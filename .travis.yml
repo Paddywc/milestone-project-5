@@ -4,3 +4,6 @@ python:
 install: "pip install -r requirements.txt"
 script:
 - SECRET_KEY="shhhhhh" ./manage.py test
+
+notifications:
+  email: false
