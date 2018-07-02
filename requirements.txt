@@ -1,7 +1,6 @@
 SecretStorage==2.0.0
 argparse==1.2.1
 colorama==0.2.5
-configobj==4.7.2
 duplicity==0.6.23
 html5lib==0.999
 httplib2==0.8
