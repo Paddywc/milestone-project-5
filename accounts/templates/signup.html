@@ -1,8 +1,9 @@
 {% extends 'base.html' %} 
+{% load bootstrap_tags %}
 {% block title %} Sign Up {% endblock %}
 {% block content %}
 <form class="accounts-form" action="{% url 'signup' %}" method="post">
-    {{ form }}
+    {{ form|as_bootstrap }}
     {% csrf_token %}
     <input type="submit" value="Sign Up">
 </form>
