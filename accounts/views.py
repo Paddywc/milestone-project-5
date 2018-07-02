@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout
 from .forms import UserSignupForm, UserLoginForm
 
 # Create your views here.
@@ -33,3 +33,15 @@ def login_user(request):
         form = UserLoginForm()
         
     return render(request, 'login.html', {"form": form})
+    
+def logout_user(request):
+    """
+    """
+    if request.method=="POST":
+        logout(request)
+        
+        # TEMP. for testing. Remove once button created
+    else:
+        logout(request)
+        
+    return redirect("login")
