@@ -1,4 +1,3 @@
-BzrTools==2.6.0
 SecretStorage==2.0.0
 argparse==1.2.1
 bzr==2.7.0dev1
