@@ -16,10 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url , include
+from market.views import render_store 
 
 from accounts import urls as urls_accounts
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url('^accounts/', include(urls_accounts)),
+    path(r'admin/', admin.site.urls),
+    url(r'^accounts/', include(urls_accounts)),
+    url(r'^store/', render_store, name='store'),
 ]

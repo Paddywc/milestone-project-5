@@ -1,0 +1,14 @@
+{% extends 'base.html' %} 
+{% block title %} Store {% endblock %}
+{% block content %}
+{% for item in store_items %}
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="{{ item.image.url }}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{ item.name }}</h5>
+    <p class="card-text">{{ item.description }}</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
