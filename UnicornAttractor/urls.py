@@ -19,9 +19,11 @@ from django.conf.urls import url , include
 from market.views import render_store 
 
 from accounts import urls as urls_accounts
+from market import urls as urls_cart
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
     url(r'^accounts/', include(urls_accounts)),
     url(r'^store/', render_store, name='store'),
+    url(r'^cart/', include(urls_cart)),
 ]
