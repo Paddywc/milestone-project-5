@@ -10,3 +10,6 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     email = models.EmailField(('email address'), blank=False, unique=True)
     REQUIRED_FIELDS = []
+    
+    def __str__(self):
+        return self.username

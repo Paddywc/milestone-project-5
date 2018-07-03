@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_forms_bootstrap',
+    'storages',
     'accounts',
+    'market',
 ]
 
 MIDDLEWARE = [
@@ -126,4 +128,33 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+# AWS CODE BELOW FROM LESSON! PADDY
+AWS_S3_OBJECT_PARAMETERS = {
+    "Expires" : "Thu, 31 Dec 2099 20:00:00 GMT",
+    "CacheControl": "max-age=94608000",
+}
+
+AWS_STORAGE_BUCKET_NAME = "paddywc-unicornattractor"
+AWS_S3_REGION_NAME = "eu-west-1"
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+    )
+
+MEDIAFILES_LOCATION = "media"
+DEFAULT_FILE_STORAGE = "custom_storages.MediaStorage"
+
+
+AWS_S3_CUSTOM_DOMAIN = "{}.s3.amazonaws.com".format(AWS_STORAGE_BUCKET_NAME)
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+
+
+STATICFILES_LOCATION = "static"
+STATICFILES_STORAGE = "custom_storages.StaticStorage"
+
