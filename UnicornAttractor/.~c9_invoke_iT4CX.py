@@ -158,7 +158,6 @@ MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 STATICFILES_LOCATION = "static"
 STATICFILES_STORAGE = "custom_storages.StaticStorage"
 
-# From Django Auth Project
 EMAIL_USE_TLS = True          
 EMAIL_HOST = 'smtp.gmail.com'         
 EMAIL_PORT = 587        
