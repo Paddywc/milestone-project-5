@@ -1,0 +1,37 @@
+{% extends 'base.html' %} 
+{% load bootstrap_tags %}
+
+{% block head_js %}
+
+<script type="text/javascript" >
+        //<![CDATA[
+    Stripe.publishableKey = '{{ publishable }}';
+    //]]>
+</script>
+{% endblock %}
+
+
+
+{% block title %} Order {% endblock %}
+{% block content %}
+<form class="accounts-form" action="{% url 'login' %}" method="post">
+    {{ form|as_bootstrap }}
+    {% csrf_token %}
+    <input type="submit" value="Submit">
+</form>
+
+<form action="{% url 'charge' %}" method="POST">
+    {% csrf_token %}
+  <script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="pk_test_b67BbJYB2tO4Pksp4y9SHzfw"
+    data-amount="999"
+    data-name="Demo Site"
+    data-description="Example charge"
+    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+    data-locale="auto"
+    data-currency="eur">
+  </script>
+</form>
+
+{% endblock %}

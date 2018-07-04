@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'market',
     'django_countries',
     'phonenumber_field',
+
 ]
 
 MIDDLEWARE = [
@@ -169,6 +170,13 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_ADDRESS')        
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')     
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
+
+
+STRIPE_PUBLISHABLE =  os.environ.get('STRIPE_PUBLISHABLE')
+STRIPE_SECRET = os.environ.get('STRIPE_SECRET')
+
+
+
 
 
 CART_SESSION_ID = 'cart'

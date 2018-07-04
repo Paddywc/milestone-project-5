@@ -24,10 +24,10 @@ class Order(models.Model):
     town_or_city = models.CharField(max_length=40, blank=False)
     county = models.CharField(max_length=50, blank=False)
     country = CountryField()
-    created = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return "{0}-{1}-{2}".format(self.id, self.created.date(), self.full_name)
+        return "{0}-{1}-{2}".format(self.id, self.date.date(), self.full_name)
         
 class OrderItem(models.Model):
     """
@@ -38,3 +38,4 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return "{0}-{1}-{2}".format(self.quantity, self.item.name, self.item.price)
+        
