@@ -27,7 +27,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return "{0}-{1}-{2}".format(self.id, self.date, self.full_name)
+        return "{0}-{1}-{2}".format(self.id, self.created.date(), self.full_name)
         
 class OrderItem(models.Model):
     """
