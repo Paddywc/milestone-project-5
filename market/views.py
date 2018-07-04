@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import StoreItem
 from .cart import Cart
-from .forms import OrderForm, PaymentForm
+from .forms import DeliveryForm, PaymentForm
 from django.conf import settings
 import stripe
 
@@ -38,33 +38,40 @@ def cart_remove(request, item_id):
 def view_cart(request):
     return render(request, "cart.html")
     
-def order(request):
+def delivery(request):
     cart = Cart(request)
+
+    form = DeliveryForm()
     if request.method=="POST":
-        x = 0
-    form = PaymentForm()
+        form = DeliveryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('pay')
     
     
+    return render(request, 'delivery.html', {"form": form})
     
-    return render(request, 'order.html', {"form": form})
-    
-def charge(request):
+def pay(request):
     """
     from stipe documentation
     https://stripe.com/docs/charges
     """
    
-    stripe.api_key = settings.STRIPE_SECRET
+   
+    if request.method =="POST":
+        stripe.api_key = settings.STRIPE_SECRET
+        
     
-
-    # changed from value in docs: token = request.form['stripeToken'] 
-    # fixed bug: 'WSGIRequest' object has no attribute 'form'
-    token = request.POST['stripeToken'] # Using Flask
-    
-    charge = stripe.Charge.create(
-        amount=999,
-        currency='usd',
-        description='Example charge',
-        source=token,
-    )
-    return redirect('store')
+        # changed from value in docs: token = request.form['stripeToken'] 
+        # fixed bug: 'WSGIRequest' object has no attribute 'form'
+        token = request.POST['stripeToken'] 
+        
+        charge = stripe.Charge.create(
+            amount=999,
+            currency='usd',
+            description='Example charge',
+            source=token,
+        )
+        return redirect('store')
+        
+    return render(request, 'pay.html')

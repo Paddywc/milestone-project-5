@@ -12,16 +12,20 @@
 
 
 
-{% block title %} Order {% endblock %}
+{% block title %} Delivery Information {% endblock %}
 {% block content %}
-<form class="accounts-form" action="{% url 'login' %}" method="post">
-    {{ form|as_bootstrap }}
-    {% csrf_token %}
-    <input type="submit" value="Submit">
-</form>
+<!--<form class="accounts-form" action="{% url 'login' %}" method="post">-->
+<!--    {{ form|as_bootstrap }}-->
+<!--    {% csrf_token %}-->
+<!--    <input type="submit" value="Submit">-->
+<!--</form>-->
 
-<form action="{% url 'charge' %}" method="POST">
+<form method="POST">
+        {{ form|as_bootstrap }}
     {% csrf_token %}
+        <input type="submit" value="Submit">
+    {% if form.isvalid %}
+    
   <script
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
     data-key="pk_test_b67BbJYB2tO4Pksp4y9SHzfw"
@@ -30,8 +34,11 @@
     data-description="Example charge"
     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
     data-locale="auto"
-    data-currency="eur">
+    data-currency="eur"
+    >
   </script>
+  
+  {% endif %}
 </form>
 
 {% endblock %}
