@@ -33,7 +33,7 @@ def cart_remove(request, item_id):
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
     cart.remove(item)
-    return redirect('store')
+    return redirect('view_cart')
  
 def view_cart(request):
     return render(request, "cart.html")

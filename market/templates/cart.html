@@ -3,12 +3,24 @@
 {% block content %}
 {% for item in cart %}
 {{ item }}
-<p>{{ item.item.name }}: {{ item.quantity }}: {{ item.total_price }}</p>
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="{{ item.item.image.url }}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{ item.item.name }}</h5>
+    <p class="card-text">{{ item.item.description }}</p>
+    <p class="card-text">€{{ item.price }}</p>
+        <p class="card-text">Quantity:{{ item.quantity}}</p>
+    <p class="card-text">€{{ item.total_price }}</p>
 
+    <a href="/cart/add/{{ item.item.id }}" class="btn btn-primary">Add Another</a>
+    <a href="/cart/remove/{{ item.item.id }}" class="btn btn-primary">Remove One</a>
+
+  </div>
+</div>
 {% endfor %}
 
 <br><br><br>
-{{ cart.get_total_price }}
+Cart total:{{ cart.get_total_price }}
 
 
 {% endblock %}
