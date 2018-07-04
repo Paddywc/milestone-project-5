@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import StoreItem
 from .cart import Cart
+
 # Create your views here.
 def render_store(request):
     """
@@ -19,6 +20,7 @@ def cart_add(request, item_id):
     """
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
+    print(item.name)
     cart.add(item=item)
     return redirect('store')
 
@@ -32,3 +34,6 @@ def cart_remove(request, item_id):
     item = get_object_or_404(StoreItem, id=item_id)
     cart.remove(item)
     return redirect('store')
+ 
+def view_cart(request):
+    return render(request, "cart.html")
