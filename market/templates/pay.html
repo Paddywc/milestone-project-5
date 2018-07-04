@@ -1,28 +1,28 @@
 {% extends 'base.html' %} 
 {% load bootstrap_tags %}
 
-{% block head_js %}
-
-<script type="text/javascript" >
-        //<![CDATA[
-    Stripe.publishableKey = '{{ publishable }}';
-    //]]>
-</script>
-{% endblock %}
 
 
 
-{% block title %} Order {% endblock %}
+{% block title %} Pay {% endblock %}
 {% block content %}
 
+{% for item in cart %}
+
+ <p>{{ item.item.name }}, {{ item.quantity }} X €{{ item.price }}} = €{{ item.total_price }} </p> 
+  
+{% endfor %}
+<br>
+<p>Total: €{{ cart.get_total_price }}</p>
 
 <form method="POST">
     {% csrf_token %}
 
   <script
+  
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
     data-key="pk_test_b67BbJYB2tO4Pksp4y9SHzfw"
-    data-amount="999"
+    data-amount="{{ cart.get_stripe_price }}"
     data-name="Demo Site"
     data-description="Example charge"
     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"

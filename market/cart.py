@@ -51,6 +51,13 @@ class Cart(object):
  
     def get_total_price(self):
         return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+        
+    def get_stripe_price(self):
+        """
+        My code. Required to get the correct price
+        for Stripe JavaScript payment
+        """
+        return (sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values()) * 100)
 
     def clear(self):
         del self.session[settings.CART_SESSION_ID]

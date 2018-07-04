@@ -1,14 +1,7 @@
 {% extends 'base.html' %} 
 {% load bootstrap_tags %}
 
-{% block head_js %}
 
-<script type="text/javascript" >
-        //<![CDATA[
-    Stripe.publishableKey = '{{ publishable }}';
-    //]]>
-</script>
-{% endblock %}
 
 
 
@@ -24,21 +17,7 @@
         {{ form|as_bootstrap }}
     {% csrf_token %}
         <input type="submit" value="Submit">
-    {% if form.isvalid %}
-    
-  <script
-    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="pk_test_b67BbJYB2tO4Pksp4y9SHzfw"
-    data-amount="999"
-    data-name="Demo Site"
-    data-description="Example charge"
-    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-    data-locale="auto"
-    data-currency="eur"
-    >
-  </script>
   
-  {% endif %}
 </form>
 
 {% endblock %}
