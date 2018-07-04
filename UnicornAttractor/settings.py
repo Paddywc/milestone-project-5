@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'storages',
     'accounts',
     'market',
+    'django_countries',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -74,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'market.contexts.cart',
+
             ],
         },
     },

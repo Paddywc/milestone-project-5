@@ -9,9 +9,6 @@ def render_store(request):
     """
     store_items = StoreItem.objects.all()
     return render(request, "store.html", {"store_items": store_items})
-    
-    
-
 
 def cart_add(request, item_id):
     """
