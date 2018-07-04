@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import StoreItem
 from .cart import Cart
-from .forms import DeliveryForm, PaymentForm
+from .forms import DeliveryForm
 from django.conf import settings
 import stripe
 
@@ -40,10 +40,12 @@ def view_cart(request):
     
 def delivery(request):
     cart = Cart(request)
-
-    form = DeliveryForm()
+    # user value hidden using widget
+    # therefore set as current user here
+    form = DeliveryForm(initial={"user": request.user})
     if request.method=="POST":
         form = DeliveryForm(request.POST)
+        # form.user_id = request.user
         if form.is_valid():
             form.save()
             return redirect('pay')
@@ -56,7 +58,6 @@ def pay(request):
     from stipe documentation
     https://stripe.com/docs/charges
     """
-   
    
     if request.method =="POST":
         stripe.api_key = settings.STRIPE_SECRET

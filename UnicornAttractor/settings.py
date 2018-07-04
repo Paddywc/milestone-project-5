@@ -178,5 +178,4 @@ STRIPE_SECRET = os.environ.get('STRIPE_SECRET')
 
 
 
-
 CART_SESSION_ID = 'cart'

@@ -1,6 +1,7 @@
 from django.db import models
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
+from accounts.models import User
 
 # below class taken from ecommerce project
 class StoreItem(models.Model):
@@ -13,9 +14,15 @@ class StoreItem(models.Model):
         return self.name
         
         
-class Order(models.Model):
+
+        
+class Delivery(models.Model):
     """
+    Delivery details
     """
+    
+    
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     full_name = models.CharField(max_length=50, blank=False)
     # phone_number = PhoneNumberField()
     phone_number = models.CharField(max_length=20, blank=False)
@@ -25,10 +32,19 @@ class Order(models.Model):
     town_or_city = models.CharField(max_length=40, blank=False)
     county = models.CharField(max_length=50, blank=False)
     country = CountryField()
-    date = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
-        return "{0}-{1}-{2}".format(self.id, self.date.date(), self.full_name)
+        return "{0}:{1},{2},{3}".format(self.user, self.full_name, self.street_address1, self.postcode)
+    
+    
+class Order(models.Model):
+    """
+    """
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
+    date = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default=False)
+    def __str__(self):
+        return "{0}-{1}-{2}".format(self.user, self.date.date(), self.full_name)
         
 class OrderItem(models.Model):
     """
