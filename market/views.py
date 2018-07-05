@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import StoreItem, Order
+from .models import StoreItem
 from .cart import Cart
-from .checkout import get_user_delivery_addresses,  process_stripe_payment, get_full_delivery_object
+from .checkout import get_user_delivery_addresses,  process_stripe_payment, get_full_delivery_object, process_order
 from .forms import DeliveryForm
 from django.conf import settings
 import stripe
@@ -62,11 +62,7 @@ def pay(request):
     if request.method =="POST":
         
         process_stripe_payment(request)
-        
-        delivery_pk = request.POST.get("deliverySelection")
-        delivery_object = get_full_delivery_object(delivery_pk)
-        order = Order(user=user, delivery_address=delivery_object)
-        order.save()
+        process_order(request, user)
         
         return redirect('store')
         

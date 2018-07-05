@@ -1,5 +1,5 @@
 from .cart import Cart
-from .models import Delivery
+from .models import Delivery, Order, OrderItem
 import stripe
 from django.conf import settings
 
@@ -31,3 +31,17 @@ def process_stripe_payment(request):
     )
     
     
+def process_order(request, user):
+    """
+    """
+    delivery_pk = request.POST.get("deliverySelection")
+    delivery_object = get_full_delivery_object(delivery_pk)
+    order = Order(user=user, delivery_address=delivery_object)
+    order.save()
+    
+    cart = Cart(request)
+    for item in cart:
+        order_item = OrderItem(order=order, item=item["item"], quantity=item["quantity"])
+        order_item.save()
+        
+    cart.clear()
