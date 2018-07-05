@@ -15,6 +15,9 @@
 <br>
 <p>Total: €{{ cart.get_total_price }}</p>
 
+{% for address in addresses %}
+<p> {{ address.country }}</p>
+{% endfor %}
 <form method="POST">
     {% csrf_token %}
 

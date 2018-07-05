@@ -9,6 +9,7 @@ class StoreItem(models.Model):
     description= models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     image = models.ImageField(upload_to='images')
+    delivery_required = models.BooleanField(blank=False)
     
     def __str__(self):
         return self.name
@@ -32,10 +33,24 @@ class Delivery(models.Model):
     town_or_city = models.CharField(max_length=40, blank=False)
     county = models.CharField(max_length=50, blank=False)
     country = CountryField()
-
+    current_delivery_method = models.BooleanField(default=True)
     def __str__(self):
         return "{0}:{1},{2},{3}".format(self.user, self.full_name, self.street_address1, self.postcode)
     
+    # Code for turning other current_delivery_method values
+    # to False once a new value saved as a True
+    # Code from: https://stackoverflow.com/questions/1455126/unique-booleanfield-value-in-django
+    def save(self, *args, **kwargs):
+        if self.current_delivery_method:
+            try:
+                temp = Delivery.objects.get(current_delivery_method=True)
+                if self != temp:
+                    temp.current_delivery_method = False
+                    temp.save()
+            except Delivery.DoesNotExist:
+                pass
+        super(Delivery, self).save(*args, **kwargs)
+
     
 class Order(models.Model):
     """
@@ -43,6 +58,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     date = models.DateTimeField(auto_now_add=True)
     paid = models.BooleanField(default=False)
+    delivery_address = models.ForeignKey(Delivery, null=True, on_delete=models.PROTECT)
     def __str__(self):
         return "{0}-{1}-{2}".format(self.user, self.date.date(), self.full_name)
         

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import StoreItem
 from .cart import Cart
+from .checkout import get_delivery_addresses
 from .forms import DeliveryForm
 from django.conf import settings
 import stripe
@@ -20,7 +21,6 @@ def cart_add(request, item_id):
     """
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
-    print(item.name)
     cart.add(item=item)
     return redirect('store')
 
@@ -59,6 +59,9 @@ def pay(request):
     https://stripe.com/docs/charges
     """
    
+    user = request.user
+    user_addresses = get_delivery_addresses(user)
+    
     if request.method =="POST":
         stripe.api_key = settings.STRIPE_SECRET
         
@@ -75,4 +78,4 @@ def pay(request):
         )
         return redirect('store')
         
-    return render(request, 'pay.html')
+    return render(request, 'pay.html', {"addresses": user_addresses})
