@@ -76,7 +76,7 @@ class UserCoins(models.Model):
     """
     """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
-    coins = models.PositiveIntegerField(null=True)
+    coins = models.PositiveIntegerField(null=True, default=0)
     
     def __str__(self):
       return "{0}-{1}".format(self.user, self.coins)
