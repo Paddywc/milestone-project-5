@@ -20,7 +20,6 @@ class Cart(object):
             self.cart[item_id] = {'quantity': 0, 'price': str(item.price)}
             
         self.cart[item_id]['quantity'] += 1
-        print(self.cart[item_id]['quantity'])
         self.save()
         
 
