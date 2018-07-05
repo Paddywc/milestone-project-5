@@ -5,6 +5,7 @@ def add_coins(user, amount):
     adds the amount specfied in the second
     argument to the argument user
     """
+    print(amount)
     # below line of code creates table row for user if none exists
     UserCoins.objects.get_or_create(user=user)
     user_row = UserCoins.objects.get(user=user)

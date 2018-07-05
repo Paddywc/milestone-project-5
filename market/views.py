@@ -57,15 +57,16 @@ def delivery(request):
     return render(request, 'delivery.html', {"form": form})
     
 def pay(request):
-
+    """
+    Post request can only occur if stripe accepts payment
+    """
    
     user = request.user
     user_addresses = get_user_delivery_addresses(user)
     
     if request.method =="POST":
         
-        remove_coins(user, 99)
-        
+
         process_stripe_payment(request)
         process_order(request, user)
         
