@@ -15,11 +15,32 @@
 <br>
 <p>Total: €{{ cart.get_total_price }}</p>
 
-{% for address in addresses %}
-<p> {{ address.country }}</p>
-{% endfor %}
+
+
+<form id="deliverySelectionForm" >
+
+</form>
+
 <form method="POST">
     {% csrf_token %}
+
+
+{% for address in addresses %}
+<p>{{ address }}</p>
+<div class="form-check">
+    {% if address.current_delivery_method %}
+  <input class="form-check-input" type="radio" name="deliverySelection" id="{{ address.id }}" add value="{{ address.id }}" checked >
+  {% else %}
+   <input class="form-check-input" type="radio" name="deliverySelection"id="{{ address.id }}" value="{{ address.id }}" >
+   {% endif %}
+  <label class="form-check-label" >
+    Use this address
+  </label>
+</div>
+
+<br><br><br>
+{% endfor %}
+
 
   <script
   

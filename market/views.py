@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import StoreItem
+from .models import StoreItem, Order
 from .cart import Cart
-from .checkout import get_delivery_addresses
+from .checkout import get_user_delivery_addresses,  process_stripe_payment, get_full_delivery_object
 from .forms import DeliveryForm
 from django.conf import settings
 import stripe
@@ -54,28 +54,20 @@ def delivery(request):
     return render(request, 'delivery.html', {"form": form})
     
 def pay(request):
-    """
-    from stipe documentation
-    https://stripe.com/docs/charges
-    """
+
    
     user = request.user
-    user_addresses = get_delivery_addresses(user)
+    user_addresses = get_user_delivery_addresses(user)
     
     if request.method =="POST":
-        stripe.api_key = settings.STRIPE_SECRET
         
-    
-        # changed from value in docs: token = request.form['stripeToken'] 
-        # fixed bug: 'WSGIRequest' object has no attribute 'form'
-        token = request.POST['stripeToken'] 
+        process_stripe_payment(request)
         
-        charge = stripe.Charge.create(
-            amount=999,
-            currency='usd',
-            description='Example charge',
-            source=token,
-        )
+        delivery_pk = request.POST.get("deliverySelection")
+        delivery_object = get_full_delivery_object(delivery_pk)
+        order = Order(user=user, delivery_address=delivery_object)
+        order.save()
+        
         return redirect('store')
         
     return render(request, 'pay.html', {"addresses": user_addresses})
