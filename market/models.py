@@ -71,3 +71,12 @@ class OrderItem(models.Model):
     def __str__(self):
         return "{0}-{1}-{2}".format(self.quantity, self.item.name, self.item.price)
         
+
+class UserCoins(models.Model):
+    """
+    """
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
+    coins = models.PositiveIntegerField(null=True)
+    
+    def __str__(self):
+      return "{0}-{1}".format(self.user, self.coins)

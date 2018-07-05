@@ -6,6 +6,9 @@ from .forms import DeliveryForm
 from django.conf import settings
 import stripe
 
+"""FOR TESTING"""
+from .coins import remove_coins
+
 # Create your views here.
 def render_store(request):
     """
@@ -60,6 +63,8 @@ def pay(request):
     user_addresses = get_user_delivery_addresses(user)
     
     if request.method =="POST":
+        
+        remove_coins(user, 99)
         
         process_stripe_payment(request)
         process_order(request, user)
