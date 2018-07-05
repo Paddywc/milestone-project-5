@@ -60,6 +60,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     date = models.DateTimeField(auto_now_add=True)
     delivery_address = models.ForeignKey(Delivery, null=True, on_delete=models.PROTECT)
+
     def __str__(self):
         return "{0}-{1}".format(self.user, self.date.date())
         
@@ -69,6 +70,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
     item = models.ForeignKey(StoreItem, null=False, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField(null=False)
+    total_purchase_price = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
         return "{0}-{1}-{2}".format(self.quantity, self.item.name, self.item.price)

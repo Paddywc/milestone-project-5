@@ -49,7 +49,7 @@ def process_order(request, user):
     for item in cart:
         if item["item"].is_coins:
             add_coins(user, (item["item"].coins_amount * item["quantity"]))
-        order_item = OrderItem(order=order, item=item["item"], quantity=item["quantity"])
+        order_item = OrderItem(order=order, item=item["item"], quantity=item["quantity"], total_purchase_price=item["total_price"])
         order_item.save()
         
     cart.clear()
