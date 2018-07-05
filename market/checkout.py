@@ -24,10 +24,13 @@ def process_stripe_payment(request):
     # fixed bug: 'WSGIRequest' object has no attribute 'form'
     token = request.POST['stripeToken'] 
     
+    cart = Cart(request)
+    payment_amount = cart.get_total_price()
+    payment_amount_in_cents = int(payment_amount*100)
     charge = stripe.Charge.create(
-        amount=999,
-        currency='usd',
-        description='Example charge',
+        amount=payment_amount_in_cents,
+        currency='eur',
+        description='UnicornAttractor purchase',
         source=token,
     )
     
