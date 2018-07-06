@@ -1,6 +1,5 @@
 from django import forms
 from .models import Suggestion
-from tinymce.widgets import TinyMCE
 
 class SuggestionForm(forms.ModelForm):
     class Meta:
