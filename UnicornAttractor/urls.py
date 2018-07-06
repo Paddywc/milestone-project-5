@@ -22,7 +22,6 @@ from accounts import urls as urls_accounts
 from market import urls as urls_cart
 from usersuggestions import urls as urls_suggestions
 
-import tinymce
 urlpatterns = [
     path(r'admin/', admin.site.urls),
     url(r'^accounts/', include(urls_accounts)),
