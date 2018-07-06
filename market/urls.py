@@ -8,5 +8,4 @@ urlpatterns = [
     url(r'^view/$', view_cart, name='view_cart'),
     url(r'^delivery/$', delivery, name='delivery'),
     url(r'^pay/$', pay, name='pay'),
-
 ]

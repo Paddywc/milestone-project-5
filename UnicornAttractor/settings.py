@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'storages',
     'accounts',
     'market',
+    'usersuggestions',
     'django_countries',
     'phonenumber_field',
 
