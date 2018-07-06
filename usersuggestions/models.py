@@ -1,6 +1,5 @@
 from django.db import models
 from accounts.models import User
-from tinymce import models as tinymce_models
 from ckeditor_uploader.fields import RichTextUploadingField 
 
 # Create your models here.
