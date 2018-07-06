@@ -4,7 +4,9 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 # Create your models here.
 class Suggestion(models.Model):
-    feature = models.BooleanField(blank=False, default=False)
+    suggestion_choices = ((True, 'Feature'), (False, 'Bug Fix'))
+    
+    suggestion_type = models.BooleanField(blank=False, default=False, choices=suggestion_choices)
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     title = models.CharField(max_length=200, blank=False)
     details = RichTextUploadingField()
