@@ -30,4 +30,6 @@ urlpatterns = [
     url(r'^cart/', include(urls_cart)),
     url(r'^suggestions/', include(urls_suggestions)),
     url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+
 ]

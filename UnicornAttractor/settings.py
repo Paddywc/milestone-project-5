@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     'django_countries',
     'phonenumber_field',
     'tinymce',
+    'grappelli',
+    'filebrowser',
+    'ckeditor',
+    'ckeditor_uploader',
 
 ]
 
@@ -178,6 +182,25 @@ STRIPE_PUBLISHABLE =  os.environ.get('STRIPE_PUBLISHABLE')
 STRIPE_SECRET = os.environ.get('STRIPE_SECRET')
 
 
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Undo', 'Redo'],
+            ['Bold', 'Italic', 'Underline'],
+            ['Styles'],
+            ['Format'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-'],
+            ['Image' ,'-', 'Table'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat'],
+        ]
+    }
+}
 
 CART_SESSION_ID = 'cart'
+
