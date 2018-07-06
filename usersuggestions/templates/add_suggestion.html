@@ -1,0 +1,11 @@
+{% extends 'base.html' %} 
+{% load bootstrap_tags %}
+{% block title %} Submit Suggestion {% endblock %}
+{% block content %}
+<form  method="post">
+    {{ form|as_bootstrap }}
+    {% csrf_token %}
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

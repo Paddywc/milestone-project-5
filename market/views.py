@@ -6,8 +6,7 @@ from .forms import DeliveryForm
 from django.conf import settings
 import stripe
 
-"""FOR TESTING"""
-from .coins import remove_coins
+
 
 # Create your views here.
 def render_store(request):

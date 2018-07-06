@@ -20,10 +20,13 @@ from market.views import render_store
 
 from accounts import urls as urls_accounts
 from market import urls as urls_cart
+from usersuggestions import urls as urls_suggestions
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
     url(r'^accounts/', include(urls_accounts)),
     url(r'^store/', render_store, name='store'),
     url(r'^cart/', include(urls_cart)),
+    url(r'^suggestions/', include(urls_suggestions)),
+
 ]
