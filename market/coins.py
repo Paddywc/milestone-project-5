@@ -24,3 +24,12 @@ def remove_coins(user, amount):
     user_row.coins = old_coins_value - amount
     user_row.save()
     
+def return_user_coins(user):
+    """
+    Returns the amount of coins that
+    the argument user has
+    """
+    UserCoins.objects.get_or_create(user=user)
+    user_row = UserCoins.objects.get(user=user)
+    return user_row.coins
+    
