@@ -9,6 +9,7 @@ class Suggestion(models.Model):
     details = models.TextField()
     date_time = models.DateTimeField(auto_now_add=True)
     
+    
     def __str__(self):
         return "{0}: {1}".format(self.user, self.title)
     

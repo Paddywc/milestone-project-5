@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'usersuggestions',
     'django_countries',
     'phonenumber_field',
+    'tinymce',
 
 ]
 
