@@ -51,9 +51,6 @@ INSTALLED_APPS = [
     'usersuggestions',
     'django_countries',
     'phonenumber_field',
-    'tinymce',
-    'grappelli',
-    'filebrowser',
     'ckeditor',
     'ckeditor_uploader',
 

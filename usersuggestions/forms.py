@@ -6,5 +6,5 @@ class SuggestionForm(forms.ModelForm):
     class Meta:
         model = Suggestion
         exclude = ["date_time"]
-        # widgets = {"user": forms.HiddenInput(), "details":TinyMCE(attrs={'cols': 80, 'rows': 30})} #value set in views
+        widgets = {"user": forms.HiddenInput()} #value set in views
     
