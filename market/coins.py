@@ -1,5 +1,4 @@
-from .models import UserCoins, CoinsPurchase
-
+from .models import UserCoins, CoinsPurchase, StoreItem
 def add_coins(user, amount):
     """
     adds the amount specfied in the second
@@ -39,4 +38,24 @@ def get_coins_price(name):
     Returns the argument's price in coins
     """
     return CoinsPurchase.objects.get(name=name).coins_price
+    
+def return_all_store_coin_options():
+    """
+    Returns all the coin variations available
+    as store items. Sorted in accessing order
+    """
+    return StoreItem.objects.filter(is_coins=True).order_by("coins_amount")
+    
+def return_minimum_coins_purchase(item_cost, user):
+    """
+    Returns the minimum purchase of coins required
+    for the argument user to be able to purchase the
+    argument item
+    """
+    user_coins  =  return_user_coins(user)
+    coin_options = return_all_store_coin_options()
+    for coin_option in coin_options:
+        if (coin_option.coins_amount + user_coins) >= item_cost:
+            return coin_option
+    
     

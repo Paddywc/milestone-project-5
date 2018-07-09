@@ -34,8 +34,38 @@
         </button>
       </div>
       <div class="modal-body">
+     
         <p>Suggestion Price: {{ price }} coins </p>
         Current coins: {{ user_coins }}
+           {% if price > user_coins %}
+        <p>You have insufficient coins to make this purchase</p>
+        <form method="GET">
+       
+    
+        <!--from bootstrap documentation-->
+  <div class="form-row align-items-center">
+    <div class="col-auto my-1">
+      <label class="mr-sm-2" for="inlineFormCustomSelect">Add more coins</label>
+      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <option selected>Choose...</option>
+        {% for coin_option in coin_options %}
+
+        <option value="{{ coin_option.id }}"> {{ coin_option }}</option>
+                {% endfor %}
+
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+    <div class="col-auto my-1">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+        
+        </form>
+        {% endif %}
+        
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
