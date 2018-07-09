@@ -40,9 +40,12 @@ def process_order(request, user):
     Adds coins to account if they are included
     in order
     """
-    delivery_pk = request.POST.get("deliverySelection")
-    delivery_object = get_full_delivery_object(delivery_pk)
-    order = Order(user=user, delivery_address=delivery_object)
+    try:
+        delivery_pk = request.POST.get("deliverySelection")
+        delivery_object = get_full_delivery_object(delivery_pk)
+        order = Order(user=user, delivery_address=delivery_object)
+    except:
+        order = Order(user=user)
     order.save()
     
     cart = Cart(request)
