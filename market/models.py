@@ -12,11 +12,18 @@ class StoreItem(models.Model):
     delivery_required = models.BooleanField(blank=False)
     is_coins = models.BooleanField(blank=False, default=False)
     coins_amount = models.PositiveIntegerField(blank=True, null=True)
+
     
     def __str__(self):
         return self.name
         
-        
+class CoinsPurchase(models.Model):
+    name = models.CharField(max_length=200, default="")
+    description= models.TextField(blank=True)
+    coins_price =models.PositiveIntegerField(blank=False)
+    
+    def __str__(self):
+        return self.name
 
         
 class Delivery(models.Model):
@@ -84,3 +91,4 @@ class UserCoins(models.Model):
     
     def __str__(self):
       return "{0}-{1}".format(self.user, self.coins)
+      

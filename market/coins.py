@@ -33,3 +33,4 @@ def return_user_coins(user):
     user_row = UserCoins.objects.get(user=user)
     return user_row.coins
     
+

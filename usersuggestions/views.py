@@ -2,13 +2,14 @@ from django.shortcuts import render
 from .forms import SuggestionForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from market.coins import return_user_coins
 
 @login_required()
 def add_suggestion(request):
     """
     """
     if (settings.COINS_ENABLED):
-        print("This is running")
+        print(return_user_coins(request.user))
     # user value hidden using widget
     # therefore set as current user here
     form = SuggestionForm(initial={"user": request.user})
@@ -19,6 +20,7 @@ def add_suggestion(request):
         is_feature = request.POST.get("suggestion_type")
         if form.is_valid():
             if is_feature=='True':
-                form.save()
-    
-    return render(request, 'add_suggestion.html', {"form": form})
+                
+                x = "2"
+        form.save()
+    return render(request, 'add_suggestion.html', {"form": form, "coins_enabled": settings.COINS_ENABLED})

@@ -8,10 +8,14 @@
 {% block content %}
 
 
-<h1>{{ user }}</h1>
 <form  method="post">
     {{ form|as_bootstrap }}
     {% csrf_token %}
+    
+    {% if not coins_enabled %}
+    <input type="submit" value="Submit" id="bugFixSubmit">
+
+      {% else %}
     <input type="submit" value="Submit" id="bugFixSubmit">
     
    <!-- Button trigger modal -->
@@ -63,5 +67,8 @@
 
 
 </script>
+
+
+{% endif %}
 
 {% endblock %}
