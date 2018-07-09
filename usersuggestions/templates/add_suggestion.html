@@ -39,26 +39,26 @@
         Current coins: {{ user_coins }}
            {% if price > user_coins %}
         <p>You have insufficient coins to make this purchase</p>
-        <form method="GET">
+        <form method="POST">
        
     
         <!--from bootstrap documentation-->
   <div class="form-row align-items-center">
     <div class="col-auto my-1">
-      <label class="mr-sm-2" for="inlineFormCustomSelect">Add more coins</label>
-      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-        <option selected>Choose...</option>
+      <label class="mr-sm-2" for="purchaseCoinsSelect">Add more coins</label>
+      <select class="custom-select mr-sm-2" name="purchaseCoinsSelect" id="purchaseCoinsSelect">
         {% for coin_option in coin_options %}
-
-        <option value="{{ coin_option.id }}"> {{ coin_option }}</option>
+        {% if coin_option == minimum_coins %}
+        <option value="{{ coin_option.id }}" selected> {{ coin_option }} </option>
+        {% else %}
+         <option value="{{ coin_option.id }}" > {{ coin_option }} </option>
+        {% endif %}
                 {% endfor %}
 
-        <option value="2">Two</option>
-        <option value="3">Three</option>
       </select>
     </div>
     <div class="col-auto my-1">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary" name="purchaseCoins">Purchase coins</button>
     </div>
   </div>
         
@@ -67,10 +67,12 @@
         
         
       </div>
+      {% if user_coins > price %}
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Confirm Submission</button>
       </div>
+      {% endif %}
     </div>
   </div>
 </div>

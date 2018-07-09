@@ -1,6 +1,6 @@
 from .cart import Cart
 from .coins import add_coins
-from .models import Delivery, Order, OrderItem
+from .models import Delivery, Order, OrderItem, StoreItem
 import stripe
 from django.conf import settings
 
@@ -53,3 +53,5 @@ def process_order(request, user):
         order_item.save()
         
     cart.clear()
+    
+    

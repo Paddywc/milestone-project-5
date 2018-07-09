@@ -4,7 +4,6 @@ def add_coins(user, amount):
     adds the amount specfied in the second
     argument to the argument user
     """
-    print(amount)
     # below line of code creates table row for user if none exists
     UserCoins.objects.get_or_create(user=user)
     user_row = UserCoins.objects.get(user=user)
@@ -57,5 +56,4 @@ def return_minimum_coins_purchase(item_cost, user):
     for coin_option in coin_options:
         if (coin_option.coins_amount + user_coins) >= item_cost:
             return coin_option
-    
     
