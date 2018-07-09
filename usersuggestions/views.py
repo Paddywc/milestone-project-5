@@ -25,6 +25,7 @@ def add_suggestion(request):
         if form.is_valid():
             if is_feature=='True' and settings.COINS_ENABLED:
                 remove_coins(request.user, price)
+                user_coins = return_user_coins(request.user)
                 
         form.save()
     return render(request, 'add_suggestion.html', {"form": form, "coins_enabled": settings.COINS_ENABLED, "user_coins": user_coins, "price":price})
