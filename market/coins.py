@@ -1,4 +1,4 @@
-from .models import UserCoins
+from .models import UserCoins, CoinsPurchase
 
 def add_coins(user, amount):
     """
@@ -34,3 +34,9 @@ def return_user_coins(user):
     return user_row.coins
     
 
+def get_coins_price(name):
+    """
+    Returns the argument's price in coins
+    """
+    return CoinsPurchase.objects.get(name=name).coins_price
+    
