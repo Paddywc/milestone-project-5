@@ -91,4 +91,4 @@ def upvote(request, id):
         remove_coins(request.user, get_coins_price("Upvote"))
     suggestion = get_object_or_404(Suggestion, id=id)
     add_upvote_to_database(request.user, suggestion)
-    return view_suggestion(request, id)
+    return redirect("view_suggestion",id)
