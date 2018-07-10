@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.http import HttpResponseRedirect
-from market.models import StoreItem
-from django.urls import reverse
 
 from .helpers import set_current_url_as_session_url, return_all_suggestions, return_all_bugs
 from .forms import SuggestionForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
+from market.helpers import purchase_coins_for_action
 from .models import Suggestion
 from .voting import add_upvote_to_database
+
 
 @login_required()
 def add_suggestion(request):
@@ -26,12 +25,7 @@ def add_suggestion(request):
         # if the user has insufficient coins for suggestion 
         # and opts to purchase more
         if 'purchaseCoins' in request.POST:
-            set_current_url_as_session_url(request)
-            coins_store_item_id = request.POST.get("purchaseCoinsSelect")
-            coins_store_item = get_object_or_404(StoreItem, id=coins_store_item_id)
-            cart = Cart(request)
-            cart.add(item=coins_store_item)
-            return HttpResponseRedirect(reverse('pay'))
+            return purchase_coins_for_action(request)
         
         else:
             form = SuggestionForm(data=request.POST)
@@ -70,14 +64,9 @@ def view_suggestion(request, id):
     
     coins_enabled =settings.COINS_ENABLED
     
-    
-    if 'purchaseCoins' in request.POST:
-        set_current_url_as_session_url(request)
-        coins_store_item_id = request.POST.get("purchaseCoinsSelect")
-        coins_store_item = get_object_or_404(StoreItem, id=coins_store_item_id)
-        cart = Cart(request)
-        cart.add(item=coins_store_item)
-        return HttpResponseRedirect(reverse('pay'))
+    if request.method=="POST":
+        if 'purchaseCoins' in request.POST:
+            return purchase_coins_for_action(request)
         
     if coins_enabled:
         price = get_coins_price("Upvote")

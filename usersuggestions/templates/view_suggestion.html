@@ -8,8 +8,6 @@
 
 
 
-<form  method="post">
-    {% csrf_token %}
     
     {% if not coins_enabled %}
 <a class="btn btn-primary" href="{% url 'upvote' suggestion.id %}" role="button">Upvote Suggestion</a>
@@ -38,7 +36,8 @@
            {% if price > user_coins %}
         <p>You have insufficient coins to make this purchase</p>
         <form method="POST">
-       
+           {% csrf_token %}
+
     
         <!--from bootstrap documentation-->
   <div class="form-row align-items-center">
@@ -76,7 +75,6 @@
 </div>
  
     
-</form>
 
 
 {% endif %}
