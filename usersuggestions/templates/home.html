@@ -20,15 +20,41 @@
   <div class="tab-pane fade show active" id="suggestions" role="tabpanel" aria-labelledby="suggestions-tab">
       
 {% for suggestion in suggestions %}
-<p>{{ suggestion }}</p>
+
+<div class="card">
+  <div class="card-header">
+    {{ suggestion.user }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ suggestion.title }}</h5>
+    <p class="card-text">{{ suggestion.details|safe }}</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+
+<br><br>
 {% endfor %}
+
       
       </div>
   <div class="tab-pane fade" id="bugs" role="tabpanel" aria-labelledby="bugs-tab">
       
             
+      
 {% for bug in bugs %}
-<p>{{ bug }}</p>
+
+<div class="card">
+  <div class="card-header">
+    {{ bug.user }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ bug.title }}</h5>
+   <p class="card-text">{{ bug.details|safe }}</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+
+<br><br>
 {% endfor %}
       
   </div>
