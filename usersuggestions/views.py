@@ -66,6 +66,9 @@ def view_suggestion(request, id):
     """
     """
     suggestion = get_suggestion_object_for_id(id)
-    return render(request, "view.html", {"suggestion": suggestion})
+    if suggestion.suggestion_type:
+        return render(request, "view.html", {"suggestion": suggestion})
+    
+    return True
     
     
