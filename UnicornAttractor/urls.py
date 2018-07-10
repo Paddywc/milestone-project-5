@@ -31,5 +31,4 @@ urlpatterns = [
     url(r'^suggestions/', include(urls_suggestions)),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^$', render_home, name='home'),
-
 ]

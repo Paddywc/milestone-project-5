@@ -5,8 +5,37 @@
 {% endblock %}
 {% block content %}
 
+
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="suggestions-tab" data-toggle="tab" href="#suggestions" role="tab" aria-controls="suggestions" aria-selected="true">Suggestions</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="bugs-tab" data-toggle="tab" href="#bugs" role="tab" aria-controls="bugs" aria-selected="false">Bugs</a>
+  </li>
+  
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="suggestions" role="tabpanel" aria-labelledby="suggestions-tab">
+      
 {% for suggestion in suggestions %}
 <p>{{ suggestion }}</p>
 {% endfor %}
+      
+      </div>
+  <div class="tab-pane fade" id="bugs" role="tabpanel" aria-labelledby="bugs-tab">
+      
+            
+{% for bug in bugs %}
+<p>{{ bug }}</p>
+{% endfor %}
+      
+  </div>
+
+</div>
+
+
+
 
 {% endblock %}

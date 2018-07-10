@@ -5,11 +5,10 @@ from django.http import HttpResponseRedirect
 from market.models import StoreItem
 from django.urls import reverse
 
-from .helpers import set_current_url_as_session_url
+from .helpers import set_current_url_as_session_url, return_all_suggestions, return_all_bugs
 from .forms import SuggestionForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
-from .models import Suggestion
 
 @login_required()
 def add_suggestion(request):
@@ -58,5 +57,6 @@ def add_suggestion(request):
 def render_home(request):
     """
     """
-    suggestions = Suggestion.objects.all()
-    return render(request, "home.html", {"suggestions": suggestions})
+    suggestions = return_all_suggestions()
+    bugs = return_all_bugs()
+    return render(request, "home.html", {"suggestions": suggestions, "bugs": bugs})
