@@ -6,19 +6,14 @@
 
 {% block title %} Pay {% endblock %}
 {% block content %}
+{% if cart|length > 0 %}
 
 {% for item in cart %}
-
  <p>{{ item.item.name }}, {{ item.quantity }} X €{{ item.price }}} = €{{ item.total_price }} </p> 
-  
 {% endfor %}
 <br>
 <p>Total: €{{ cart.get_total_price }}</p>
-
-
-
 <form id="deliverySelectionForm" >
-
 </form>
 
 <form method="POST">
@@ -38,19 +33,16 @@
   </label>
 </div>
 
-
 <br><br><br>
 {% endfor %}
 {% endif %}
-
-
   <script
   
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
     data-key="pk_test_b67BbJYB2tO4Pksp4y9SHzfw"
     data-amount="{{ cart.get_stripe_price }}"
-    data-name="Demo Site"
-    data-description="Example charge"
+    data-name="UnicornAttractor"
+    data-description="Cart Checkout"
     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
     data-locale="auto"
     data-currency="eur"
@@ -61,4 +53,7 @@
   
 </form>
 
+{% else %}
+<p>Cart is empty</p>
+{% endif %}
 {% endblock %}
