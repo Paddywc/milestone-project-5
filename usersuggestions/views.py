@@ -32,11 +32,10 @@ def add_suggestion(request):
             return HttpResponseRedirect(reverse('pay'))
         
         else:
-            print("this is running")
             form = SuggestionForm(data=request.POST)
-            # below line of code returns true if suggestion_type ==
+            # below line of code returns true if is_suggestion ==
             # 'feature'. Returns False if == 'bug fix'. Returned as String
-            is_feature = request.POST.get("suggestion_type")
+            is_feature = request.POST.get("is_suggestion")
             if form.is_valid():
                 if is_feature=='True' and settings.COINS_ENABLED:
                     remove_coins(request.user, get_coins_price("Suggestion"))
@@ -66,8 +65,11 @@ def view_suggestion(request, id):
     """
     """
     suggestion = get_suggestion_object_for_id(id)
-    if suggestion.suggestion_type:
-        return render(request, "view.html", {"suggestion": suggestion})
+    if suggestion.is_suggestion:
+        return render(request, "view_suggestion.html", {"suggestion": suggestion})
+        
+    else:
+        return render(request, "view_bug.html", {"bug": suggestion})
     
     return True
     

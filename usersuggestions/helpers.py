@@ -8,12 +8,12 @@ def set_current_url_as_session_url(request):
 def return_all_suggestions():
     """
     """
-    return Suggestion.objects.filter(suggestion_type=True)
+    return Suggestion.objects.filter(is_suggestion=True)
     
 def return_all_bugs():
     """
     """
-    return Suggestion.objects.filter(suggestion_type=False)
+    return Suggestion.objects.filter(is_suggestion=False)
     
 def get_suggestion_object_for_id(suggestion_id):
     """

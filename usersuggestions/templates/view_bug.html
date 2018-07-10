@@ -1,0 +1,8 @@
+{% extends 'base.html' %} 
+{% block title %} View Bug {% endblock %}
+
+{% block content %}
+
+<p>{{ bug.title }}</p>
+<p>{{ bug.details|safe }}</p>
+{% endblock %}
