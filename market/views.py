@@ -3,7 +3,13 @@ from .models import StoreItem
 from .cart import Cart
 from .checkout import get_user_delivery_addresses,  process_stripe_payment, get_full_delivery_object, process_order
 from .forms import DeliveryForm
+from .helpers import retrieve_session_url
 from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.http import JsonResponse
+
+
 import stripe
 
 
@@ -59,16 +65,19 @@ def pay(request):
     """
     Post request can only occur if stripe accepts payment
     """
-   
-    user = request.user
-    user_addresses = get_user_delivery_addresses(user)
-    
+
     if request.method =="POST":
         
-
         process_stripe_payment(request)
-        process_order(request, user)
-        
-        return redirect('store')
-        
+        process_order(request, request.user)
+        redirect_url = retrieve_session_url(request)
+        if redirect_url:
+            return redirect(redirect_url)
+        else:
+            return(redirect("store"))
+
+    user_addresses = get_user_delivery_addresses(request.user)
+
+
+
     return render(request, 'pay.html', {"addresses": user_addresses})

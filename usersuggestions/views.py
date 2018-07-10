@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import SuggestionForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.http import HttpResponseRedirect
 from market.models import StoreItem
+from django.urls import reverse
+
+from .helpers import set_current_url_as_session_url
+from .forms import SuggestionForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
 
@@ -11,6 +15,7 @@ def add_suggestion(request):
     """
     """
     if (settings.COINS_ENABLED):
+        set_current_url_as_session_url(request)
         user_coins = return_user_coins(request.user)
         price = get_coins_price("Suggestion")
         coin_options = return_all_store_coin_options()
@@ -28,8 +33,7 @@ def add_suggestion(request):
             coins_store_item = get_object_or_404(StoreItem, id=coins_store_item_id)
             cart = Cart(request)
             cart.add(item=coins_store_item)
-            return redirect('pay')
-            
+            return HttpResponseRedirect(reverse('pay'))
         
         else:
             form = SuggestionForm(data=request.POST)
