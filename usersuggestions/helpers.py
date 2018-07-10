@@ -12,7 +12,7 @@ def return_all_suggestions():
     along with their upvote count. Ordered in descending 
     order by upvote count
     """
-    return Suggestion.objects.filter(is_suggestion=True).annotate(upvotes=Count("upvote")).order_by("-upvote")
+    return Suggestion.objects.filter(is_suggestion=True).annotate(upvotes=Count("upvote")).order_by("-upvotes")
 
 def return_all_bugs():
     """
@@ -20,6 +20,6 @@ def return_all_bugs():
     their upvote count. Ordered in descending 
     order by upvote count
     """
-    return Suggestion.objects.filter(is_suggestion=False).annotate(upvotes=Count("upvote")).order_by("-upvote")
+    return Suggestion.objects.filter(is_suggestion=False).annotate(upvotes=Count("upvote")).order_by("-upvotes")
     
 

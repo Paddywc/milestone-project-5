@@ -21,14 +21,18 @@
 
 <div class="card">
   <div class="card-header">
-    {{ suggestion.user }}
-    {{ suggestion.upvotes }}
+
+    Upvotes: {{ suggestion.upvotes }}
   </div>
   <div class="card-body">
     <h5 class="card-title">{{ suggestion.title }}</h5>
     <p class="card-text">{{ suggestion.details|safe }}</p>
     <a href="{% url 'view_suggestion' suggestion.id %}" class="btn btn-primary">View Suggestion</a>
   </div>
+    <div class="card-footer text-muted">
+    From {{ suggestion.user }}
+  </div>
+  
 </div>
 
 <br><br>
@@ -44,12 +48,15 @@
 
 <div class="card">
   <div class="card-header">
-    {{ bug.user }}
+    Upvotes: {{ bug.upvotes }}
   </div>
   <div class="card-body">
     <h5 class="card-title">{{ bug.title }}</h5>
    <p class="card-text">{{ bug.details|safe }}</p>
     <a href="{% url 'view_suggestion' bug.id %}" class="btn btn-primary">View Bug</a>
+  </div>
+      <div class="card-footer text-muted">
+    From {{ bug.user }}
   </div>
 </div>
 
