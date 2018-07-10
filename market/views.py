@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import StoreItem
 from .cart import Cart
-from .checkout import get_user_delivery_addresses,  process_stripe_payment, get_full_delivery_object, process_order
+from .checkout import get_user_delivery_addresses,  process_stripe_payment, get_full_delivery_object, process_order, cart_contains_item_needing_delivery
 from .forms import DeliveryForm
 from .helpers import retrieve_session_url
 from django.conf import settings
@@ -77,7 +77,7 @@ def pay(request):
             return(redirect("store"))
 
     user_addresses = get_user_delivery_addresses(request.user)
+    cart_contains_delivery_item = cart_contains_item_needing_delivery(request)
 
 
-
-    return render(request, 'pay.html', {"addresses": user_addresses})
+    return render(request, 'pay.html', {"addresses": user_addresses, "cart_contains_delivery_item": cart_contains_delivery_item})

@@ -58,3 +58,14 @@ def process_order(request, user):
     cart.clear()
     
     
+def cart_contains_item_needing_delivery(request):
+    """
+    Returns True if the cart contains at least one 
+    item with delivery_required == True. Returns False otherwise
+    """
+    
+    cart = Cart(request)
+    for item in cart:
+        if item["item"].delivery_required==True:
+            return True
+    return False

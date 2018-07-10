@@ -24,7 +24,7 @@
 <form method="POST">
     {% csrf_token %}
 
-
+{% if cart_contains_delivery_item %}
 {% for address in addresses %}
 <p>{{ address }}</p>
 <div class="form-check">
@@ -38,8 +38,10 @@
   </label>
 </div>
 
+
 <br><br><br>
 {% endfor %}
+{% endif %}
 
 
   <script
