@@ -1,8 +1,6 @@
 {% extends 'base.html' %} 
 {% block title %} Home {% endblock %}
-{% block head %}
 
-{% endblock %}
 {% block content %}
 
 
@@ -28,7 +26,7 @@
   <div class="card-body">
     <h5 class="card-title">{{ suggestion.title }}</h5>
     <p class="card-text">{{ suggestion.details|safe }}</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <a href="{% url 'view_suggestion' suggestion.id %}" class="btn btn-primary">View Suggestion</a>
   </div>
 </div>
 
@@ -50,7 +48,7 @@
   <div class="card-body">
     <h5 class="card-title">{{ bug.title }}</h5>
    <p class="card-text">{{ bug.details|safe }}</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <a href="{% url 'view_suggestion' bug.id %}" class="btn btn-primary">View Bug</a>
   </div>
 </div>
 

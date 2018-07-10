@@ -1,0 +1,8 @@
+{% extends 'base.html' %} 
+{% block title %} View Suggestion {% endblock %}
+
+{% block content %}
+
+<p>{{ suggestion.title }}</p>
+<p>{{ suggestion.details|safe }}</p>
+{% endblock %}

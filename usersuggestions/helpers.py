@@ -14,3 +14,8 @@ def return_all_bugs():
     """
     """
     return Suggestion.objects.filter(suggestion_type=False)
+    
+def get_suggestion_object_for_id(suggestion_id):
+    """
+    """
+    return Suggestion.objects.get(id=suggestion_id)
