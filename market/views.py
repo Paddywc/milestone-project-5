@@ -5,9 +5,8 @@ from .checkout import get_user_delivery_addresses,  process_stripe_payment, get_
 from .forms import DeliveryForm
 from .helpers import retrieve_session_url
 from django.conf import settings
-from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 import stripe
@@ -46,6 +45,7 @@ def cart_remove(request, item_id):
 def view_cart(request):
     return render(request, "cart.html")
     
+@login_required()
 def delivery(request):
     cart = Cart(request)
     # user value hidden using widget
@@ -61,6 +61,7 @@ def delivery(request):
     
     return render(request, 'delivery.html', {"form": form})
     
+@login_required()
 def pay(request):
     """
     Post request can only occur if stripe accepts payment

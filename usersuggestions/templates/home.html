@@ -1,0 +1,12 @@
+{% extends 'base.html' %} 
+{% block title %} Home {% endblock %}
+{% block head %}
+
+{% endblock %}
+{% block content %}
+
+{% for suggestion in suggestions %}
+<p>{{ suggestion }}</p>
+{% endfor %}
+
+{% endblock %}
