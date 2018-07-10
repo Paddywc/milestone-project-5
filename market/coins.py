@@ -45,13 +45,12 @@ def return_all_store_coin_options():
     """
     return StoreItem.objects.filter(is_coins=True).order_by("coins_amount")
     
-def return_minimum_coins_purchase(item_cost, user):
+def return_minimum_coins_purchase(item_cost, user_coins):
     """
     Returns the minimum purchase of coins required
     for the argument user to be able to purchase the
     argument item
     """
-    user_coins  =  return_user_coins(user)
     coin_options = return_all_store_coin_options()
     for coin_option in coin_options:
         if (coin_option.coins_amount + user_coins) >= item_cost:

@@ -14,21 +14,18 @@ from market.coins import return_user_coins, get_coins_price, remove_coins, retur
 def add_suggestion(request):
     """
     """
-    if (settings.COINS_ENABLED):
-        set_current_url_as_session_url(request)
-        user_coins = return_user_coins(request.user)
-        price = get_coins_price("Suggestion")
-        coin_options = return_all_store_coin_options()
-        minimum_coins = return_minimum_coins_purchase(price, request.user)
- 
+    
+    
     # user value hidden using widget
     # therefore set as current user here
     form = SuggestionForm(initial={"user": request.user})
+        
     if request.method=="POST":
         
         # if the user has insufficient coins for suggestion 
         # and opts to purchase more
         if 'purchaseCoins' in request.POST:
+            set_current_url_as_session_url(request)
             coins_store_item_id = request.POST.get("purchaseCoinsSelect")
             coins_store_item = get_object_or_404(StoreItem, id=coins_store_item_id)
             cart = Cart(request)
@@ -36,15 +33,23 @@ def add_suggestion(request):
             return HttpResponseRedirect(reverse('pay'))
         
         else:
+            print("this is running")
             form = SuggestionForm(data=request.POST)
             # below line of code returns true if suggestion_type ==
             # 'feature'. Returns False if == 'bug fix'. Returned as String
             is_feature = request.POST.get("suggestion_type")
             if form.is_valid():
                 if is_feature=='True' and settings.COINS_ENABLED:
-                    remove_coins(request.user, price)
+                    remove_coins(request.user, get_coins_price("Suggestion"))
                     user_coins = return_user_coins(request.user)
                     
-            form.save()
-
+                form.save()
+                
+                
+    if (settings.COINS_ENABLED):
+        price = get_coins_price("Suggestion")
+        user_coins = return_user_coins(request.user)
+        minimum_coins = return_minimum_coins_purchase(price, user_coins)
+        coin_options = return_all_store_coin_options()
+        
     return render(request, 'add_suggestion.html', {"form": form, "coins_enabled": settings.COINS_ENABLED, "user_coins": user_coins, "price":price, "coin_options": coin_options, "minimum_coins": minimum_coins})

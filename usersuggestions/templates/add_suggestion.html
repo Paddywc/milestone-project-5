@@ -49,9 +49,9 @@
       <select class="custom-select mr-sm-2" name="purchaseCoinsSelect" id="purchaseCoinsSelect">
         {% for coin_option in coin_options %}
         {% if coin_option == minimum_coins %}
-        <option value="{{ coin_option.id }}" selected> {{ coin_option }} </option>
+        <option value="{{ coin_option.id }}" selected> {{ coin_option }}: €{{ coin_option.price }}  </option>
         {% else %}
-         <option value="{{ coin_option.id }}" > {{ coin_option }} </option>
+         <option value="{{ coin_option.id }}" > {{ coin_option }}: €{{ coin_option.price }} </option>
         {% endif %}
                 {% endfor %}
 
