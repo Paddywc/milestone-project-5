@@ -5,10 +5,12 @@ from django.http import HttpResponseRedirect
 from market.models import StoreItem
 from django.urls import reverse
 
-from .helpers import set_current_url_as_session_url, return_all_suggestions, return_all_bugs, get_suggestion_object_for_id
+from .helpers import set_current_url_as_session_url, return_all_suggestions, return_all_bugs
 from .forms import SuggestionForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
+from .models import Suggestion
+from .voting import add_upvote_to_database
 
 @login_required()
 def add_suggestion(request):
@@ -64,13 +66,40 @@ def render_home(request):
 def view_suggestion(request, id):
     """
     """
-    suggestion = get_suggestion_object_for_id(id)
-    if suggestion.is_suggestion:
-        return render(request, "view_suggestion.html", {"suggestion": suggestion})
+    suggestion = get_object_or_404(Suggestion, id=id)
+    
+    coins_enabled =settings.COINS_ENABLED
+    
+    
+    if 'purchaseCoins' in request.POST:
+        set_current_url_as_session_url(request)
+        coins_store_item_id = request.POST.get("purchaseCoinsSelect")
+        coins_store_item = get_object_or_404(StoreItem, id=coins_store_item_id)
+        cart = Cart(request)
+        cart.add(item=coins_store_item)
+        return HttpResponseRedirect(reverse('pay'))
+        
+    if coins_enabled:
+        price = get_coins_price("Upvote")
+        user_coins = return_user_coins(request.user)
+        minimum_coins = return_minimum_coins_purchase(price, user_coins)
+        coin_options = return_all_store_coin_options()
+
+    if suggestion.is_suggestion: 
+        return render(request, "view_suggestion.html", {"suggestion": suggestion, "coins_enabled": coins_enabled, "price": price, "user_coins": user_coins, "minimum_coins": minimum_coins, "coin_options": coin_options})
         
     else:
-        return render(request, "view_bug.html", {"bug": suggestion})
+        return render(request, "view_bug.html", {"bug": suggestion,"coins_enabled": coins_enabled})
+        
+    
     
     return True
-    
-    
+  
+def upvote(request, id):
+    """
+    """
+    if settings.COINS_ENABLED:
+        remove_coins(request.user, get_coins_price("Upvote"))
+    suggestion = get_object_or_404(Suggestion, id=id)
+    add_upvote_to_database(request.user, suggestion)
+    return view_suggestion(request, id)

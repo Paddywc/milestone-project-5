@@ -6,3 +6,5 @@
 <p>{{ bug.title }}</p>
 <p>{{ bug.details|safe }}</p>
 {% endblock %}
+
+<a class="btn btn-primary" href="{% url 'upvote' bug.id %}" role="button">I have this bug</a>

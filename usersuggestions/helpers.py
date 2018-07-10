@@ -15,7 +15,3 @@ def return_all_bugs():
     """
     return Suggestion.objects.filter(is_suggestion=False)
     
-def get_suggestion_object_for_id(suggestion_id):
-    """
-    """
-    return Suggestion.objects.get(id=suggestion_id)
