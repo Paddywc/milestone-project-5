@@ -1,4 +1,5 @@
-from .models import Suggestion
+from .models import Suggestion, Upvote
+from django.db.models import Count
 
 def set_current_url_as_session_url(request):
     """
@@ -7,11 +8,18 @@ def set_current_url_as_session_url(request):
 
 def return_all_suggestions():
     """
+    Returns all suggestions (not bugs) in database 
+    along with their upvote count. Ordered in descending 
+    order by upvote count
     """
-    return Suggestion.objects.filter(is_suggestion=True)
-    
+    return Suggestion.objects.filter(is_suggestion=True).annotate(upvotes=Count("upvote")).order_by("-upvote")
+
 def return_all_bugs():
     """
+    Returns all bugs in database  along with 
+    their upvote count. Ordered in descending 
+    order by upvote count
     """
-    return Suggestion.objects.filter(is_suggestion=False)
+    return Suggestion.objects.filter(is_suggestion=False).annotate(upvotes=Count("upvote")).order_by("-upvote")
     
+
