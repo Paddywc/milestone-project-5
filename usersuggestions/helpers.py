@@ -42,4 +42,5 @@ def update_suggestion_admin_page(form):
     row.priority = form.cleaned_data["priority"]
     row.date_time_started = form.cleaned_data["date_time_started"]
     row.expected_completion_date_time = form.cleaned_data["expected_completion_date_time"]
+    row.github_branch = form.cleaned_data["github_branch"]
     row.save()

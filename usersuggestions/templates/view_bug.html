@@ -8,6 +8,12 @@
 {% endblock %}
 {% block content %}
 
+{% if request.user.is_staff %}
+<div class="row">
+<a class="btn btn-primary" href="{% url 'admin_page' bug.id %}" role="button">View admin page</a>
+</div>
+{% endif %}
+
 <p>{{ bug.title }}</p>
 <p>{{ bug.details|safe }}</p>
 

@@ -14,6 +14,26 @@
 <p>{{ suggestion.details|safe }}</p>
 <form method="POST">
   {{ form|as_bootstrap }}
+  <div id="fullGitHubUrl"></div>
+    
+    <script>
+  
+  
+ let showFullGitHubUrl = function(){
+      $("#fullGitHubUrl").empty()
+      $("#fullGitHubUrl").append(
+          `<a target="_blank" href="https://github.com/Paddywc/milestone-project-5/tree/${$("#id_github_branch").val()}">
+            https://github.com/Paddywc/milestone-project-5/tree/${$("#id_github_branch").val()}
+            </a>
+          `)};
+  
+  $(document).ready(showFullGitHubUrl)
+  $("#id_github_branch").keyup(showFullGitHubUrl)
+  
+
+</script>
+
+  
     {% csrf_token %}
     <input type="submit" value="submit changes" name="adminPageSubmit">
     </form>

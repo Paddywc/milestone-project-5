@@ -16,14 +16,14 @@ class CommentForm(forms.ModelForm):
         widgets = {"user": forms.HiddenInput(), "suggestion": forms.HiddenInput(), "admin_page_comment": forms.HiddenInput()}
         
         
+
 class SuggestionAdminPageForm(forms.ModelForm):
-    
     
     # init function code from:https://stackoverflow.com/questions/291945/how-do-i-filter-foreignkey-choices-in-a-django-modelform
     def __init__(self, *args, **kwargs):
         super(SuggestionAdminPageForm, self).__init__(*args, **kwargs)
         self.fields["developer_assigned"].queryset = User.objects.filter(is_staff=True)
-        
+
     class Meta:
         model = SuggestionAdminPage
         exclude = [""]

@@ -28,6 +28,7 @@ class SuggestionAdminPage(models.Model):
     priority = models.PositiveSmallIntegerField(choices=priority_choices, null=True, blank=True, default=1)
     date_time_started = models.DateTimeField(null=True, blank=True)
     expected_completion_date_time = models.DateTimeField(null=True, blank=True)
+    github_branch = models.CharField(null=True, blank=True, max_length=50)
     
     def __str__(self):
         return self.suggestion.title
