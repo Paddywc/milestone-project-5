@@ -4,19 +4,25 @@
 {% load bootstrap_tags %}
 <!--Script for ckeditor-->
     {{ form.media }}
+    
+{% endblock %}
 {% block content %}
 
 <p>{{ bug.title }}</p>
 <p>{{ bug.details|safe }}</p>
-{% endblock %}
 
 <a class="btn btn-primary" href="{% url 'upvote' bug.id %}" role="button">I have this bug</a>
 
+{% for comment in comments %}
+<div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}</p></div>
+
+{% endfor %}
 
 <form method="POST">
 
     {{ form|as_bootstrap }}
     {% csrf_token %}
-    <input type="submit" value="Post Comment">
+    <input type="submit" value="Post Comment" name="postComment">
 
 </form>
+{% endblock %}

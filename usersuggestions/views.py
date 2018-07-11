@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from .helpers import set_current_url_as_session_url, return_all_suggestions, return_all_bugs
+from .helpers import set_current_url_as_session_url, return_all_suggestions, return_all_bugs, return_suggestion_comments
 from .forms import SuggestionForm, CommentForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
@@ -60,16 +60,17 @@ def render_home(request):
 def view_suggestion(request, id):
     """
     """
-    suggestion = get_object_or_404(Suggestion, id=id)
-    
     coins_enabled =settings.COINS_ENABLED
+
+    suggestion = get_object_or_404(Suggestion, id=id)
+    comments = return_suggestion_comments(suggestion)
     form = CommentForm(initial={"user": request.user,"suggestion": suggestion})
     
     if request.method=="POST":
         if 'purchaseCoins' in request.POST:
             return purchase_coins_for_action(request)
             
-        elif 'comment' in request.POST:
+        elif 'postComment' in request.POST:
             form = CommentForm(data=request.POST)
             if form.is_valid():
                 form.save()
@@ -82,10 +83,10 @@ def view_suggestion(request, id):
         coin_options = return_all_store_coin_options()
 
     if suggestion.is_suggestion: 
-        return render(request, "view_suggestion.html", {"form":form,"suggestion": suggestion, "coins_enabled": coins_enabled, "price": price, "user_coins": user_coins, "minimum_coins": minimum_coins, "coin_options": coin_options})
+        return render(request, "view_suggestion.html", {"form":form, "comments": comments, "suggestion": suggestion, "coins_enabled": coins_enabled, "price": price, "user_coins": user_coins, "minimum_coins": minimum_coins, "coin_options": coin_options})
         
     else:
-        return render(request, "view_bug.html", {"form":form, "bug": suggestion,"coins_enabled": coins_enabled})
+        return render(request, "view_bug.html", {"form":form, "comments": comments, "bug": suggestion,"coins_enabled": coins_enabled})
         
     
     

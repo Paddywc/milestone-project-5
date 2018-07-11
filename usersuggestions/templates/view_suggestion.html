@@ -82,11 +82,17 @@
     
 
 {% endif %}
+
+{% for comment in comments %}
+<div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}</p></div>
+
+{% endfor %}
+
 <form method="POST">
 
     {{ form|as_bootstrap }}
     {% csrf_token %}
-    <input type="submit" value="Post Comment" name="comment">
+    <input type="submit" value="Post Comment" name="postComment">
 
 </form>
 {% endblock %}
