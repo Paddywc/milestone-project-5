@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from .helpers import set_current_url_as_session_url, return_all_suggestions, return_all_bugs, return_suggestion_comments
+from .helpers import set_current_url_as_session_url, return_all_features, return_all_bugs, return_suggestion_comments
 from .forms import SuggestionForm, CommentForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
@@ -29,9 +29,9 @@ def add_suggestion(request):
         
         else:
             form = SuggestionForm(data=request.POST)
-            # below line of code returns true if is_suggestion ==
+            # below line of code returns true if is_feature ==
             # 'feature'. Returns False if == 'bug fix'. Returned as String
-            is_feature = request.POST.get("is_suggestion")
+            is_feature = request.POST.get("is_feature")
             if form.is_valid():
                 if is_feature=='True' and settings.COINS_ENABLED:
                     remove_coins(request.user, get_coins_price("Suggestion"))
@@ -52,9 +52,9 @@ def add_suggestion(request):
 def render_home(request):
     """
     """
-    suggestions = return_all_suggestions()
+    features = return_all_features()
     bugs = return_all_bugs()
-    return render(request, "home.html", {"suggestions": suggestions, "bugs": bugs})
+    return render(request, "home.html", {"features": features, "bugs": bugs})
 
 
 def view_suggestion(request, id):
@@ -82,8 +82,8 @@ def view_suggestion(request, id):
         minimum_coins = return_minimum_coins_purchase(price, user_coins)
         coin_options = return_all_store_coin_options()
 
-    if suggestion.is_suggestion: 
-        return render(request, "view_suggestion.html", {"form":form, "comments": comments, "suggestion": suggestion, "coins_enabled": coins_enabled, "price": price, "user_coins": user_coins, "minimum_coins": minimum_coins, "coin_options": coin_options})
+    if suggestion.is_feature: 
+        return render(request, "view_feature.html", {"form":form, "comments": comments, "feature": suggestion, "coins_enabled": coins_enabled, "price": price, "user_coins": user_coins, "minimum_coins": minimum_coins, "coin_options": coin_options})
         
     else:
         return render(request, "view_bug.html", {"form":form, "comments": comments, "bug": suggestion,"coins_enabled": coins_enabled})

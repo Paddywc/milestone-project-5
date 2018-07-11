@@ -82,7 +82,7 @@
 
 <script>
     let showAppropriateButton = function() {
-        if ($("#id_is_suggestion").val() == "True") {
+        if ($("#id_is_feature").val() == "True") {
             $("#bugFixSubmit").hide();
             $("#featureSubmit").show();
         }
@@ -96,7 +96,7 @@
          showAppropriateButton()
      })
 
-    $("#id_is_suggestion").change(showAppropriateButton)
+    $("#id_is_feature").change(showAppropriateButton)
 
 
 </script>

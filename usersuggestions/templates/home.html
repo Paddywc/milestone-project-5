@@ -7,7 +7,7 @@
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link active" id="suggestions-tab" data-toggle="tab" href="#suggestions" role="tab" aria-controls="suggestions" aria-selected="true">Suggestions</a>
+    <a class="nav-link active" id="features-tab" data-toggle="tab" href="#features" role="tab" aria-controls="features" aria-selected="true">Suggestions</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="bugs-tab" data-toggle="tab" href="#bugs" role="tab" aria-controls="bugs" aria-selected="false">Bugs</a>
@@ -15,22 +15,22 @@
   
 </ul>
 <div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="suggestions" role="tabpanel" aria-labelledby="suggestions-tab">
+  <div class="tab-pane fade show active" id="features" role="tabpanel" aria-labelledby="features-tab">
       
-{% for suggestion in suggestions %}
+{% for feature in features %}
 
 <div class="card">
   <div class="card-header">
 
-    Upvotes: {{ suggestion.upvotes }}
+    Upvotes: {{ feature.upvotes }}
   </div>
   <div class="card-body">
-    <h5 class="card-title">{{ suggestion.title }}</h5>
-    <p class="card-text">{{ suggestion.details|safe }}</p>
-    <a href="{% url 'view_suggestion' suggestion.id %}" class="btn btn-primary">View Suggestion</a>
+    <h5 class="card-title">{{ feature.title }}</h5>
+    <p class="card-text">{{ feature.details|safe }}</p>
+    <a href="{% url 'view_suggestion' feature.id %}" class="btn btn-primary">View Feature Suggestion</a>
   </div>
     <div class="card-footer text-muted">
-    From {{ suggestion.user }}
+    From {{ feature.user }}
   </div>
   
 </div>

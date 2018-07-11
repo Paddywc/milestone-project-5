@@ -7,14 +7,14 @@
 {% endblock %}
 {% block content %}
 
-<p>{{ suggestion.title }}</p>
-<p>{{ suggestion.details|safe }}</p>
+<p>{{ feature.title }}</p>
+<p>{{ feature.details|safe }}</p>
 
 
 
     
     {% if not coins_enabled %}
-<a class="btn btn-primary" href="{% url 'upvote' suggestion.id %}" role="button">Upvote Suggestion</a>
+<a class="btn btn-primary" href="{% url 'upvote' feature.id %}" role="button">Upvote Suggestion</a>
 
       {% else %}
       
@@ -71,7 +71,7 @@
       {% if user_coins >= price %}
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <a role="button" href="{% url 'upvote' suggestion.id %}" class="btn btn-primary">Confirm Upvote</a>
+        <a role="button" href="{% url 'upvote' feature.id %}" class="btn btn-primary">Confirm Upvote</a>
       </div>
       {% endif %}
     </div>
