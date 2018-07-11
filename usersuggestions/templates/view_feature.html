@@ -7,11 +7,6 @@
 {% endblock %}
 {% block content %}
 
-{% if request.user.is_authenticated %}
-<h2>Is admin</h2>
-
-{% endif %}
-
 <p>{{ feature.title }}</p>
 <p>{{ feature.details|safe }}</p>
 
@@ -98,7 +93,7 @@
 
     {{ form|as_bootstrap }}
     {% csrf_token %}
-    <input type="submit" value="Post Comment" name="postComment">
+    <input type="submit" value="Submit" name="postComment">
 
 </form>
 {% endblock %}

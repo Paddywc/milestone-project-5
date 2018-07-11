@@ -1,0 +1,19 @@
+{% extends 'base.html' %} 
+{% block title %} View Suggestion {% endblock %}
+{% load bootstrap_tags %}
+{% block head %}
+<!--Script for ckeditor-->
+    {{ form.media }}
+{% endblock %}
+{% block content %}
+
+
+<p>{{ suggestion.title }}</p>
+<p>{{ suggestion.get_is_feature_display }}</p>
+
+<p>{{ suggestion.details|safe }}</p>
+  {{ form|as_bootstrap }}
+    {% csrf_token %}
+    <input type="submit" value="Post Comment" name="postComment">
+
+{% endblock %}
