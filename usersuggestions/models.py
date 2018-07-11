@@ -24,3 +24,14 @@ class Upvote(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return "{0}: {1}".format(self.user, self.suggestion.title)
+        
+class Comment(models.Model):
+    """
+    """
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
+    suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.PROTECT)
+    comment = RichTextUploadingField()
+    date_time = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return "{0}: {1}".format(self.user, self.suggestion.title)

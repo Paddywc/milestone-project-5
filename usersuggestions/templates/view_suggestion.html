@@ -1,6 +1,10 @@
 {% extends 'base.html' %} 
 {% block title %} View Suggestion {% endblock %}
-
+{% load bootstrap_tags %}
+{% block head %}
+<!--Script for ckeditor-->
+    {{ form.media }}
+{% endblock %}
 {% block content %}
 
 <p>{{ suggestion.title }}</p>
@@ -24,7 +28,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="upvoteModalLabel">Submit Suggestion</h5>
+        <h5 class="modal-title" id="upvoteModalLabel">Upvote Suggestion</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -73,10 +77,16 @@
     </div>
   </div>
 </div>
+
  
     
 
-
 {% endif %}
+<form method="POST">
 
+    {{ form|as_bootstrap }}
+    {% csrf_token %}
+    <input type="submit" value="Post Comment" name="comment">
+
+</form>
 {% endblock %}

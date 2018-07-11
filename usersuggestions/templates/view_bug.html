@@ -1,6 +1,9 @@
 {% extends 'base.html' %} 
 {% block title %} View Bug {% endblock %}
-
+{% block head %}
+{% load bootstrap_tags %}
+<!--Script for ckeditor-->
+    {{ form.media }}
 {% block content %}
 
 <p>{{ bug.title }}</p>
@@ -8,3 +11,12 @@
 {% endblock %}
 
 <a class="btn btn-primary" href="{% url 'upvote' bug.id %}" role="button">I have this bug</a>
+
+
+<form method="POST">
+
+    {{ form|as_bootstrap }}
+    {% csrf_token %}
+    <input type="submit" value="Post Comment">
+
+</form>
