@@ -24,10 +24,10 @@ class SuggestionAdminPage(models.Model):
     
     suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.PROTECT)
     status = models.PositiveSmallIntegerField(choices=status_choices, default=0)
-    developer_assigned = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
-    priority = models.PositiveSmallIntegerField(choices=priority_choices, null=True, default=1)
-    date_time_started = models.DateTimeField(null=True)
-    expected_completion_date_time = models.DateTimeField(null=True)
+    developer_assigned = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT)
+    priority = models.PositiveSmallIntegerField(choices=priority_choices, null=True, blank=True, default=1)
+    date_time_started = models.DateTimeField(null=True, blank=True)
+    expected_completion_date_time = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         return self.suggestion.title
