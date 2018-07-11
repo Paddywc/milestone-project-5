@@ -16,14 +16,7 @@ class Suggestion(models.Model):
     def __str__(self):
         return "{0}: {1}".format(self.user, self.title)
     
-class Upvote(models.Model):
-    """
-    """
-    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
-    suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.PROTECT)
-    date_time = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return "{0}: {1}".format(self.user, self.suggestion.title)
+
         
 class Comment(models.Model):
     """
@@ -35,3 +28,16 @@ class Comment(models.Model):
     
     def __str__(self):
         return "{0}: {1}".format(self.user, self.suggestion.title)
+        
+class Upvote(models.Model):
+    """
+    """
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
+    suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.PROTECT)
+    comment = models.ForeignKey(Comment, null=True, on_delete=models.PROTECT)
+    date_time = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        try:
+            return "{0}:Suggestion:{1}".format(self.user,self.suggestion.title)
+        except:
+            return "{0}: Comment on Suggestion: {1}".format(self.user,self.comment.suggestion.title)

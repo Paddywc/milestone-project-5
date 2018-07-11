@@ -26,4 +26,4 @@ def return_all_bugs():
 def return_suggestion_comments(suggestion):
     """
     """
-    return Comment.objects.filter(suggestion=suggestion).order_by("date_time")
+    return Comment.objects.filter(suggestion=suggestion).order_by("date_time").annotate(upvotes=Count("upvote"))

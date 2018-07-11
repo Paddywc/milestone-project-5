@@ -11,12 +11,14 @@
 <p>{{ bug.title }}</p>
 <p>{{ bug.details|safe }}</p>
 
-<a class="btn btn-primary" href="{% url 'upvote' bug.id %}" role="button">I have this bug</a>
+<a class="btn btn-primary" href="{% url 'upvote_suggestion' bug.id %}" role="button">I have this bug</a>
 
 {% for comment in comments %}
-<div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}</p></div>
+<div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}. Upvotes {{ comment.upvotes }}</p></div>
+<a class="btn btn-primary" href="{% url 'upvote_comment' comment.id %}" role="button">Upvote Comment</a>
 
 {% endfor %}
+
 
 <form method="POST">
 

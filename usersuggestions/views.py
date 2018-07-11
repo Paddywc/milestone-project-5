@@ -7,8 +7,8 @@ from .forms import SuggestionForm, CommentForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
 from market.helpers import purchase_coins_for_action
-from .models import Suggestion
-from .voting import add_upvote_to_database
+from .models import Suggestion, Comment
+from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database
 
 
 @login_required()
@@ -92,11 +92,16 @@ def view_suggestion(request, id):
     
     return True
   
-def upvote(request, id):
+def upvote_suggestion(request, id):
     """
     """
     if settings.COINS_ENABLED:
         remove_coins(request.user, get_coins_price("Upvote"))
     suggestion = get_object_or_404(Suggestion, id=id)
-    add_upvote_to_database(request.user, suggestion)
+    add_suggestion_upvote_to_database(request.user, suggestion)
     return redirect("view_suggestion",id)
+
+def upvote_comment(request, id):
+    comment = get_object_or_404(Comment, id=id)
+    add_comment_upvote_to_database(request.user, comment)
+    return redirect("view_suggestion",comment.suggestion.id)
