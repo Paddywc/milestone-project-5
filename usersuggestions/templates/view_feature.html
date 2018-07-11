@@ -10,8 +10,11 @@
 <p>{{ feature.title }}</p>
 <p>{{ feature.details|safe }}</p>
 
-
-
+{% if request.user.is_staff %}
+<div class="row">
+<a class="btn btn-primary" href="{% url 'admin_page' feature.id %}" role="button">View admin page</a>
+</div>
+{% endif %}
     
     {% if not coins_enabled %}
 <a class="btn btn-primary" href="{% url 'upvote_suggestion' feature.id %}" role="button">Upvote Suggestion</a>
