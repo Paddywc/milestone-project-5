@@ -7,7 +7,7 @@ from .forms import SuggestionForm, CommentForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
 from market.helpers import purchase_coins_for_action
-from .models import Suggestion, Comment
+from .models import Suggestion, Comment, SuggestionAdminPage
 from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database
 
 
@@ -36,8 +36,11 @@ def add_suggestion(request):
                 if is_feature=='True' and settings.COINS_ENABLED:
                     remove_coins(request.user, get_coins_price("Suggestion"))
                     user_coins = return_user_coins(request.user)
-                    
-                form.save()
+            
+                saved_suggestion_object = form.save()
+                suggestion_admin_page = SuggestionAdminPage(suggestion= saved_suggestion_object)
+                suggestion_admin_page.save()
+                
                 
                 
     if (settings.COINS_ENABLED):
@@ -76,11 +79,17 @@ def view_suggestion(request, id):
                 form.save()
             
         
-    if coins_enabled:
+    if coins_enabled and request.user.is_authenticated:
         price = get_coins_price("Upvote")
         user_coins = return_user_coins(request.user)
         minimum_coins = return_minimum_coins_purchase(price, user_coins)
         coin_options = return_all_store_coin_options()
+        
+    else:
+        price = None
+        user_coins = None
+        minimum_coins = None
+        coin_options = None 
 
     if suggestion.is_feature: 
         return render(request, "view_feature.html", {"form":form, "comments": comments, "feature": suggestion, "coins_enabled": coins_enabled, "price": price, "user_coins": user_coins, "minimum_coins": minimum_coins, "coin_options": coin_options})
@@ -92,6 +101,7 @@ def view_suggestion(request, id):
     
     return True
   
+@login_required
 def upvote_suggestion(request, id):
     """
     """
@@ -101,6 +111,7 @@ def upvote_suggestion(request, id):
     add_suggestion_upvote_to_database(request.user, suggestion)
     return redirect("view_suggestion",id)
 
+@login_required
 def upvote_comment(request, id):
     comment = get_object_or_404(Comment, id=id)
     add_comment_upvote_to_database(request.user, comment)
