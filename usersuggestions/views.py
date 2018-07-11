@@ -15,16 +15,27 @@ from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_dat
 def add_suggestion(request):
     """
     """
+    try:
+        x = request.session["form_title"]
+    except:
+        request.session["form_title"] = False
+        
     
     # user value hidden using widget
     # therefore set as current user here
     form = SuggestionForm(initial={"user": request.user})
+    
+    if request.session["form_title"] != False:
+        form = SuggestionForm(initial={"user": request.user, "is_feature": True, "details": request.session["form_details"], "title": request.session["form_title"]})
         
     if request.method=="POST":
         
         # if the user has insufficient coins for suggestion 
         # and opts to purchase more
         if 'purchaseCoins' in request.POST:
+            current_form = SuggestionForm(data=request.POST)
+            request.session["form_title"] = current_form["title"].data
+            request.session["form_details"] = current_form["details"].data
             return purchase_coins_for_action(request)
         
         else:
@@ -40,7 +51,8 @@ def add_suggestion(request):
                 saved_suggestion_object = form.save()
                 suggestion_admin_page = SuggestionAdminPage(suggestion= saved_suggestion_object)
                 suggestion_admin_page.save()
-                
+                request.session["form_title"] = False
+                request.session["form_details"] = False
                 
                 
     if (settings.COINS_ENABLED):
@@ -111,7 +123,7 @@ def render_suggestion_admin_page(request,id):
     admin_page_values = get_object_or_404(SuggestionAdminPage, suggestion=suggestion)
     
     form = SuggestionAdminPageForm(instance=admin_page_values)
-    comment_form = CommentForm(initial={"user": request.user,"suggestion": suggestion, "admin_page_comment": True})
+    comment_form = CommentForm(initial={"user": request.user,"suggestion": suggestion, "admin_page_comment": True, })
     comments = return_admin_suggestion_comments(suggestion)
     
     if request.method=="POST":
