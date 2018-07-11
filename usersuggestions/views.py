@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from .helpers import set_current_url_as_session_url, return_all_features, return_all_bugs, return_suggestion_comments
+from .helpers import set_current_url_as_session_url, return_all_features, return_all_bugs, return_public_suggestion_comments, return_admin_suggestion_comments
 from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
@@ -66,7 +66,7 @@ def view_suggestion(request, id):
     coins_enabled =settings.COINS_ENABLED
 
     suggestion = get_object_or_404(Suggestion, id=id)
-    comments = return_suggestion_comments(suggestion)
+    comments = return_public_suggestion_comments(suggestion)
     form = CommentForm(initial={"user": request.user,"suggestion": suggestion})
     
     if request.method=="POST":
@@ -111,7 +111,17 @@ def render_suggestion_admin_page(request,id):
     admin_page_values = get_object_or_404(SuggestionAdminPage, suggestion=suggestion)
     
     form = SuggestionAdminPageForm(instance=admin_page_values)
-    return render(request, "suggestion_admin_page.html", {"form":form, "suggestion": suggestion})
+    comment_form = CommentForm(initial={"user": request.user,"suggestion": suggestion, "admin_page_comment": True})
+    comments = return_admin_suggestion_comments(suggestion)
+    
+    if request.method=="POST":
+        if "postComment" in request.POST:
+            form = CommentForm(data=request.POST)
+            if form.is_valid():
+                form.save()
+                
+            
+    return render(request, "suggestion_admin_page.html", {"form":form,"comment_form": comment_form, "comments": comments, "suggestion": suggestion})
     
 @login_required
 def upvote_suggestion(request, id):

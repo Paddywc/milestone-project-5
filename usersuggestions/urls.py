@@ -6,5 +6,5 @@ urlpatterns = [
     url(r'^view/(?P<id>\d+)', view_suggestion, name="view_suggestion"),
     url(r'^upvote_suggestion/(?P<id>\d+)', upvote_suggestion, name="upvote_suggestion"),
     url(r'^upvote_comment/(?P<id>\d+)', upvote_comment, name="upvote_comment"),
-    url(r'^admin_page/(?P<id>\d+)', render_suggestion_admin_page, name="admin_page"),
+    url(r'^admin/(?P<id>\d+)', render_suggestion_admin_page, name="admin_page"),
     ]

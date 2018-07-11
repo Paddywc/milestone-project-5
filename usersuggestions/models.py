@@ -17,12 +17,29 @@ class Suggestion(models.Model):
         return "{0}: {1}".format(self.user, self.title)
     
 
+class SuggestionAdminPage(models.Model):
+    
+    status_choices = ((0,"not scheduled"), (1,"to do"), (2,"doing"), (3, "done"))
+    priority_choices = ((0,"low"),(1,'normal'),(2,'high'))
+    
+    suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.PROTECT)
+    status = models.PositiveSmallIntegerField(choices=status_choices, default=0)
+    developer_assigned = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
+    priority = models.PositiveSmallIntegerField(choices=priority_choices, null=True, default=1)
+    date_time_started = models.DateTimeField(null=True)
+    expected_completion_date_time = models.DateTimeField(null=True)
+    
+    def __str__(self):
+        return self.suggestion.title
         
+            
+
 class Comment(models.Model):
     """
     """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.CASCADE)
+    admin_page_comment= models.BooleanField(blank=False, default=False)
     comment = RichTextUploadingField()
     date_time = models.DateTimeField(auto_now_add=True)
     
@@ -42,17 +59,3 @@ class Upvote(models.Model):
         except:
             return "{0}: Comment on Suggestion: {1}".format(self.user,self.comment.suggestion.title)
             
-class SuggestionAdminPage(models.Model):
-    
-    status_choices = ((0,"not scheduled"), (1,"to do"), (2,"doing"), (3, "done"))
-    priority_choices = ((0,"low"),(1,'normal'),(2,'high'))
-    
-    suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.PROTECT)
-    status = models.PositiveSmallIntegerField(choices=status_choices, default=0)
-    developer_assigned = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
-    priority = models.PositiveSmallIntegerField(choices=priority_choices, null=True, default=1)
-    date_time_started = models.DateTimeField(null=True)
-    expected_completion_date_time = models.DateTimeField(null=True)
-    
-    def __str__(self):
-        return self.suggestion.title

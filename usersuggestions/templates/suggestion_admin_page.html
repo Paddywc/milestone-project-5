@@ -1,9 +1,9 @@
 {% extends 'base.html' %} 
-{% block title %} View Suggestion {% endblock %}
+{% block title %} Suggestion Admin Page {% endblock %}
 {% load bootstrap_tags %}
 {% block head %}
 <!--Script for ckeditor-->
-    {{ form.media }}
+    {{ comment_form.media }}
 {% endblock %}
 {% block content %}
 
@@ -12,8 +12,24 @@
 <p>{{ suggestion.get_is_feature_display }}</p>
 
 <p>{{ suggestion.details|safe }}</p>
+<form method="POST">
   {{ form|as_bootstrap }}
     {% csrf_token %}
-    <input type="submit" value="Post Comment" name="postComment">
+    <input type="submit" value="submit" name="adminPageSubmit">
+    </form>
+    
+    
+    {% for comment in comments %}
+<div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}. Upvotes {{ comment.upvotes }}</p></div>
+<a class="btn btn-primary" href="{% url 'upvote_comment' comment.id %}" role="button">Upvote Comment</a>
+
+{% endfor %}
+    
+    <form method="POST">
+        {{ comment_form|as_bootstrap }}
+        {% csrf_token %}
+            <input type="submit" value="Post Comment" name="postComment">
+
+    </form>
 
 {% endblock %}

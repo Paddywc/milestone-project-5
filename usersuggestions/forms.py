@@ -13,7 +13,7 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ["date_time"]
-        widgets = {"user": forms.HiddenInput(), "suggestion": forms.HiddenInput()}
+        widgets = {"user": forms.HiddenInput(), "suggestion": forms.HiddenInput(), "admin_page_comment": forms.HiddenInput()}
         
         
 class SuggestionAdminPageForm(forms.ModelForm):
