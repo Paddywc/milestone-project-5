@@ -8,7 +8,7 @@ from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
 from market.helpers import purchase_coins_for_action
 from .models import Suggestion, Comment, SuggestionAdminPage, Flag
-from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database
+from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, get_voting_end_date
 
 
 @login_required()
@@ -109,6 +109,8 @@ def view_suggestion(request, id):
 def render_suggestion_admin_page(request,id):
     """
     """
+    # print(get_voting_end_date())
+    
     if not request.user.is_staff:
         return redirect("view_suggestion", id=id)
     suggestion = get_object_or_404(Suggestion, id=id)
@@ -140,6 +142,7 @@ def upvote_suggestion(request, id):
     suggestion = get_object_or_404(Suggestion, id=id)
     add_suggestion_upvote_to_database(request.user, suggestion)
     return redirect("view_suggestion",id)
+
 
 @login_required
 def upvote_comment(request, id):

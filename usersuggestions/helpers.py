@@ -37,13 +37,16 @@ def return_admin_suggestion_comments(suggestion):
     return Comment.objects.filter(suggestion=suggestion, admin_page_comment=True).order_by("date_time").annotate(upvotes=Count("upvote"))
     
 def update_suggestion_admin_page(form):
+  
     row = SuggestionAdminPage.objects.get(suggestion=form.cleaned_data["suggestion"])
     row.status = form.cleaned_data["status"]
     row.developer_assigned = form.cleaned_data["developer_assigned"]
     row.priority = form.cleaned_data["priority"]
-    row.date_time_started = form.cleaned_data["date_time_started"]
-    row.expected_completion_date_time = form.cleaned_data["expected_completion_date_time"]
+    row.date_time_started = form.cleaned_data["date_started"]
+    row.estimated_completion_time = form.cleaned_data["estimated_completion_time"]
+    row.expected_completion_date_time = form.cleaned_data["expected_completion_date"]
     row.github_branch = form.cleaned_data["github_branch"]
+    row.is_current_winner = form.cleaned_data["is_current_winner"]
     row.save()
     
 def set_initial_session_form_title_as_false(request):

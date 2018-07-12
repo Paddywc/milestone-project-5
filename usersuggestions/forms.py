@@ -27,4 +27,4 @@ class SuggestionAdminPageForm(forms.ModelForm):
     class Meta:
         model = SuggestionAdminPage
         exclude = [""]
-        widgets = {"suggestion": forms.HiddenInput(), "date_time_started": forms.DateTimeInput(attrs={'type': 'datetime-local'}), "expected_completion_date_time": forms.DateTimeInput(attrs={'type': 'datetime-local'})}
+        widgets = {"suggestion": forms.HiddenInput(), "date_started": forms.SelectDateWidget(), "expected_completion_date": forms.SelectDateWidget()}

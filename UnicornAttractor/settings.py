@@ -132,6 +132,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+
+
 # Toggle to enable and disable coins
 COINS_ENABLED = True
 
