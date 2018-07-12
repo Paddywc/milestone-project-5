@@ -10,6 +10,61 @@
 <p>{{ feature.title }}</p>
 <p>{{ feature.details|safe }}</p>
 
+
+
+
+
+   <!-- Flag suggestion modal trigger -->
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#flagSuggestionModal">
+Flag Suggestion
+</button>
+
+<!--Flag suggestion model-->
+
+<div class="modal fade" id="flagSuggestionModal" tabindex="-1" role="dialog" aria-labelledby="flagSuggestionModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="flagSuggestionModalLabel">Flag Suggestion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+     
+    <form id="flagForm" method="GET">
+        <!--from bootstrap documentation-->
+  <div class="form-row align-items-center">
+    <div class="col-auto my-1">
+      <select class="custom-select mr-sm-2" name="flagSuggestionReasonSelect" id="flagSuggestionReasonSelect">
+       <option selected>Suggestion contains...</option>
+        <option value="0">Spam</option>
+         <option value="1" >Hate Speech</option>
+       <option value="2" >Graphic Content</option>
+        <option value="3" >Harassment or Bullying</option>
+      </select>
+      
+    </div>
+   
+    <div class="col-auto my-1">
+    <a class="flagBtn btn btn-danger" id="suggestionSpanBtn" href="{% url 'flag' 2 feature.id 0 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="suggestionHateBtn" href="{% url 'flag' 2 feature.id 1 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="suggestionGraphicBtn" href="{% url 'flag' 2 feature.id 2 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="suggestionBullyingBtn" href="{% url 'flag' 2 feature.id 3 %}" role="button">Flag </a>
+
+    </div>
+
+  </div>
+  </form>
+        
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+
+
 {% if request.user.is_staff %}
 <div class="row">
 <a class="btn btn-primary" href="{% url 'admin_page' feature.id %}" role="button">View admin page</a>
@@ -82,8 +137,6 @@
 </div>
 
  
-    
-
 {% endif %}
 
 {% for comment in comments %}
@@ -92,18 +145,18 @@
 <!--<a class="btn btn-danger" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>-->
 
 
-   <!-- Upvote trigger modal -->
-<button type="button" id="upvote" class="btn btn-danger" data-toggle="modal" data-target="#flagModal">
+   <!-- Flag comment modal trigger -->
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#flagCommentModal">
 Flag Comment
 </button>
 
-<!--Flag model-->
+<!--Flag comment model-->
 
-<div class="modal fade" id="flagModal" tabindex="-1" role="dialog" aria-labelledby="flagModalLabel" aria-hidden="true">
+<div class="modal fade" id="flagCommentModal" tabindex="-1" role="dialog" aria-labelledby="flagCommentModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="flagModalLabel">Flag Comment</h5>
+        <h5 class="modal-title" id="flagCommentModalLabel">Flag Comment</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -114,7 +167,7 @@ Flag Comment
         <!--from bootstrap documentation-->
   <div class="form-row align-items-center">
     <div class="col-auto my-1">
-      <select class="custom-select mr-sm-2" name="flagReasonSelect" id="flagReasonSelect">
+      <select class="custom-select mr-sm-2" name="flagCommentReasonSelect" id="flagCommentReasonSelect">
        <option selected>Comment contains...</option>
         <option value="0">Spam</option>
          <option value="1" >Hate Speech</option>
@@ -125,24 +178,51 @@ Flag Comment
     </div>
    
     <div class="col-auto my-1">
-    <a class="flagBtn btn btn-danger" id="spanBtn" href="{% url 'flag' 1 comment.id 0 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="hateBtn" href="{% url 'flag' 1 comment.id 1 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="graphicBtn" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="bullyingBtn" href="{% url 'flag' 1 comment.id 3 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="commentSpanBtn" href="{% url 'flag' 1 comment.id 0 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="commentHateBtn" href="{% url 'flag' 1 comment.id 1 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="commentGraphicBtn" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="commentBullyingBtn" href="{% url 'flag' 1 comment.id 3 %}" role="button">Flag </a>
 
     </div>
+
+
+   
+   
+   
+  </div>
+  </form>
+        
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+
+{% endfor %}
    <script>
     let showAppropriateButton = function() {
         $(".flagBtn").hide()
-        if ($("#flagReasonSelect").val()=="0"){
-           $("#spanBtn").show()
-        } else if ($("#flagReasonSelect").val()=="1"){
-           $("#hateBtn").show()
-        } else if ($("#flagReasonSelect").val()=="2"){
-           $("#graphicBtn").show()
-        } else if ($("#flagReasonSelect").val()=="3"){
-           $("#bullyingBtn").show()
+        if ($("#flagCommentReasonSelect").val()=="0"){
+           $("#commentSpanBtn").show()
+        } else if ($("#flagCommentReasonSelect").val()=="1"){
+           $("#commentHateBtn").show()
+        } else if ($("#flagCommentReasonSelect").val()=="2"){
+           $("#commentGraphicBtn").show()
+        } else if ($("#flagCommentReasonSelect").val()=="3"){
+           $("#commentBullyingBtn").show()
         }
+        
+         if ($("#flagSuggestionReasonSelect").val()=="0"){
+           $("#suggestionSpanBtn").show()
+        } else if ($("#flagSuggestionReasonSelect").val()=="1"){
+           $("#suggestionHateBtn").show()
+        } else if ($("#flagSuggestionReasonSelect").val()=="2"){
+           $("#suggestionGraphicBtn").show()
+        } else if ($("#flagSuggestionReasonSelect").val()=="3"){
+           $("#suggestionBullyingBtn").show()
+        }
+        
         
      
     };
@@ -151,31 +231,11 @@ Flag Comment
          showAppropriateButton()
      })
 
-    $("#flagReasonSelect").change(showAppropriateButton)
+    $("#flagCommentReasonSelect").change(showAppropriateButton)
+    $("#flagSuggestionReasonSelect").change(showAppropriateButton)
 
 
 </script>
-
-   
-   
-   
-  </div>
-  </form>
-        
-        
-        
-      </div>
-     
-    </div>
-  </div>
-</div>
-
- 
-
-
-
-{% endfor %}
-
 <form method="POST">
 
     {{ form|as_bootstrap }}
