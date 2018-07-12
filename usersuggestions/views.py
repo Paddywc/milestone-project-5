@@ -151,7 +151,6 @@ def upvote_comment(request, id):
 def flag_item(request, item_type, item_id, reason):
     """
     """
-    print("first part is running")
     # if flagged item is a commment
     if item_type=="1":
         print("if statement")

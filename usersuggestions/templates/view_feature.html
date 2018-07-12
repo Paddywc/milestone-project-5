@@ -21,12 +21,12 @@
 
       {% else %}
       
-   <!-- Button trigger modal -->
+   <!-- Upvote modal trigger-->
 <button type="button" id="upvote" class="btn btn-primary" data-toggle="modal" data-target="#upvoteModal">
  Upvote Suggestion
 </button>
 
-<!-- Modal -->
+<!-- Upvote Modal -->
 <div class="modal fade" id="upvoteModal" tabindex="-1" role="dialog" aria-labelledby="upvoteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -89,7 +89,90 @@
 {% for comment in comments %}
 <div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}. Upvotes {{ comment.upvotes }}</p></div>
 <a class="btn btn-primary" href="{% url 'upvote_comment' comment.id %}" role="button">Upvote Comment</a>
-<a class="btn btn-danger" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>
+<!--<a class="btn btn-danger" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>-->
+
+
+   <!-- Upvote trigger modal -->
+<button type="button" id="upvote" class="btn btn-danger" data-toggle="modal" data-target="#flagModal">
+Flag Comment
+</button>
+
+<!--Flag model-->
+
+<div class="modal fade" id="flagModal" tabindex="-1" role="dialog" aria-labelledby="flagModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="flagModalLabel">Flag Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+     
+    <form id="flagForm" method="GET">
+        <!--from bootstrap documentation-->
+  <div class="form-row align-items-center">
+    <div class="col-auto my-1">
+      <select class="custom-select mr-sm-2" name="flagReasonSelect" id="flagReasonSelect">
+       <option selected>Comment contains...</option>
+        <option value="0">Spam</option>
+         <option value="1" >Hate Speech</option>
+       <option value="2" >Graphic Content</option>
+        <option value="3" >Harassment or Bullying</option>
+      </select>
+      
+    </div>
+   
+    <div class="col-auto my-1">
+    <a class="flagBtn btn btn-danger" id="spanBtn" href="{% url 'flag' 1 comment.id 0 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="hateBtn" href="{% url 'flag' 1 comment.id 1 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="graphicBtn" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>
+    <a class="flagBtn btn btn-danger" id="bullyingBtn" href="{% url 'flag' 1 comment.id 3 %}" role="button">Flag </a>
+
+    </div>
+   <script>
+    let showAppropriateButton = function() {
+        $(".flagBtn").hide()
+        if ($("#flagReasonSelect").val()=="0"){
+           $("#spanBtn").show()
+        } else if ($("#flagReasonSelect").val()=="1"){
+           $("#hateBtn").show()
+        } else if ($("#flagReasonSelect").val()=="2"){
+           $("#graphicBtn").show()
+        } else if ($("#flagReasonSelect").val()=="3"){
+           $("#bullyingBtn").show()
+        }
+        
+     
+    };
+    
+     $(document).ready(function(){
+         showAppropriateButton()
+     })
+
+    $("#flagReasonSelect").change(showAppropriateButton)
+
+
+</script>
+
+   
+   
+   
+  </div>
+  </form>
+        
+        
+        
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+ 
+
+
 
 {% endfor %}
 
