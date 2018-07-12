@@ -89,6 +89,7 @@
 {% for comment in comments %}
 <div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}. Upvotes {{ comment.upvotes }}</p></div>
 <a class="btn btn-primary" href="{% url 'upvote_comment' comment.id %}" role="button">Upvote Comment</a>
+<a class="btn btn-danger" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>
 
 {% endfor %}
 
