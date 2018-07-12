@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from .helpers import set_current_url_as_session_url, return_all_features, return_all_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page
+from .helpers import set_current_url_as_session_url, return_all_features, return_all_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, set_initial_session_form_title_as_false, return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false
 from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
@@ -15,19 +15,10 @@ from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_dat
 def add_suggestion(request):
     """
     """
-    try:
-        x = request.session["form_title"]
-    except:
-        request.session["form_title"] = False
-        
+    set_initial_session_form_title_as_false(request)
     
-    # user value hidden using widget
-    # therefore set as current user here
-    form = SuggestionForm(initial={"user": request.user})
-    
-    if request.session["form_title"] != False:
-        form = SuggestionForm(initial={"user": request.user, "is_feature": True, "details": request.session["form_details"], "title": request.session["form_title"]})
-        
+    form = return_previous_suggestion_form_values_or_empty_form(request)
+
     if request.method=="POST":
         
         # if the user has insufficient coins for suggestion 
@@ -51,8 +42,9 @@ def add_suggestion(request):
                 saved_suggestion_object = form.save()
                 suggestion_admin_page = SuggestionAdminPage(suggestion= saved_suggestion_object)
                 suggestion_admin_page.save()
-                request.session["form_title"] = False
-                request.session["form_details"] = False
+                set_session_form_values_as_false(request)
+                return(redirect("view_suggestion", saved_suggestion_object.id))
+                
                 
                 
     if (settings.COINS_ENABLED):

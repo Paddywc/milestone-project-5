@@ -1,5 +1,6 @@
 from .models import Suggestion, Upvote, Comment, SuggestionAdminPage
 from django.db.models import Count
+from .forms import SuggestionForm
 
 def set_current_url_as_session_url(request):
     """
@@ -44,3 +45,35 @@ def update_suggestion_admin_page(form):
     row.expected_completion_date_time = form.cleaned_data["expected_completion_date_time"]
     row.github_branch = form.cleaned_data["github_branch"]
     row.save()
+    
+def set_initial_session_form_title_as_false(request):
+    """
+    If there is no set form_title value in 
+    the session, set it as False
+    """
+    try:
+        x = request.session["form_title"]
+    except:
+        request.session["form_title"] = False
+        
+        
+def return_previous_suggestion_form_values_or_empty_form(request):
+    """
+    If there are previous suggestion form values saved in the session,
+    return a form prepopulated with these values. Otherwise return 
+    an empty form.
+    """
+    if request.session["form_title"] != False:
+        return SuggestionForm(initial={"user": request.user, "is_feature": True, "details": request.session["form_details"], "title": request.session["form_title"]})
+        
+    else:
+        # user value hidden using widget
+        # therefore set as current user here
+        return SuggestionForm(initial={"user": request.user})
+        
+def set_session_form_values_as_false(request):
+    """
+    For use in add_suggestion function
+    """
+    request.session["form_title"] = False
+    request.session["form_details"] = False
