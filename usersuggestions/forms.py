@@ -28,3 +28,6 @@ class SuggestionAdminPageForm(forms.ModelForm):
         model = SuggestionAdminPage
         exclude = [""]
         widgets = {"suggestion": forms.HiddenInput(), "date_started": forms.SelectDateWidget(), "expected_completion_date": forms.SelectDateWidget()}
+
+
+    
