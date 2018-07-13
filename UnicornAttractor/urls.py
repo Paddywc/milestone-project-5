@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^store/', render_store, name='store'),
     url(r'^cart/', include(urls_cart)),
     url(r'^suggestions/', include(urls_suggestions)),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^sort/(?P<sorting>[-\w]+)$', render_home, name='home'),
     url(r'^$', render_home, name='home'),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    
 ]

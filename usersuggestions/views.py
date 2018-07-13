@@ -56,16 +56,16 @@ def add_suggestion(request):
     return render(request, 'add_suggestion.html', {"form": form, "coins_enabled": settings.COINS_ENABLED, "user_coins": user_coins, "price":price, "coin_options": coin_options, "minimum_coins": minimum_coins})
     
     
-def render_home(request):
+def render_home(request, sorting="oldest"):
     """
     """
     # for testing
-    set_current_voting_cycle_as_true_for_all_suggestions()
+    # set_current_voting_cycle_as_true_for_all_suggestions()
     
     
     voting_end_date = get_voting_end_date()
-    current_features = return_current_features()
-    bugs = return_all_bugs()
+    current_features = return_current_features(sorting)
+    bugs = return_all_bugs(sorting)
     previous_winners = return_previous_winners()
     return render(request, "home.html", {"features": current_features, "bugs": bugs, "voting_end_date": voting_end_date})
 
@@ -156,7 +156,7 @@ def upvote_suggestion(request, id):
 def upvote_comment(request, id):
     comment = get_object_or_404(Comment, id=id)
     add_comment_upvote_to_database(request.user, comment)
-    return redirect("view_suggestion",comment.suggestion.id)
+    return redirect("view_suggestion", comment.suggestion.id)
     
 @login_required()
 def flag_item(request, item_type, item_id, reason):

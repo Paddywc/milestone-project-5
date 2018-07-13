@@ -7,24 +7,43 @@ def set_current_url_as_session_url(request):
     """
     request.session["session_url"] = str(request.build_absolute_uri())
 
-def return_current_features():
+def return_current_features(sorting="oldest"):
     """
     Returns all features (not bugs) in the current 
     voting cycle along with their upvote count.
-    Ordered in  descending  order by upvote count
+    Ordered by argument value
     """
-    return Suggestion.objects.filter(is_feature=True, suggestionadminpage__in_current_voting_cycle=True).annotate(upvotes=Count("upvote")).order_by("-upvotes")
+    if sorting == "oldest":
+        sorting ="date_time"
+    elif sorting == "newest":
+        sorting= "-date_time"
+    elif sorting == "comments":
+        sorting = "-comments"
+    else:
+        sorting = "-upvotes"
+    
+    return Suggestion.objects.filter(is_feature=True, suggestionadminpage__in_current_voting_cycle=True).annotate(upvotes=Count("upvote")).annotate(comments=Count("comment")).order_by(sorting)
 
-def return_all_bugs():
+def return_all_bugs(sorting="oldest"):
     """
     Returns all bugs in database  along with 
     their upvote count. Ordered in descending 
     order by upvote count
     """
-    return Suggestion.objects.filter(is_feature=False).annotate(upvotes=Count("upvote")).order_by("-upvotes")
+    
+    if sorting == "oldest":
+        sorting ="date_time"
+    elif sorting == "newest":
+        sorting= "-date_time"
+    elif sorting == "comments":
+        sorting = "-comments"
+    else:
+        sorting = "-upvotes"
+
+    return Suggestion.objects.filter(is_feature=False).annotate(upvotes=Count("upvote")).annotate(comments=Count("comment")).order_by(sorting)
     
 
-def return_public_suggestion_comments(suggestion, comment_sorting):
+def return_public_suggestion_comments(suggestion, comment_sorting="oldest"):
     """
     Excludes admin comments
     """
@@ -36,7 +55,7 @@ def return_public_suggestion_comments(suggestion, comment_sorting):
         comment_sorting = "-upvotes"
     
     
-    return Comment.objects.filter(suggestion=suggestion, admin_page_comment=False).annotate(upvotes=Count("upvote")).order_by(comment_sorting)
+    return Comment.objects.filter(suggestion=suggestion, admin_page_comment=False).annotate(upvotes=Count("upvote")).annotate(comments=Count("comment")).order_by(comment_sorting)
     
     
 def return_admin_suggestion_comments(suggestion):

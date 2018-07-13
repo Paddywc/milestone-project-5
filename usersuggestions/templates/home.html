@@ -17,13 +17,38 @@
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="features" role="tabpanel" aria-labelledby="features-tab">
       
-<h3>Voting end date: {{ voting_end_date }} </h3>      
+<h3>Voting end date: {{ voting_end_date }} </h3>   
+
+
+
+
+  <div class="btn-group" role="group">
+    <button id="orderResultsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Sort results by
+    </button>
+    <div class="dropdown-menu" aria-labelledby="orderResultsButtonGroup">
+      <a class="dropdown-item" href="{% url 'home'  'oldest' %}">Oldest</a>
+      <a class="dropdown-item" href="{% url 'home' 'newest' %}">Newest</a>
+            <a class="dropdown-item" href="{% url 'home' 'comments' %}">Most Commented</a>
+
+        <a class="dropdown-item" href="{% url 'home' 'upvotes' %}">Most Popular</a>
+      
+    </div>
+  </div>
+
+
+
+
+
+
+
 {% for feature in features %}
 
 <div class="card">
   <div class="card-header">
 
-    Upvotes: {{ feature.upvotes }}
+    <p>Upvotes: {{ feature.upvotes }}</p>
+    <p>Comments: {{ feature.comments }}</p>
   </div>
   <div class="card-body">
     <h5 class="card-title">{{ feature.title }}</h5>
@@ -43,13 +68,27 @@
       </div>
   <div class="tab-pane fade" id="bugs" role="tabpanel" aria-labelledby="bugs-tab">
       
+      <div class="btn-group" role="group">
+    <button id="orderResultsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Sort results by
+    </button>
+    <div class="dropdown-menu" aria-labelledby="orderResultsButtonGroup">
+      <a class="dropdown-item" href="{% url 'home'  'oldest' %}#bugs">Oldest</a>
+      <a class="dropdown-item" href="{% url 'home' 'newest' %}#bugs">Newest</a>
+         <a class="dropdown-item" href="{% url 'home' 'comments' %}#bugs">Most Commented</a>
+
+        <a class="dropdown-item" href="{% url 'home' 'upvotes' %}#bugs">Most Encountered</a>
+    </div>
+  </div>
+
             
       
 {% for bug in bugs %}
 
 <div class="card">
   <div class="card-header">
-    Upvotes: {{ bug.upvotes }}
+      <p>Upvotes: {{ bug.upvotes }}</p>
+    <p>Comments: {{ bug.comments }}</p>
   </div>
   <div class="card-body">
     <h5 class="card-title">{{ bug.title }}</h5>
@@ -68,6 +107,15 @@
 
 </div>
 
+<script>
+// code from: https://stackoverflow.com/questions/7862233/twitter-bootstrap-tabs-go-to-specific-tab-on-page-reload-or-hyperlink
+  var url = document.location.toString();
+if (url.match('#')) {
+    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+} 
+
+  
+</script>
 
 
 
