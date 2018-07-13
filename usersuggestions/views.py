@@ -40,7 +40,10 @@ def add_suggestion(request):
                     user_coins = return_user_coins(request.user)
             
                 saved_suggestion_object = form.save()
-                suggestion_admin_page = SuggestionAdminPage(suggestion= saved_suggestion_object)
+                if saved_suggestion_object.delay_submission == True:
+                    suggestion_admin_page = SuggestionAdminPage(suggestion= saved_suggestion_object, in_current_voting_cycle=False)
+                else:    
+                    suggestion_admin_page = SuggestionAdminPage(suggestion= saved_suggestion_object)
                 suggestion_admin_page.save()
                 set_session_form_values_as_false(request)
                 return(redirect("view_suggestion", saved_suggestion_object.id))
@@ -116,7 +119,7 @@ def render_suggestion_admin_page(request,id):
     """
     # for testing:
     # set_current_voting_cycle_as_true_for_all_suggestions()
-    # declare_winner_if_voting_end_date()
+    # end_voting_cycle_if_current_end_date()
     
     
     if not request.user.is_staff:

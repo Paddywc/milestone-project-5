@@ -11,7 +11,7 @@ class Suggestion(models.Model):
     title = models.CharField(max_length=200, blank=False)
     details = RichTextUploadingField()
     date_time = models.DateTimeField(auto_now_add=True)
-    
+    delay_submission = models.BooleanField(null=False, blank=True, default=False)
     
     def __str__(self):
         return "{0}: {1}".format(self.user, self.title)

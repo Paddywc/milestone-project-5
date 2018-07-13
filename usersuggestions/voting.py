@@ -26,14 +26,15 @@ def get_voting_end_date():
         return datetime.date.today() + datetime.timedelta(days=5)
        
        
-def set_expected_compilation_date_if_none_exists(suggestion_admin_page_object):
+def set_expected_compilation_date_if_none_exists():
     """
     """
+    winner_admin_object = SuggestionAdminPage.objects.get(current_winner=True)
     try:
-        if suggestion_admin_page_object.expected_completion_date == None:
-            estimated_days = suggestion_admin_page_object.estimated_days_to_complete
-            suggestion_admin_page_object.expected_completion_date = datetime.date.today() + datetime.timedelta(days=estimated_days)
-            suggestion_admin_page_object.save()
+        if winner_admin_object.expected_completion_date == None:
+            estimated_days = winner_admin_object.estimated_days_to_complete
+            winner_admin_object.expected_completion_date = datetime.date.today() + datetime.timedelta(days=estimated_days)
+            winner_admin_object.save()
     except:
         return False
         
@@ -41,7 +42,7 @@ def set_current_voting_cycle_as_true_for_all_suggestions():
     """
     For testing
     """
-    SuggestionAdminPage.objects.all().update(in_current_voting_cycle=True)
+    SuggestionAdminPage.objects.filter(suggestion__delay_submission=True).update(in_current_voting_cycle=True)
         
 def remove_all_suggestions_from_current_voting_cycle():
     """
@@ -65,7 +66,18 @@ def declare_winner():
         winner_admin_object.save()
     except:
         return False
- 
+        
+        
+def trigger_delayed_suggestions():
+    """
+    """
+    try:
+        SuggestionAdminPage.objects.filter(suggestion__delay_submission=True).update(in_current_voting_cycle=True)
+        Suggestion.objects.filter(delay_submission=True).update(delay_submission=False)
+        
+        
+    except Exception as e:
+        print(e)
         
 def end_voting_cycle_if_current_end_date():
     """
@@ -78,7 +90,8 @@ def end_voting_cycle_if_current_end_date():
            declare_winner()
            set_suggestions_success_result()
            remove_all_suggestions_from_current_voting_cycle()
-           set_expected_compilation_date_if_none_exists(winner_admin_object)
+           trigger_delayed_suggestions()
+           set_expected_compilation_date_if_none_exists()
            
         else:
             return False

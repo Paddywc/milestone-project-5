@@ -11,7 +11,7 @@
 <form method="post">
     {{ form|as_bootstrap }}
     {% csrf_token %}
-    
+  
     {% if not coins_enabled %}
     <input type="submit" value="Submit" id="bugFixSubmit">
 
@@ -92,11 +92,21 @@
         }
     };
     
+    let showOrHideDelaySubmissionCheckbox = function(){
+       if ($("#id_is_feature").val() == "True"){
+         $(".checkbox").show()
+       }else{
+         $(".checkbox").hide()
+       }
+    }; 
+    
      $(document).ready(function(){
          showAppropriateButton()
+         showOrHideDelaySubmissionCheckbox()
      })
 
     $("#id_is_feature").change(showAppropriateButton)
+    $("#id_is_feature").change(showOrHideDelaySubmissionCheckbox)
 
 
 </script>
