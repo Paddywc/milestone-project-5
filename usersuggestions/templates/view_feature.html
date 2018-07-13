@@ -137,6 +137,25 @@ Flag Suggestion
 </div>
 
  
+ <div id="comments">
+     
+ 
+
+  <div class="btn-group" role="group">
+    <button id="orderCommentsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Sort comments by
+    </button>
+    <div class="dropdown-menu" aria-labelledby="orderCommentsButtonGroup">
+      <a class="dropdown-item" href="{% url 'view_suggestion' feature.id  'oldest' %}#comments">Oldest</a>
+      <a class="dropdown-item" href="{% url 'view_suggestion' feature.id  'newest' %}#comments">Newest</a>
+        <a class="dropdown-item" href="{% url 'view_suggestion' feature.id  'upvotes' %}#comments">Most Popular</a>
+    </div>
+  </div>
+</div>
+     
+     
+     
+     
 {% endif %}
 
 {% for comment in comments %}
@@ -196,6 +215,8 @@ Flag Comment
 
 
 {% endfor %}
+
+</div>
    <script>
     let showAppropriateButton = function() {
         $(".flagBtn").hide()

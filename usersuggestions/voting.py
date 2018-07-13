@@ -85,3 +85,8 @@ def end_voting_cycle_if_current_end_date():
     except Exception as e:
         print(e)
         return False
+        
+def return_previous_winners():
+    """
+    """
+    return Suggestion.objects.filter(suggestionadminpage__was_successful=True)

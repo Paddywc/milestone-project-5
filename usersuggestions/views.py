@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from .helpers import set_current_url_as_session_url, return_all_features, return_all_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, set_initial_session_form_title_as_false, return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false
+from .helpers import set_current_url_as_session_url, return_current_features, return_all_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, set_initial_session_form_title_as_false, return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false
 from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
 from market.helpers import purchase_coins_for_action
 from .models import Suggestion, Comment, SuggestionAdminPage, Flag
+from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, end_voting_cycle_if_current_end_date, set_current_voting_cycle_as_true_for_all_suggestions, get_voting_end_date, return_previous_winners
 
 
 @login_required()
@@ -58,18 +59,23 @@ def add_suggestion(request):
 def render_home(request):
     """
     """
-    features = return_all_features()
+    # for testing
+    set_current_voting_cycle_as_true_for_all_suggestions()
+    
+    
+    voting_end_date = get_voting_end_date()
+    current_features = return_current_features()
     bugs = return_all_bugs()
-    return render(request, "home.html", {"features": features, "bugs": bugs})
+    previous_winners = return_previous_winners()
+    return render(request, "home.html", {"features": current_features, "bugs": bugs, "voting_end_date": voting_end_date})
 
 
-def view_suggestion(request, id):
+def view_suggestion(request, id, comment_sorting="oldest"):
     """
     """
     coins_enabled =settings.COINS_ENABLED
-
     suggestion = get_object_or_404(Suggestion, id=id)
-    comments = return_public_suggestion_comments(suggestion)
+    comments = return_public_suggestion_comments(suggestion, comment_sorting)
     form = CommentForm(initial={"user": request.user,"suggestion": suggestion})
     
     if request.method=="POST":
@@ -108,8 +114,11 @@ def view_suggestion(request, id):
 def render_suggestion_admin_page(request,id):
     """
     """
-    set_current_voting_cycle_as_true_for_all_suggestions()
-    declare_winner_if_voting_end_date()
+    # for testing:
+    # set_current_voting_cycle_as_true_for_all_suggestions()
+    # declare_winner_if_voting_end_date()
+    
+    
     if not request.user.is_staff:
         return redirect("view_suggestion", id=id)
     suggestion = get_object_or_404(Suggestion, id=id)

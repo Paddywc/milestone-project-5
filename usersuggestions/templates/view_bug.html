@@ -69,11 +69,24 @@ Flag Suggestion
 </div>
 
 
-
-
-
-
 <a class="btn btn-primary" href="{% url 'upvote_suggestion' bug.id %}" role="button">I have this bug</a>
+
+ <div id="comments">
+
+  <div class="btn-group" role="group">
+    <button id="orderCommentsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Sort comments by
+    </button>
+    <div class="dropdown-menu" aria-labelledby="orderCommentsButtonGroup">
+      <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'oldest' %}#comments">Oldest</a>
+      <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'newest' %}#comments">Newest</a>
+        <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'upvotes' %}#comments">Most Popular</a>
+    </div>
+  </div>
+</div>
+     
+
+
 
 {% for comment in comments %}
 <div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}. Upvotes {{ comment.upvotes }}</p></div>
@@ -134,6 +147,8 @@ Flag Comment
 </div>
 
 {% endfor %}
+
+</div>
    <script>
     let showAppropriateButton = function() {
         $(".flagBtn").hide()
