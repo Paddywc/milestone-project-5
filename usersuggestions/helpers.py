@@ -43,10 +43,10 @@ def update_suggestion_admin_page(form):
     row.developer_assigned = form.cleaned_data["developer_assigned"]
     row.priority = form.cleaned_data["priority"]
     row.date_started = form.cleaned_data["date_started"]
-    row.estimated_completion_time = form.cleaned_data["estimated_completion_time"]
+    row.estimated_days_to_complete = form.cleaned_data["estimated_days_to_complete"]
     row.expected_completion_date = form.cleaned_data["expected_completion_date"]
     row.github_branch = form.cleaned_data["github_branch"]
-    row.is_current_winner = form.cleaned_data["is_current_winner"]
+    row.in_current_voting_cycle = form.cleaned_data["in_current_voting_cycle"]
     row.save()
     
 def set_initial_session_form_title_as_false(request):

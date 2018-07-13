@@ -27,24 +27,26 @@ class SuggestionAdminPage(models.Model):
     developer_assigned = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT)
     priority = models.PositiveSmallIntegerField(choices=priority_choices, null=True, blank=True, default=1)
     date_started = models.DateField(null=True, blank=True)
-    estimated_completion_time =  models.DurationField(null=True, blank=True)
+    estimated_days_to_complete =  models.PositiveSmallIntegerField(null=True, blank=True)
     expected_completion_date = models.DateField(null=True, blank=True)
     github_branch = models.CharField(null=True, blank=True, max_length=50)
-    is_current_winner = models.BooleanField(blank=False, default=False)
+    in_current_voting_cycle = models.BooleanField(blank=False, default=True)
+    was_successful = models.NullBooleanField(blank=True, null=True) 
+    current_winner = models.BooleanField(blank=False, default=False)
     
     def __str__(self):
         return self.suggestion.title
         
             
-    # Code for turning other is_current_winner values
+    # Code for turning other current_winner values
     # to False once a new value saved as a True
     # Code from: https://stackoverflow.com/questions/1455126/unique-booleanfield-value-in-django
     def save(self, *args, **kwargs):
-        if self.is_current_winner:
+        if self.current_winner:
             try:
-                temp = SuggestionAdminPage.objects.get(is_current_winner=True)
+                temp = SuggestionAdminPage.objects.get(current_winner=True)
                 if self != temp:
-                    temp.is_current_winner = False
+                    temp.current_winner = False
                     temp.save()
             except SuggestionAdminPage.DoesNotExist:
                 pass

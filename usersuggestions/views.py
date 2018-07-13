@@ -8,7 +8,6 @@ from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
 from market.helpers import purchase_coins_for_action
 from .models import Suggestion, Comment, SuggestionAdminPage, Flag
-from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database,  declare_winner_if_voting_end_date
 
 
 @login_required()
@@ -109,8 +108,8 @@ def view_suggestion(request, id):
 def render_suggestion_admin_page(request,id):
     """
     """
-    print(declare_winner_if_voting_end_date())
-    
+    set_current_voting_cycle_as_true_for_all_suggestions()
+    declare_winner_if_voting_end_date()
     if not request.user.is_staff:
         return redirect("view_suggestion", id=id)
     suggestion = get_object_or_404(Suggestion, id=id)
@@ -156,7 +155,6 @@ def flag_item(request, item_type, item_id, reason):
     """
     # if flagged item is a commment
     if item_type=="1":
-        print("if statement")
         comment =  get_object_or_404(Comment, id=int(item_id))
         flag = Flag(flagged_item_type=int(item_type), comment= comment,
         flagged_by= request.user, reason=reason)
@@ -164,7 +162,6 @@ def flag_item(request, item_type, item_id, reason):
         return redirect("view_suggestion", comment.suggestion.id)
     # if flagged item is a suggestion
     else:
-        print("else statement")
         suggestion = get_object_or_404(Suggestion, id=item_id)
         flag = Flag(flagged_item_type= item_type, suggestion=suggestion,
         flagged_by= request.user, reason=reason)
