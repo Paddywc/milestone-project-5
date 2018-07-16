@@ -99,3 +99,13 @@ class Flag(models.Model):
     
     def __str__(self):
         return "Flagged {0}. {1}. {2}".format(self.get_flagged_item_type_display(), self.date_time_marked, self.get_status_display())
+        
+        
+class UserFavorites(models.Model):
+    """
+    """
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
+    suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return "{0}: {1}".format(self.user, self.suggestion)

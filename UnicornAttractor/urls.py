@@ -21,7 +21,7 @@ from market.views import render_store
 from accounts import urls as urls_accounts
 from market import urls as urls_cart
 from usersuggestions import urls as urls_suggestions
-from usersuggestions.views import render_home
+from usersuggestions.views import render_home, render_userpage
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
@@ -32,5 +32,5 @@ urlpatterns = [
     url(r'^sort/(?P<sorting>[-\w]+)$', render_home, name='home'),
     url(r'^$', render_home, name='home'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    
+    url(r'^user/(?P<user_id>\d+)$', render_userpage, name='userpage'),
 ]

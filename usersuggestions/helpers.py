@@ -1,4 +1,5 @@
-from .models import Suggestion, Upvote, Comment, SuggestionAdminPage
+from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, UserFavorites
+from market.models import Order, UserCoinHistory, OrderItem
 from django.db.models import Count
 from .forms import SuggestionForm
 
@@ -108,3 +109,28 @@ def set_session_form_values_as_false(request):
     """
     request.session["form_title"] = False
     request.session["form_details"] = False
+    
+def get_userpage_values(user):
+    """
+    Returns a dictionary with all the values required
+    to render a userpage
+    """
+    favorites = UserFavorites.objects.filter(user=user)
+    votes =  Upvote.objects.filter(user=user).order_by("-date_time")
+    purchases = Order.objects.filter(user=user).order_by("-date_time")
+    coin_history = UserCoinHistory.objects.filter(user=user).order_by("-date_time")
+    suggestions = Suggestion.objects.filter(user=user).order_by("-date_time")
+    
+    
+    for purchase in purchases:
+        purchase.items = OrderItem.objects.filter(order=purchase)
+        purchase.total_cost = 0
+        for item in purchase.items:
+            purchase.total_cost += item.total_purchase_price
+    
+    
+    values_dictionary = {"favorites": favorites, "purchases": purchases,
+        "coin_history": coin_history, "votes": votes, "suggestions": suggestions
+    }
+    
+    return values_dictionary

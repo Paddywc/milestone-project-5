@@ -1,8 +1,25 @@
-from .models import UserCoins, CoinsPurchase, StoreItem
+from .models import UserCoins, CoinsPurchase, StoreItem, UserCoinHistory
+from usersuggestions.models import Suggestion, Comment
+
+def add_transaction_to_user_coin_history(user, amount, purchase=False, charge=0):
+    """
+    """
+    user_coins_row = UserCoins.objects.get(user=user)
+    if purchase:
+        if isinstance(purchase, Suggestion):
+            transaction = UserCoinHistory(user=user,coins_change=amount, suggestion=purchase, charge=charge)
+        
+    else:
+        transaction = UserCoinHistory(user=user,coins_change=amount)
+    transaction.save()
+    
+
+
 def add_coins(user, amount):
     """
     adds the amount specfied in the second
-    argument to the argument user
+    argument to the argument user. Adds transaction
+    to UserCoinHistory
     """
     # below line of code creates table row for user if none exists
     UserCoins.objects.get_or_create(user=user)
@@ -10,17 +27,24 @@ def add_coins(user, amount):
     old_coins_value = user_row.coins
     user_row.coins = old_coins_value + amount
     user_row.save()
+    add_transaction_to_user_coin_history(user, amount)
     
-def remove_coins(user, amount):
+def remove_coins(user, amount, purchase=False, charge=0):
     """
     adds the amount specfied in the second
-    argument to the argument user
+    argument to the argument user. Adds transaction
+    to UserCoinHistory
     """
     UserCoins.objects.get_or_create(user=user)
     user_row = UserCoins.objects.get(user=user)
     old_coins_value = user_row.coins
     user_row.coins = old_coins_value - amount
     user_row.save()
+    
+    if purchase:
+        add_transaction_to_user_coin_history(user,(0-amount), purchase, charge)
+    else:
+        add_transaction_to_user_coin_history(user, (0-amount))
     
 def return_user_coins(user):
     """

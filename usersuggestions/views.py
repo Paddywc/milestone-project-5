@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from .helpers import set_current_url_as_session_url, return_current_features, return_all_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, set_initial_session_form_title_as_false, return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false
+from .helpers import get_userpage_values, set_current_url_as_session_url, return_current_features, return_all_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, set_initial_session_form_title_as_false, return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false
 from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
 from market.cart import Cart
 from market.coins import return_user_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
 from market.helpers import purchase_coins_for_action
 from .models import Suggestion, Comment, SuggestionAdminPage, Flag
 from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, end_voting_cycle_if_current_end_date, set_current_voting_cycle_as_true_for_all_suggestions, get_voting_end_date, return_previous_winners
-
+from accounts.models import User
 
 @login_required()
 def add_suggestion(request):
@@ -35,11 +35,11 @@ def add_suggestion(request):
             # 'feature'. Returns False if == 'bug fix'. Returned as String
             is_feature = request.POST.get("is_feature")
             if form.is_valid():
-                if is_feature=='True' and settings.COINS_ENABLED:
-                    remove_coins(request.user, get_coins_price("Suggestion"))
-                    user_coins = return_user_coins(request.user)
-            
                 saved_suggestion_object = form.save()
+                if is_feature=='True' and settings.COINS_ENABLED:
+                    remove_coins(request.user, get_coins_price("Suggestion"), saved_suggestion_object, charge=1)
+                    user_coins = return_user_coins(request.user)
+                    
                 if saved_suggestion_object.delay_submission == True:
                     suggestion_admin_page = SuggestionAdminPage(suggestion= saved_suggestion_object, in_current_voting_cycle=False)
                 else:    
@@ -86,9 +86,12 @@ def view_suggestion(request, id, comment_sorting="oldest"):
             return purchase_coins_for_action(request)
             
         elif 'postComment' in request.POST:
-            form = CommentForm(data=request.POST)
-            if form.is_valid():
-                form.save()
+            if request.user.is_authenticated:
+                form = CommentForm(data=request.POST)
+                if form.is_valid():
+                    form.save()
+            else:
+                return redirect("login")
             
         
     if coins_enabled and request.user.is_authenticated:
@@ -148,9 +151,9 @@ def render_suggestion_admin_page(request,id):
 def upvote_suggestion(request, id):
     """
     """
-    if settings.COINS_ENABLED:
-        remove_coins(request.user, get_coins_price("Upvote"))
     suggestion = get_object_or_404(Suggestion, id=id)
+    if settings.COINS_ENABLED:
+        remove_coins(request.user, get_coins_price("Upvote"), suggestion, 2)
     add_suggestion_upvote_to_database(request.user, suggestion)
     return redirect("view_suggestion",id)
 
@@ -181,4 +184,18 @@ def flag_item(request, item_type, item_id, reason):
         return redirect("view_suggestion", item_id)
     
         
+@login_required()
+def render_userpage(request, user_id):
+    """
+    """
+    user = get_object_or_404(User, id=user_id)
+    if request.user == user:
+        values = get_userpage_values(user)
+        return render(request, "userpage.html", {"user": user, "favorites": values["favorites"], 
+            "votes": values["votes"], "purchases": values["purchases"], 
+            "coin_history": values["coin_history"], "suggestions" : values["suggestions"]
+        })
+        
+    else:
+        return redirect("home")
     

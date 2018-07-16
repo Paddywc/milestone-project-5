@@ -2,6 +2,7 @@ from django.db import models
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 from accounts.models import User
+from usersuggestions.models import Suggestion, Comment
 
 # below class taken from ecommerce project
 class StoreItem(models.Model):
@@ -65,11 +66,11 @@ class Order(models.Model):
     """
     """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
-    date = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateTimeField(auto_now_add=True)
     delivery_address = models.ForeignKey(Delivery, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
-        return "{0}-{1}".format(self.user, self.date.date())
+        return "{0}-{1}".format(self.user, self.date_time.date())
         
 class OrderItem(models.Model):
     """
@@ -92,4 +93,18 @@ class UserCoins(models.Model):
     def __str__(self):
       return "{0}-{1}".format(self.user, self.coins)
       
-      
+
+class UserCoinHistory(models.Model):
+    """
+    """
+    charge_choices = (((1,'submission'),(2,'upvote')))
+    
+    
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
+    coins_change = models.IntegerField(null=False)
+    date_time = models.DateTimeField(auto_now_add=True)
+    suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.CASCADE)
+    charge =   models.PositiveSmallIntegerField(choices=charge_choices, blank=True, null=True)
+    def __str__(self):
+        return "{0}: {1}".format(self.user, self.coins_change)
+    

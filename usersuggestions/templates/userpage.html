@@ -1,0 +1,92 @@
+{% extends 'base.html' %} 
+
+{% block title %} Userpage {% endblock %}
+
+{% block content %}
+
+
+<p>{{ user }}</p>
+
+<h2>Submissions</h2>
+
+{% if suggestions|length == 0 %}
+<p>You have not submitted any suggestions</p>
+{% else %}
+
+{% for suggestion in suggestions %}
+<p>{{ suggestion.title }}</p>
+{% endfor %}
+
+{% endif %}
+
+<h2>Votes</h2>
+
+{% if votes|length == 0 %}
+<p>You have not cast any votes</p>
+{% else %}
+
+
+{% for vote in votes %}
+<div class="row">
+{% if vote.suggestion %}
+<p>Suggestion: {{ vote.suggestion.title }}</p>
+{% else %}
+<p>Comment: {{  vote.comment.comment|safe }}</p>
+{% endif %}
+</div>
+{% endfor %}
+
+{% endif %}
+
+<h2>Favorites</h2>
+{% if favorites|length == 0 %}
+<p>You have no favorites</p>
+{% else %}
+
+{% for favorite in favorites %}
+{{ favorite.suggestion.title }}
+{% endfor %}
+
+{% endif %}
+
+
+<h2>Coin History</h2>
+{% if coin_history|length == 0 %}
+<p>You have no coin transaction</p>
+{% else %}
+
+{% for entry in coin_history %}
+<p>{{ entry }}
+
+
+{% if entry.suggestion %}
+,{{ entry.get_charge_display }}
+:{{ entry.suggestion.title }}
+{% endif %}
+
+</p>
+{% endfor %}
+{% endif %}
+
+
+<h2>Store Purchases</h2>
+{% if purchases|length == 0 %}
+<p>You have made no purchases at our store</p>
+{% else %}
+
+{% for purchase in purchases %}
+<p>{{ purchase.date_time }}
+
+{% for item in purchase.items %}
+{{ item.quantity }}:{{ item.item }}. 
+{% endfor %}
+Total: €{{ purchase.total_cost }}
+</p>
+
+{% endfor %}
+
+{% endif %}
+
+
+
+{% endblock %}
