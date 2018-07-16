@@ -6,7 +6,6 @@ def add_transaction_to_user_coin_history(user, amount, purchase=False, transacti
     """
     user_coins_row = UserCoins.objects.get(user=user)
     if purchase:
-        print("this ran")
         if isinstance(purchase, Suggestion):
             transaction = UserCoinHistory(user=user,coins_change=amount, suggestion=purchase, transaction=transaction)
         else:
@@ -24,7 +23,6 @@ def add_coins(user, amount, transaction=0):
     to UserCoinHistory
     """
     # below line of code creates table row for user if none exists
-    print("add coins running")
     UserCoins.objects.get_or_create(user=user)
     user_row = UserCoins.objects.get(user=user)
     old_coins_value = user_row.coins

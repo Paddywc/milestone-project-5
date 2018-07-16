@@ -70,7 +70,7 @@ def pay(request):
     if request.method =="POST":
         
         process_stripe_payment(request)
-        process_order(request, request.user)
+        process_order(request, request.user, 4)
         redirect_url = retrieve_session_url(request)
         if redirect_url:
             return redirect(redirect_url)

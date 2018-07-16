@@ -35,7 +35,7 @@ def process_stripe_payment(request):
     )
     
     
-def process_order(request, user):
+def process_order(request, user, transaction=0):
     """
     Adds coins to account if they are included
     in order
@@ -51,7 +51,7 @@ def process_order(request, user):
     cart = Cart(request)
     for item in cart:
         if item["item"].is_coins:
-            add_coins(user, (item["item"].coins_amount * item["quantity"]))
+            add_coins(user, (item["item"].coins_amount * item["quantity"]), transaction)
         order_item = OrderItem(order=order, item=item["item"], quantity=item["quantity"], total_purchase_price=item["total_price"])
         order_item.save()
         
