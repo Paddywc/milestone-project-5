@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+{% block title %} Earn Coins {% endblock %}
+{% block content %}
+
+<h3>Referral</h3>
+<p>Link: {{ request.get_host }}{% url 'referred_signup'  request.user.id %}</p>
+<form method="POST">
+       {% csrf_token %}
+  <div class="form-group">
+    <label for="refereeEmail">Referee email address</label>
+    <input type="email" class="form-control" name="refereeEmail" id="refereeEmail" placeholder="name@example.com">
+  </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+{% endblock %}

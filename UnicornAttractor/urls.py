@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url , include
-from market.views import render_store 
+from market.views import render_store, earn_coins
 
 from accounts import urls as urls_accounts
 from market import urls as urls_cart
@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^$', render_home, name='home'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^user/(?P<user_id>\d+)$', render_userpage, name='userpage'),
+    url(r'^earn_coins$', earn_coins, name='earn_coins'),
 ]

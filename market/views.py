@@ -7,6 +7,7 @@ from .helpers import retrieve_session_url
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
 
 
 import stripe
@@ -82,3 +83,17 @@ def pay(request):
 
 
     return render(request, 'pay.html', {"addresses": user_addresses, "cart_contains_delivery_item": cart_contains_delivery_item})
+    
+    
+def earn_coins(request):
+    """
+    """
+    if request.method=="POST":
+        email = request.POST.get("refereeEmail")
+        referral_link = "{0}{1}".format(request.get_host(),redirect("referred_signup", request.user.id).url)
+        reference_sender_email = request.user.email
+        subject = "{} thinks that you'll like UnicorAttractor".format(reference_sender_email)
+        body = "click this link to sign up now: {}".format(referral_link)
+        email = EmailMessage(subject, body, to=[email])
+        email.send()
+    return render(request, "earn_coins.html" )
