@@ -1,7 +1,11 @@
 from .models import Upvote, SuggestionAdminPage, Suggestion
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
+from django.conf import settings
 import datetime
+import market.coin_rewards as coin_rewards
+from market.coins import add_coins
+
 
 def add_suggestion_upvote_to_database(user, suggestion):
     """
@@ -32,7 +36,10 @@ def set_expected_compilation_date_if_none_exists():
     winner_admin_object = SuggestionAdminPage.objects.get(current_winner=True)
     try:
         if winner_admin_object.expected_completion_date == None:
-            estimated_days = winner_admin_object.estimated_days_to_complete
+            if winner_admin_object.estimated_days_to_complete:
+                estimated_days = winner_admin_object.estimated_days_to_complete
+            else:
+                estimated_days = 14
             winner_admin_object.expected_completion_date = datetime.date.today() + datetime.timedelta(days=estimated_days)
             winner_admin_object.save()
     except:
@@ -58,12 +65,15 @@ def set_suggestions_success_result():
         
 def declare_winner():
     """
+    Note that this also adds coins
     """
     try:        
         winner = Suggestion.objects.filter(is_feature=True, suggestionadminpage__in_current_voting_cycle=True).annotate(upvotes=Count("upvote")).latest('upvote')
         winner_admin_object = SuggestionAdminPage.objects.get(suggestion=winner)
         winner_admin_object.current_winner=True
         winner_admin_object.save()
+        if settings.COINS_ENABLED:
+            add_coins(winner_admin_object.suggestion.user, coin_rewards.suggestion_successful, 8) 
     except:
         return False
         

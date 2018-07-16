@@ -58,9 +58,11 @@
 {% for entry in coin_history %}
 <p>{{ entry }}
 
-
+{% if entry.transaction %}
+{{ entry.get_transaction_display }}
+{% endif %}
 {% if entry.suggestion %}
-,{{ entry.get_charge_display }}
+,
 :{{ entry.suggestion.title }}
 {% endif %}
 

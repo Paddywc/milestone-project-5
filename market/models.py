@@ -97,14 +97,15 @@ class UserCoins(models.Model):
 class UserCoinHistory(models.Model):
     """
     """
-    transaction_choices = (((1,'submission'),(2,'upvote'), (3, 'referral'),
-    (4, 'store purchase')))
+    transaction_choices = ((1,'submission'),(2,'upvote'), (3, 'referral'),
+    (4, 'store purchase'), (5, 'initial signup'), (6, 'received referral'), 
+    (7, 'suggestion upvoted'), (8, 'suggestion successful'))
     
     
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     coins_change = models.IntegerField(null=False)
     date_time = models.DateTimeField(auto_now_add=True)
-    suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.CASCADE)
+    suggestion = models.ForeignKey(Suggestion, null=True, blank=True, on_delete=models.CASCADE)
     transaction =   models.PositiveSmallIntegerField(choices=transaction_choices, blank=True, null=True)
     def __str__(self):
         return "{0}: {1}".format(self.user, self.coins_change)

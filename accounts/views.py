@@ -4,6 +4,7 @@ from django.conf import settings
 from .forms import UserSignupForm, UserLoginForm
 from .models import User
 from market.coins import add_coins
+import market.coin_rewards as coin_rewards
 
 def create_user(request):
     """
@@ -13,7 +14,9 @@ def create_user(request):
     if request.method == "POST":
         form = UserSignupForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_user = form.save()
+            if settings.COINS_ENABLED:
+                add_coins(new_user, coin_rewards.signup,5)
     else:
         form = UserSignupForm()
         
@@ -25,11 +28,12 @@ def create_referred_user(request, ref_user_id):
     if request.method == "POST":
         form = UserSignupForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_user =form.save()
             ref_user = get_object_or_404(User, id=ref_user_id)
             if settings.COINS_ENABLED:
-                add_coins(ref_user, 200, 3)
-            
+                add_coins(new_user, coin_rewards.signup,5)
+                add_coins(ref_user, coin_rewards.referral, 3)
+                add_coins(new_user, coin_rewards.received_referral, 6)
     else:
         form = UserSignupForm()
         
