@@ -1,35 +1,38 @@
 from .models import UserCoins, CoinsPurchase, StoreItem, UserCoinHistory
 from usersuggestions.models import Suggestion, Comment
 
-def add_transaction_to_user_coin_history(user, amount, purchase=False, charge=0):
+def add_transaction_to_user_coin_history(user, amount, purchase=False, transaction=0):
     """
     """
     user_coins_row = UserCoins.objects.get(user=user)
     if purchase:
+        print("this ran")
         if isinstance(purchase, Suggestion):
-            transaction = UserCoinHistory(user=user,coins_change=amount, suggestion=purchase, charge=charge)
-        
+            transaction = UserCoinHistory(user=user,coins_change=amount, suggestion=purchase, transaction=transaction)
+        else:
+            transaction = UserCoinHistory(user=user, coins_change=amount, transaction=transaction)
     else:
         transaction = UserCoinHistory(user=user,coins_change=amount)
     transaction.save()
     
 
 
-def add_coins(user, amount):
+def add_coins(user, amount, transaction=0):
     """
     adds the amount specfied in the second
     argument to the argument user. Adds transaction
     to UserCoinHistory
     """
     # below line of code creates table row for user if none exists
+    print("add coins running")
     UserCoins.objects.get_or_create(user=user)
     user_row = UserCoins.objects.get(user=user)
     old_coins_value = user_row.coins
     user_row.coins = old_coins_value + amount
     user_row.save()
-    add_transaction_to_user_coin_history(user, amount)
+    add_transaction_to_user_coin_history(user, amount, True, transaction)
     
-def remove_coins(user, amount, purchase=False, charge=0):
+def remove_coins(user, amount, purchase=False, transaction=0):
     """
     adds the amount specfied in the second
     argument to the argument user. Adds transaction
@@ -42,7 +45,7 @@ def remove_coins(user, amount, purchase=False, charge=0):
     user_row.save()
     
     if purchase:
-        add_transaction_to_user_coin_history(user,(0-amount), purchase, charge)
+        add_transaction_to_user_coin_history(user,(0-amount), purchase, transaction)
     else:
         add_transaction_to_user_coin_history(user, (0-amount))
     

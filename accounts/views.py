@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from .forms import UserSignupForm, UserLoginForm
-
+from .models import User
+from market.coins import add_coins
 # Create your views here.
 
 def create_user(request):
@@ -13,6 +14,21 @@ def create_user(request):
         form = UserSignupForm(request.POST)
         if form.is_valid():
             form.save()
+    else:
+        form = UserSignupForm()
+        
+    return render(request, 'signup.html', {"form": form})
+    
+def created_referred_user(request, ref_user_id):
+    """
+    """
+    if request.method == "POST":
+        form = UserSignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            ref_user = get_object_or_404(User, id=ref_user_id)
+            add_coins(ref_user, 200, 3)
+            
     else:
         form = UserSignupForm()
         
