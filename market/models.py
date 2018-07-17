@@ -99,7 +99,7 @@ class UserCoinHistory(models.Model):
     """
     transaction_choices = ((1,'submission'),(2,'upvote'), (3, 'referral'),
     (4, 'store purchase'), (5, 'initial signup'), (6, 'received referral'), 
-    (7, 'suggestion upvoted'), (8, 'suggestion successful'))
+    (7, 'suggestion upvoted'), (8, 'suggestion successful'), (9, 'feature suggestion promoted'))
     
     
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)

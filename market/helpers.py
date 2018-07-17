@@ -30,3 +30,15 @@ def purchase_coins_for_action(request):
     cart = Cart(request)
     cart.add(item=coins_store_item)
     return HttpResponseRedirect(reverse('pay'))
+    
+def purchase_coins_for_feature_promotion(request, user_coins):
+    """
+    """
+    set_current_url_as_session_url(request)
+    price =prices["{}".format(request.POST.get("promotionDays"))]
+    coins = return_minimum_coins_purchase(price, user_coins)
+    cart = Cart(request)
+    cart.add(coins)
+    return HttpResponseRedirect(reverse('pay'))
+    
+    

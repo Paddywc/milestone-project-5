@@ -109,3 +109,16 @@ class UserFavorites(models.Model):
     
     def __str__(self):
         return "{0}: {1}".format(self.user, self.suggestion)
+        
+class PromotedFeatureSuggestion(models.Model):
+    """
+    """
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
+    suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.CASCADE)
+    start_date = models.DateField(blank=False, null=False)
+    end_date = models.DateField(blank=False, null=False)
+    
+    def __str__(self):
+        return "{0}: {1}-{2}".format(self.suggestion, self.start_date, self.end_date)
+        
+    

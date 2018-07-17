@@ -1,0 +1,169 @@
+{% extends 'base.html' %} 
+{% block title %} Promote Feature {% endblock %}
+
+{% block content %}
+
+
+<h2>Hello wolrd!</h2>
+<input type="text" id="searhFeature"  placeholder="Search for feature suggestion..">    
+
+<form method="POST" id="featureSuggestionForm">
+    
+        {% csrf_token %}
+
+
+{% for feature in features %}
+
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ feature.title }}</h5>
+    <p class="card-text">{{ feature.details|safe }}</p>
+    <div class="form-check">
+   <input class="form-check-input" type="radio" required name="featureSuggestion"id="{{ feature.id }}" value="{{ feature.id }}" >
+  <label class="form-check-label" >
+    Select this feature
+  </label>
+</div>
+  </div>
+</div>
+{% endfor %}
+
+  <div class="form-group">
+    <label for="promotionDays">Days Promoted</label>
+    <select class="form-control" id="promotionDays" name="promotionDays" required>
+      <option value=1>1: {{ prices.1 }} coins</option>
+      <option value=2>2: {{ prices.2 }} coins</option>
+      <option value=3>3: {{ prices.3 }} coins</option>
+      <option value=4>4: {{ prices.4 }} coins</option>
+      <option value=5>5: {{ prices.5 }} coins</option>
+    </select>
+  </div>
+  
+      <label for="startDate">Start Date:</label>
+
+
+  <input id="startDate" type="date" required min="{{ tomorrow.year }}-0{{ tomorrow.month }}-{{ tomorrow.day }}" max="{{ max_date.year }}-0{{ max_date.month }}-{{ max_date.day }}"  value="{{ tomorrow.year }}-0{{ tomorrow.month }}-{{ tomorrow.day }}" name="startDate"/>
+<div id="endDate"></div>
+
+        <p>coins = {{ user_coins }}</p>
+
+    <div id="price">
+        
+    </div>
+        <button type="submit" class="btn btn-primary" id="purchaseCoins" name="purchaseCoins">Purchase more coins</button>
+        <button type="submit" class="btn btn-primary" id="confirm">Confirm Purchase</button>
+
+
+
+</form>
+<script>
+
+// searchFunction code largely from: https://www.w3schools.com/jquery/jquery_filters.asp
+let searchFuntion = function(){
+  $("#searhFeature").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#featureSuggestionForm .card").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+};
+
+//from from:https://stackoverflow.com/questions/563406/add-days-to-javascript-date
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+let showEndDate = function(){
+         let startDate = $("#startDate").val()
+         let startDateJS = new Date(startDate);
+         let daysToAdd = Number($("#promotionDays").val())
+         let endDate =  addDays(startDateJS, daysToAdd);
+         let endDateString = `${endDate.getDate()}/${endDate.getMonth()+1}/${endDate.getFullYear()}`;
+         $("#endDate").html("End date: " + endDateString);
+     }
+     
+let showAppropriateButton = function(){
+    
+    var price;
+
+    switch ($("#promotionDays").val()) {
+        
+        case "2" :
+            price = {{ prices.2 }} 
+            break;
+        case "3" :
+            price = {{ prices.3 }} 
+            break;
+            
+        case "4" :
+            price = {{ prices.4 }} 
+            break;
+            
+        case "5" :
+            price = {{ prices.5 }} 
+            break;
+        
+        default:
+            price = {{ prices.1 }}
+    }
+    
+    let userCoins = {{ user_coins }}
+    
+    if (userCoins >= price){
+        $("#purchaseCoins").hide();
+        $("#confirm").show();
+    }else{
+         $("#purchaseCoins").show();
+        $("#confirm").hide();
+    }
+    
+}
+
+let showPrice = function(){
+    
+    var price;
+
+    switch ($("#promotionDays").val()) {
+        
+        case "2" :
+            price = {{ prices.2 }} 
+            break;
+        case "3" :
+            price = {{ prices.3 }} 
+            break;
+            
+        case "4" :
+            price = {{ prices.4 }} 
+            break;
+            
+        case "5" :
+            price = {{ prices.5 }} 
+            break;
+        
+        default:
+            price = {{ prices.1 }}
+    }
+    
+   $("#price").html("price: " + price);
+}
+    $("#promotionDays").change(function(){
+        showAppropriateButton();
+        showPrice()
+        showEndDate()
+    })
+
+$("#startDate").change(showEndDate)
+
+$(document).ready(function(){
+    showAppropriateButton()
+    showPrice()
+    searchFuntion()
+    showEndDate()
+});
+
+</script>
+
+
+{% endblock %}

@@ -40,7 +40,28 @@
 
 
 
+{% for feature in promoted_features %}
 
+<div class="card">
+  <div class="card-header">
+
+   PROMOTED 
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ feature.suggestion.title }}</h5>
+    <p class="card-text">{{ feature.suggestion.details|safe }}</p>
+    <a href="{% url 'view_suggestion' feature.suggestion.id %}" class="btn btn-primary">View Feature Suggestion</a>
+  </div>
+    <div class="card-footer text-muted">
+    From {{ feature.suggestion.user }}
+  </div>
+  
+</div>
+
+<br><br>
+
+
+{% endfor %}
 
 {% for feature in features %}
 

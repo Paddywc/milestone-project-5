@@ -1,16 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-from .helpers import get_userpage_values, set_current_url_as_session_url, return_current_features, return_all_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, set_initial_session_form_title_as_false, return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false
+import datetime
+
+from .helpers import get_userpage_values, set_current_url_as_session_url, return_current_features, return_all_bugs, \
+return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, set_initial_session_form_title_as_false, \
+return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false, get_feature_promotion_prices, submit_feature_promotion, \
+get_promoted_features
 from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
 from market.cart import Cart
-from market.coins import return_user_coins, add_coins, get_coins_price, remove_coins, return_all_store_coin_options, return_minimum_coins_purchase
-from market.helpers import purchase_coins_for_action
-from .models import Suggestion, Comment, SuggestionAdminPage, Flag
-from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, end_voting_cycle_if_current_end_date, set_current_voting_cycle_as_true_for_all_suggestions, get_voting_end_date, return_previous_winners
+from market.coins import return_user_coins, add_coins, get_coins_price, remove_coins, return_all_store_coin_options, \
+return_minimum_coins_purchase
+from market.helpers import purchase_coins_for_action, purchase_coins_for_feature_promotion
+from .models import Suggestion, Comment, SuggestionAdminPage, Flag, PromotedFeatureSuggestion
+from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, \
+end_voting_cycle_if_current_end_date, set_current_voting_cycle_as_true_for_all_suggestions, get_voting_end_date, return_previous_winners
 from accounts.models import User
 import market.coin_rewards as coin_rewards
+
 
 @login_required()
 def add_suggestion(request):
@@ -71,7 +81,9 @@ def render_home(request, sorting="oldest"):
     current_features = return_current_features(sorting)
     bugs = return_all_bugs(sorting)
     previous_winners = return_previous_winners()
-    return render(request, "home.html", {"features": current_features, "bugs": bugs, "voting_end_date": voting_end_date})
+    promoted_features = get_promoted_features()
+    return render(request, "home.html", {"features": current_features, "bugs": bugs, 
+                            "voting_end_date": voting_end_date, "promoted_features": promoted_features})
 
 
 def view_suggestion(request, id, comment_sorting="oldest"):
@@ -122,8 +134,8 @@ def render_suggestion_admin_page(request,id):
     """
     """
     # for testing:
-    set_current_voting_cycle_as_true_for_all_suggestions()
-    end_voting_cycle_if_current_end_date()
+    # set_current_voting_cycle_as_true_for_all_suggestions()
+    # end_voting_cycle_if_current_end_date()
     
     
     if not request.user.is_staff:
@@ -201,3 +213,38 @@ def render_userpage(request, user_id):
     else:
         return redirect("home")
     
+@login_required()
+def promote_feature(request):
+    """
+    """
+    if settings.COINS_ENABLED:
+        # note when implementing DRY that price is different than others 
+        prices = get_feature_promotion_prices()
+        user_coins = return_user_coins(request.user)
+        coin_options = return_all_store_coin_options()
+        
+        tomorrow = (datetime.date.today() + datetime.timedelta(days=1))
+        max_date = (get_voting_end_date() - datetime.timedelta(days=2))
+        
+        features = return_current_features()
+        
+        if request.method == "POST":
+            if 'purchaseCoins' in request.POST:
+                purchase_coins_for_feature_promotion(request, user_coins)
+                
+            else:
+                submit_feature_promotion(request)
+                price =prices["{}".format(request.POST.get("promotionDays"))]
+                add_coins(request.user, price, 9 )
+                return redirect("home") 
+                
+                
+                
+            
+        
+        return render(request, "promote_feature.html", {"features": features, 
+        "user_coins": user_coins, "prices":prices, "coin_options": coin_options,
+         "max_date": max_date, "tomorrow": tomorrow})
+    
+    else:
+        return redirect("home")

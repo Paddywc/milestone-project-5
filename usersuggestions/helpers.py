@@ -1,14 +1,18 @@
-from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, UserFavorites
+from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, UserFavorites, PromotedFeatureSuggestion
 from market.models import Order, UserCoinHistory, OrderItem
+from market.coins import get_coins_price
 from django.db.models import Count
+from django.shortcuts import get_object_or_404
 from .forms import SuggestionForm
+import market.suggestion_promotion_discounts as discounts
+import datetime
 
 def set_current_url_as_session_url(request):
     """
     """
     request.session["session_url"] = str(request.build_absolute_uri())
 
-def return_current_features(sorting="oldest"):
+def return_current_features(sorting="-upvotes"):
     """
     Returns all features (not bugs) in the current 
     voting cycle along with their upvote count.
@@ -134,3 +138,46 @@ def get_userpage_values(user):
     }
     
     return values_dictionary
+    
+    
+def get_feature_promotion_prices():
+    """
+    """
+    price_of_one = get_coins_price("Feature Suggestion Promotion")
+    
+    def calculate_discounted_price(amount, percent_discount):
+        total_value_before_discount = price_of_one * amount
+        value_to_subtract = total_value_before_discount * (percent_discount/100)
+        value_with_discount = total_value_before_discount - value_to_subtract
+        return int(value_with_discount)
+        
+        
+    prices = {"1": price_of_one, "2": calculate_discounted_price(2, discounts.two),
+            "3": calculate_discounted_price(3, discounts.three), "4": calculate_discounted_price(4, discounts.four),
+            "5": calculate_discounted_price(5, discounts.five)}
+            
+    return prices
+        
+def submit_feature_promotion(request):
+    """
+    """
+    user = request.user
+    feature_id = request.POST.get("featureSuggestion")
+    print(feature_id)
+    feature = get_object_or_404(Suggestion, id=int(feature_id))
+    start_date_string = request.POST.get("startDate")
+    start_date = datetime.datetime.strptime(start_date_string, "%Y-%m-%d")
+    duration = int(request.POST.get("promotionDays"))
+    print(start_date)
+    end_date = (start_date + datetime.timedelta(days=duration))
+    promoted_suggestion = PromotedFeatureSuggestion(user=user, suggestion=feature,
+                                                    start_date=start_date, end_date=end_date)
+    promoted_suggestion.save()
+    
+    
+def get_promoted_features():
+    """
+    """
+    current_date = datetime.date.today()
+    promoted_feature_suggestions = PromotedFeatureSuggestion.objects.filter(end_date__gt=current_date)
+    return promoted_feature_suggestions
