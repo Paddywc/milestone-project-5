@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from ckeditor_uploader.fields import RichTextUploadingField 
+import datetime
 
 # Create your models here.
 class Suggestion(models.Model):
@@ -29,6 +30,7 @@ class SuggestionAdminPage(models.Model):
     date_started = models.DateField(null=True, blank=True)
     estimated_days_to_complete =  models.PositiveSmallIntegerField(null=True, blank=True)
     expected_completion_date = models.DateField(null=True, blank=True)
+    date_completed = models.DateField(null=True, blank=True)
     github_branch = models.CharField(null=True, blank=True, max_length=50)
     in_current_voting_cycle = models.BooleanField(blank=False, default=True)
     was_successful = models.NullBooleanField(blank=True, null=True) 
@@ -51,7 +53,16 @@ class SuggestionAdminPage(models.Model):
             except SuggestionAdminPage.DoesNotExist:
                 pass
         super(SuggestionAdminPage, self).save(*args, **kwargs)
-
+        
+        # My code
+        # For setting completed date automatically once status set to done
+        if self.status==3:
+            try:
+                self.date_completed = datetime.date.today()
+            
+            except SuggestionAdminPage.DoesNotExist:
+                pass
+        super(SuggestionAdminPage, self).save(*args, **kwargs)
 
 class Comment(models.Model):
     """

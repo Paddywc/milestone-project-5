@@ -26,7 +26,7 @@ class SuggestionAdminPageForm(forms.ModelForm):
 
     class Meta:
         model = SuggestionAdminPage
-        exclude = ["was_successful", "current_winner"]
+        exclude = ["was_successful", "current_winner", "date_completed"]
         widgets = {"suggestion": forms.HiddenInput(), "date_started": forms.SelectDateWidget(),
         "expected_completion_date": forms.SelectDateWidget(), "estimated_days_to_complete": forms.NumberInput()}
 
