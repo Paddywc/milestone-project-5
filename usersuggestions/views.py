@@ -143,10 +143,6 @@ def render_suggestion_admin_page(request,id):
     suggestion = get_object_or_404(Suggestion, id=id)
     admin_page_values = get_object_or_404(SuggestionAdminPage, suggestion=suggestion)
     
-    form = SuggestionAdminPageForm(instance=admin_page_values)
-    comment_form = CommentForm(initial={"user": request.user,"suggestion": suggestion, "admin_page_comment": True, })
-    comments = return_admin_suggestion_comments(suggestion)
-    
     if request.method=="POST":
         if "postComment" in request.POST:
             form = CommentForm(data=request.POST)
@@ -157,6 +153,10 @@ def render_suggestion_admin_page(request,id):
             form = SuggestionAdminPageForm(data=request.POST)
             if form.is_valid():
                 update_suggestion_admin_page(form)
+                
+    form = SuggestionAdminPageForm(instance=admin_page_values)
+    comment_form = CommentForm(initial={"user": request.user,"suggestion": suggestion, "admin_page_comment": True, })
+    comments = return_admin_suggestion_comments(suggestion)
             
     return render(request, "suggestion_admin_page.html", {"form":form,"comment_form": comment_form, "comments": comments, "suggestion": suggestion})
     
