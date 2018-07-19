@@ -20,7 +20,7 @@ from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_dat
 end_voting_cycle_if_current_end_date, set_current_voting_cycle_as_true_for_all_suggestions, get_voting_end_date, return_previous_winners
 from accounts.models import User
 import market.coin_rewards as coin_rewards
-
+from .data_visualization import populate_completion_dates_chart
 
 @login_required()
 def add_suggestion(request):
@@ -48,7 +48,7 @@ def add_suggestion(request):
             if form.is_valid():
                 saved_suggestion_object = form.save()
                 if is_feature=='True' and settings.COINS_ENABLED:
-                    remove_coins(request.user, get_coins_price("Suggestion"), saved_suggestion_object, charge=1)
+                    remove_coins(request.user, get_coins_price("Suggestion"), saved_suggestion_object, 1)
                     user_coins = return_user_coins(request.user)
                     
                 if saved_suggestion_object.delay_submission == True:
@@ -75,7 +75,6 @@ def render_home(request, sorting="oldest"):
     """
     # for testing
     # set_current_voting_cycle_as_true_for_all_suggestions()
-    
     
     voting_end_date = get_voting_end_date()
     current_features = return_current_features(sorting)
@@ -235,7 +234,7 @@ def promote_feature(request):
             else:
                 submit_feature_promotion(request)
                 price =prices["{}".format(request.POST.get("promotionDays"))]
-                add_coins(request.user, price, 9 )
+                remove_coins(request.user, price, True, 9 )
                 return redirect("home") 
                 
                 

@@ -174,7 +174,7 @@ def submit_feature_promotion(request):
                                                     start_date=start_date, end_date=end_date)
     promoted_suggestion.save()
     
-    
+  
 def get_promoted_features():
     """
     """
