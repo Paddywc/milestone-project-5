@@ -20,7 +20,7 @@ from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_dat
 end_voting_cycle_if_current_end_date, set_current_voting_cycle_as_true_for_all_suggestions, get_voting_end_date, return_previous_winners
 from accounts.models import User
 import market.coin_rewards as coin_rewards
-from .data_visualization import create_most_upvoted_chart
+from .data_visualization import create_most_upvoted_chart, create_coin_spending_chart, create_completions_in_june_chart
 
 @login_required()
 def add_suggestion(request):
@@ -253,5 +253,6 @@ def view_data(request):
     """
     """
     upvoted_chart = create_most_upvoted_chart(5)
-    # print(chart)
-    return render(request, "view_data.html", {"upvoted_chart": upvoted_chart})
+    coin_spending_chart = create_coin_spending_chart()
+    june_completions_chart_url = "https://s3-{0}.amazonaws.com/{1}/{2}/images/june_completions_chart.png".format(settings.AWS_S3_REGION_NAME,settings.AWS_STORAGE_BUCKET_NAME, settings.MEDIAFILES_LOCATION)
+    return render(request, "view_data.html", {"upvoted_chart": upvoted_chart, "coin_spending_chart": coin_spending_chart, "june_completions_chart_url": june_completions_chart_url})

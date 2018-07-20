@@ -2,11 +2,15 @@ import matplotlib.pyplot as plt
 from .models import Suggestion, SuggestionAdminPage
 from market.models import UserCoinHistory
 from django.db.models import Count
+from django.conf import settings
 from django.db.models import Q
 import datetime
 from random import choice
 import matplotlib.patches as mpatches
+from matplotlib.ticker import MultipleLocator, FuncFormatter
 from mpld3 import fig_to_html
+from io import BytesIO
+import boto3
 
 def get_highest_vote_totals(limit):
     """
@@ -75,15 +79,12 @@ def create_most_upvoted_chart(limit):
     
     y = [suggestion.upvotes for suggestion in top_voted]
     
-    blank_x = ["", " ", "  ", "   ", "    ",]
-    blank_x_2 = [((" ") * i) for i in range(1, (limit+1))]
-    print(blank_x)
-    
+  
     
     fig = plt.figure()
     plt.style.use('fivethirtyeight')
 
-    plt.bar(blank_x,y, color=colors)
+    plt.bar(x,y, color=colors)
     
 
     handles_list = []
@@ -104,6 +105,113 @@ def create_most_upvoted_chart(limit):
     return chart
 
     
+def create_coin_spending_chart():
+    """
+    """
+    totals = get_coin_expenditures()
+    slices = [totals["upvoting"], totals["promoting_suggestion"], totals["submissions"]]
+    labels = ["Upvoting Suggestions","Promoting Suggestions", "Submitting Suggestions"]
+    
+    fig = plt.figure()
+
+    plt.pie(slices, labels=None, autopct='%1.1f%%', startangle=90)
+    plt.title("How Coins are Spent")
+    plt.legend(labels=labels)
+
+ 
+    chart = fig_to_html(fig)
+    
+    return chart
     
     
+def get_data_for_june_completions_chart():
+    """
+    """
+        
+    admin_suggestion_data = return_data_for_completion_dates_chart()
     
+    june_days = [day for day in range(0, 31)]
+    
+    
+    bugs = admin_suggestion_data["bugs"]
+    features = admin_suggestion_data["features"]
+    
+    bug_completion_days = [bug.date_completed.day for bug in bugs]
+    feature_completion_days = [feature.date_completed.day for feature in features]
+    
+    bug_june_day_counts = []
+    feature_june_day_counts = []
+    
+    for june_day in june_days:
+        bug_count = 0
+        feature_count = 0
+        for bug_day in bug_completion_days:
+            if bug_day == june_day:
+                bug_count += 1
+        for feature_day in feature_completion_days:
+            if feature_day == june_day:
+                feature_count += 1
+                
+        bug_june_day_counts.append(bug_count)
+        feature_june_day_counts.append(feature_count)
+        
+    return {"bug_june_day_counts": bug_june_day_counts, "feature_june_day_counts": feature_june_day_counts}
+    
+def create_completions_in_june_chart():
+    """
+    Saved as img because mpld3 can't render tick marks properly. And unlike 
+    other charts, data is static.
+    """
+    data = get_data_for_june_completions_chart()
+    
+    bug_june_day_counts = data["bug_june_day_counts"]
+    feature_june_day_counts = data["feature_june_day_counts"]
+    june_days = [day for day in range(0, 31)]
+
+    def format_ticks_as_dates(x,i):
+        if i==1:
+            return "1st"
+        elif i!=0:
+            return "{}th".format(int(x))
+        else:
+            return ""
+        
+    
+    y_axis_height= [(bug_june_day_counts[day] + feature_june_day_counts[day]) for day in range(len(june_days)) ]
+    max_y_axis_height = max(y_axis_height)
+    
+    minorLocator = MultipleLocator(1)
+    majorFormatter = FuncFormatter(format_ticks_as_dates)
+    majorLocator = MultipleLocator(5)
+    
+    # plt.style.use('fivethirtyeight')
+    fig, ax = plt.subplots()
+    
+    p1 = plt.bar(june_days, bug_june_day_counts)
+    p2 = plt.bar(june_days, feature_june_day_counts, bottom=bug_june_day_counts)
+    
+    plt.yticks(range((max_y_axis_height+1)))
+    
+    ax.xaxis.set_major_locator(majorLocator)
+    ax.xaxis.set_major_formatter(majorFormatter)
+    ax.xaxis.set_minor_locator(minorLocator)
+    
+    # following 4 lines of code from:https://matplotlib.org/gallery/ticks_and_spines/major_minor_demo.html#sphx-glr-gallery-ticks-and-spines-major-minor-demo-py
+    ax.tick_params(which='both', width=2)
+    ax.tick_params(which='major', length=7)
+    ax.tick_params(which='minor', length=4)
+    plt.tight_layout()
+    
+    plt.ylabel("NUMBER COMPLETED")
+    plt.xlabel("DATE")
+    plt.title("Bug Fixes and Features Completed\nJune 2018")
+    plt.legend(labels=["Bug Fixes", "Features"])
+    
+    # save img to aws
+    # code largly from: https://stackoverflow.com/questions/31485660/python-uploading-a-plot-from-memory-to-s3-using-matplotlib-and-boto
+    img_data = BytesIO()
+    plt.savefig(img_data, format='png', bbox_inches='tight')
+    img_data.seek(0)
+    s3= boto3.resource("s3")
+    bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+    bucket.put_object(Body=img_data, ContentType='image/png', Key="{}/images/june_completions_chart.png".format(settings.MEDIAFILES_LOCATION))
