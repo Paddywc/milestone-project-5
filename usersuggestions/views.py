@@ -20,7 +20,7 @@ from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_dat
 end_voting_cycle_if_current_end_date, set_current_voting_cycle_as_true_for_all_suggestions, get_voting_end_date, return_previous_winners
 from accounts.models import User
 import market.coin_rewards as coin_rewards
-from .data_visualization import populate_completion_dates_chart
+from .data_visualization import create_most_upvoted_chart
 
 @login_required()
 def add_suggestion(request):
@@ -247,3 +247,11 @@ def promote_feature(request):
     
     else:
         return redirect("home")
+        
+        
+def view_data(request):
+    """
+    """
+    upvoted_chart = create_most_upvoted_chart(5)
+    # print(chart)
+    return render(request, "view_data.html", {"upvoted_chart": upvoted_chart})

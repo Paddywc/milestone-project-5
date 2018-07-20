@@ -5,6 +5,8 @@ from django.db.models import Count
 from django.db.models import Q
 import datetime
 from random import choice
+import matplotlib.patches as mpatches
+from mpld3 import fig_to_html
 
 def get_highest_vote_totals(limit):
     """
@@ -64,6 +66,42 @@ def return_data_for_completion_dates_chart():
     
     
     return {"bugs": bugs, "features": features}
+    
+def create_most_upvoted_chart(limit):
+
+    colors = "rgbymc"
+    top_voted = get_highest_vote_totals(limit)
+    x = [suggestion.title for suggestion in top_voted]
+    
+    y = [suggestion.upvotes for suggestion in top_voted]
+    
+    blank_x = ["", " ", "  ", "   ", "    ",]
+    blank_x_2 = [((" ") * i) for i in range(1, (limit+1))]
+    print(blank_x)
+    
+    
+    fig = plt.figure()
+    plt.style.use('fivethirtyeight')
+
+    plt.bar(blank_x,y, color=colors)
+    
+
+    handles_list = []
+    for i in range(len(x)):
+        bar = mpatches.Patch(color=colors[i], label=x[i])
+        handles_list.append(bar)
+        
+        
+    plt.legend(handles=handles_list, shadow=True, title="SUGGESTION TITLE")
+    plt.title("Most Upvoted Feature Suggestions")
+    plt.ylabel("VOTES")
+    plt.xlabel("SUGGESTION")
+    
+    plt.xticks([])
+    # fig.axis.get_xaxis().set_visable(False)
+    chart = fig_to_html(fig)
+    
+    return chart
 
     
     
