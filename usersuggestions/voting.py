@@ -33,8 +33,8 @@ def get_voting_end_date():
 def set_expected_compilation_date_if_none_exists():
     """
     """
-    winner_admin_object = SuggestionAdminPage.objects.get(current_winner=True)
     try:
+        winner_admin_object = SuggestionAdminPage.objects.get(current_winner=True)
         if winner_admin_object.expected_completion_date == None:
             if winner_admin_object.estimated_days_to_complete:
                 estimated_days = winner_admin_object.estimated_days_to_complete
