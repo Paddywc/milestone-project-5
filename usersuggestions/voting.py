@@ -94,7 +94,6 @@ def end_voting_cycle_if_current_end_date():
     """
     """
     voting_end_date = get_voting_end_date()
-
     try:
         if datetime.date.today() == voting_end_date:
            declare_winner()
