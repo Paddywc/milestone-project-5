@@ -94,10 +94,9 @@ def end_voting_cycle_if_current_end_date():
     """
     """
     voting_end_date = get_voting_end_date()
-    # if datetime.date.today() == voting_end_date:
-    # for testing:
+
     try:
-        if datetime.date.today() != voting_end_date:
+        if datetime.date.today() == voting_end_date:
            declare_winner()
            set_suggestions_success_result()
            remove_all_suggestions_from_current_voting_cycle()
