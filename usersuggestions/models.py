@@ -94,7 +94,6 @@ class Flag(models.Model):
     """
     
     flagged_item_choices  = ((1,"comment"),(2,'suggestion'))
-    result_choices = ((0,"low"),(1,'normal'),(2,'high'))
     status_choices = ((0,"not scheduled"), (1,"to do"), (2,"doing"), (3, "done"))
     reason_choices = ((0,"Spam"), (1,"Hate Speech"), (2,"Graphic Content"), (3, "Harassment or Bullying"))
     
@@ -102,7 +101,7 @@ class Flag(models.Model):
     flagged_by = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.SET_NULL)
     comment =  models.ForeignKey(Comment, null=True, on_delete=models.SET_NULL)
-    reason = models.PositiveSmallIntegerField(choices=reason_choices)
+    reason = models.PositiveSmallIntegerField(choices=reason_choices, null=False, blank=False)
     date_time_marked = models.DateTimeField(auto_now_add=True)
     admin_assigned = models.ForeignKey(User, related_name="admin_assigned", null=True, blank=True, on_delete=models.PROTECT)
     status = models.PositiveSmallIntegerField(choices=status_choices, default=0)
@@ -112,14 +111,7 @@ class Flag(models.Model):
         return "Flagged {0}. {1}. {2}".format(self.get_flagged_item_type_display(), self.date_time_marked, self.get_status_display())
         
         
-class UserFavorites(models.Model):
-    """
-    """
-    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
-    suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return "{0}: {1}".format(self.user, self.suggestion)
+
         
 class PromotedFeatureSuggestion(models.Model):
     """

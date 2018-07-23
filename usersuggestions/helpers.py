@@ -1,4 +1,4 @@
-from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, UserFavorites, PromotedFeatureSuggestion
+from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, PromotedFeatureSuggestion
 from market.models import Order, UserCoinHistory, OrderItem
 from market.coins import get_coins_price
 from django.db.models import Count
@@ -119,7 +119,6 @@ def get_userpage_values(user):
     Returns a dictionary with all the values required
     to render a userpage
     """
-    favorites = UserFavorites.objects.filter(user=user)
     votes =  Upvote.objects.filter(user=user).order_by("-date_time")
     purchases = Order.objects.filter(user=user).order_by("-date_time")
     coin_history = UserCoinHistory.objects.filter(user=user).order_by("-date_time")
@@ -133,7 +132,7 @@ def get_userpage_values(user):
             purchase.total_cost += item.total_purchase_price
     
     
-    values_dictionary = {"favorites": favorites, "purchases": purchases,
+    values_dictionary = {"purchases": purchases,
         "coin_history": coin_history, "votes": votes, "suggestions": suggestions
     }
     

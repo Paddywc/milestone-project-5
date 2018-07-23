@@ -204,7 +204,7 @@ def render_userpage(request, user_id):
     user = get_object_or_404(User, id=user_id)
     if request.user == user:
         values = get_userpage_values(user)
-        return render(request, "userpage.html", {"user": user, "favorites": values["favorites"], 
+        return render(request, "userpage.html", {"user": user,
             "votes": values["votes"], "purchases": values["purchases"], 
             "coin_history": values["coin_history"], "suggestions" : values["suggestions"]
         })
