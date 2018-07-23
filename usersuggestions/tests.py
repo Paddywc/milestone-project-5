@@ -1,9 +1,9 @@
 from django.db import models
 from django.test import TestCase
 from django.conf import settings
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, get_voting_end_date, remove_all_suggestions_from_current_voting_cycle, set_expected_compilation_date_if_none_exists, set_suggestions_success_result,  declare_winner, trigger_delayed_suggestions, end_voting_cycle_if_current_end_date, return_previous_winners
-from .models import Upvote, Suggestion, Comment, SuggestionAdminPage
+from .models import Upvote, Suggestion, Comment, SuggestionAdminPage, Flag, PromotedFeatureSuggestion
 from market.models import UserCoins
 from accounts.models import User
 from random import choice, randint
@@ -535,7 +535,93 @@ class TestModels(TestCase):
         self.assertTrue(True)
         
         
+    def test_flag_defaults_correctly(self):
+        """
+        Test to check that when creating a Flag object, unspecified values default 
+        as expected. These are: status : 0, date_time: Now
+        """
+        random_user= choice(User.objects.all())
+        random_comment= choice(Comment.objects.all())
+        
+        new_flag = Flag(flagged_item_type=1, flagged_by=random_user, 
+                        comment=random_comment, reason=2)
+        new_flag.save()
+        
+        current_date = datetime.date.today()
+        self.assertEqual(new_flag.date_time_marked.date(), current_date)
+        self.assertEqual(new_flag.status, 0)
+        
+    def test_creating_flag_requires_item_type_and_user_and_reason(self):
+        """
+        Test to check that an integrity error is thrown if an attempt
+        is made to save a Flag object without a value for flagged_by, 
+        flagged_item_type and reason
+        """
+        
+        with self.assertRaises(IntegrityError):
+           
+            with transaction.atomic():
+                random_user= choice(User.objects.all())
+                random_suggestion= choice(Suggestion.objects.all())
+                without_item_type = Flag(flagged_by=random_user, 
+                        suggestion=random_suggestion, reason=2)
+                without_item_type.save()
+                
+            with transaction.atomic():
+                random_suggestion= choice(Suggestion.objects.all())
+                without_user = Flag(flagged_item_type=2,
+                        suggestion=random_suggestion, reason=2)
+                without_user.save()
+            
+            with transaction.atomic():
+                random_user= choice(User.objects.all())
+                random_comment= choice(Comment.objects.all())
+                without_reason = Flag(flagged_item_type=1, flagged_by=random_user, 
+                                    comment=random_comment)
+                without_reason.save()
     
+    def test_flag_choices_appear_as_expected(self):
+        """
+        Test to check that the human readable values for a Flag's
+        choices appear as expected
+        """
+        random_user= choice(User.objects.all())
+        random_suggestion = choice(Suggestion.objects.all())
+        new_flag = Flag(flagged_item_type=2, flagged_by=random_user, suggestion=random_suggestion,
+                        reason=0, status=3)
+        new_flag.save()
         
+        self.assertEqual(new_flag.get_flagged_item_type_display(), "suggestion")
+        self.assertEqual(new_flag.get_reason_display(), "Spam")
+        self.assertEqual(new_flag.get_status_display(), "done")
         
-        
+    def test_user_and_suggestion_and_start_date_and_end_date_required_to_create_user_promoted_feature_suggestion(self):
+        """
+        Test to check that a user, suggestion, start_date, and end_date are required
+        in order to save a PromotedFeatureSuggestion
+        """
+        with self.assertRaises(IntegrityError):
+           
+           
+            random_user = choice(User.objects.all())
+            random_suggestion = choice(Suggestion.objects.all())
+            random_start_date = (datetime.date.today() - datetime.timedelta(days=choice(range(30))))
+            random_end_date = (datetime.date.today() + datetime.timedelta(days=choice(range(30))))
+            
+            with transaction.atomic():
+                without_user = PromotedFeatureSuggestion(suggestion=random_suggestion, start_date=random_start_date, end_date=random_end_date)
+                without_user.save()
+                
+            with transaction.atomic():
+                without_suggestion = PromotedFeatureSuggestion(user=random_user, start_date=random_start_date, end_date=random_end_date)
+                without_suggestion.save()
+                
+            with transaction.atomic():
+                without_start_date = PromotedFeatureSuggestion(user=random_user, suggestion= random_suggestion, end_date=random_end_date)
+                without_start_date.save()
+                
+            with transaction.atomic():
+                without_end_date = PromotedFeatureSuggestion(user= random_user, suggestion=random_suggestion, start_date=random_start_date)
+                without_end_date.save()
+            
+                
