@@ -141,8 +141,8 @@ def render_suggestion_admin_page(request,id):
         return redirect("view_suggestion", id=id)
     suggestion = get_object_or_404(Suggestion, id=id)
     admin_page_values = get_object_or_404(SuggestionAdminPage, suggestion=suggestion)
-    
     if request.method=="POST":
+
         if "postComment" in request.POST:
             form = CommentForm(data=request.POST)
             if form.is_valid():

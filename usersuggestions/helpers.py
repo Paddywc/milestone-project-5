@@ -70,7 +70,6 @@ def return_admin_suggestion_comments(suggestion):
     return Comment.objects.filter(suggestion=suggestion, admin_page_comment=True).order_by("date_time").annotate(upvotes=Count("upvote"))
     
 def update_suggestion_admin_page(form):
-  
     row = SuggestionAdminPage.objects.get(suggestion=form.cleaned_data["suggestion"])
     row.status = form.cleaned_data["status"]
     row.developer_assigned = form.cleaned_data["developer_assigned"]
@@ -162,12 +161,10 @@ def submit_feature_promotion(request):
     """
     user = request.user
     feature_id = request.POST.get("featureSuggestion")
-    print(feature_id)
     feature = get_object_or_404(Suggestion, id=int(feature_id))
     start_date_string = request.POST.get("startDate")
     start_date = datetime.datetime.strptime(start_date_string, "%Y-%m-%d")
     duration = int(request.POST.get("promotionDays"))
-    print(start_date)
     end_date = (start_date + datetime.timedelta(days=duration))
     promoted_suggestion = PromotedFeatureSuggestion(user=user, suggestion=feature,
                                                     start_date=start_date, end_date=end_date)
