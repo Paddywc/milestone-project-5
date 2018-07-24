@@ -10,7 +10,7 @@ from django.db.models import Count
 from django.db.models import Q
 from matplotlib.ticker import MultipleLocator, FuncFormatter
 from mpld3 import fig_to_html
-
+import matplotlib
 from market.models import UserCoinHistory
 from .models import Suggestion, SuggestionAdminPage
 
