@@ -6,7 +6,7 @@ from django.urls import reverse
 
 import datetime
 
-from .helpers import get_userpage_values, set_current_url_as_session_url, return_current_features, return_all_bugs, \
+from .helpers import get_userpage_values, set_current_url_as_session_url, return_current_features, return_all_current_bugs, \
 return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, set_initial_session_form_title_as_false, \
 return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false, get_feature_promotion_prices, submit_feature_promotion, \
 get_promoted_features
@@ -14,7 +14,7 @@ from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
 from market.cart import Cart
 from market.coins import return_user_coins, add_coins, get_coins_price, remove_coins, return_all_store_coin_options, \
 return_minimum_coins_purchase
-from market.helpers import purchase_coins_for_action, purchase_coins_for_feature_promotion
+from market.helpers import purchase_coins_for_action, purchase_coins_for_feature_promotion, get_promote_feature_discount_rates
 from .models import Suggestion, Comment, SuggestionAdminPage, Flag, PromotedFeatureSuggestion
 from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, \
 end_voting_cycle_if_current_end_date, set_current_voting_cycle_as_true_for_all_suggestions, get_voting_end_date, return_previous_winners
@@ -78,7 +78,7 @@ def render_home(request, sorting="oldest"):
     
     voting_end_date = get_voting_end_date()
     current_features = return_current_features(sorting)
-    bugs = return_all_bugs(sorting)
+    bugs = return_all_current_bugs(sorting)
     previous_winners = return_previous_winners()
     promoted_features = get_promoted_features()
     return render(request, "home.html", {"features": current_features, "bugs": bugs, 
@@ -221,6 +221,7 @@ def promote_feature(request):
         prices = get_feature_promotion_prices()
         user_coins = return_user_coins(request.user)
         coin_options = return_all_store_coin_options()
+        discount_rates = get_promote_feature_discount_rates()
         
         tomorrow = (datetime.date.today() + datetime.timedelta(days=1))
         max_date = (get_voting_end_date() - datetime.timedelta(days=2))
@@ -229,7 +230,7 @@ def promote_feature(request):
         
         if request.method == "POST":
             if 'purchaseCoins' in request.POST:
-                purchase_coins_for_feature_promotion(request, user_coins)
+                purchase_coins_for_feature_promotion(request, user_coins, prices)
                 
             else:
                 submit_feature_promotion(request)
@@ -237,12 +238,8 @@ def promote_feature(request):
                 remove_coins(request.user, price, True, 9 )
                 return redirect("home") 
                 
-                
-                
-            
-        
         return render(request, "promote_feature.html", {"features": features, 
-        "user_coins": user_coins, "prices":prices, "coin_options": coin_options,
+        "user_coins": user_coins, "discount_rates": discount_rates, "prices":prices, "coin_options": coin_options,
          "max_date": max_date, "tomorrow": tomorrow})
     
     else:

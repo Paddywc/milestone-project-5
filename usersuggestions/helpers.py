@@ -1,7 +1,7 @@
 from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, PromotedFeatureSuggestion
 from market.models import Order, UserCoinHistory, OrderItem
 from market.coins import get_coins_price
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
 from .forms import SuggestionForm
 import market.suggestion_promotion_discounts as discounts
@@ -15,7 +15,7 @@ def set_current_url_as_session_url(request):
 def return_current_features(sorting="-upvotes"):
     """
     Returns all features (not bugs) in the current 
-    voting cycle along with their upvote count.
+    voting cycle along with their upvote and comment count.
     Ordered by argument value
     """
     if sorting == "oldest":
@@ -27,13 +27,13 @@ def return_current_features(sorting="-upvotes"):
     else:
         sorting = "-upvotes"
     
-    return Suggestion.objects.filter(is_feature=True, suggestionadminpage__in_current_voting_cycle=True).annotate(upvotes=Count("upvote")).annotate(comments=Count("comment")).order_by(sorting)
+    return Suggestion.objects.filter(is_feature=True, suggestionadminpage__in_current_voting_cycle=True).annotate(upvotes=Count("upvote", distinct=True)).annotate(comments=Count("comment", distinct=True, filter=Q(comment__admin_page_comment=False))).order_by(sorting)
 
-def return_all_bugs(sorting="oldest"):
+def return_all_current_bugs(sorting="newest"):
     """
-    Returns all bugs in database  along with 
-    their upvote count. Ordered in descending 
-    order by upvote count
+    Returns all bugs in database that do not have a 
+    status of 'done', along with their upvote and comment count. Ordered
+    by argument value
     """
     
     if sorting == "oldest":
@@ -45,7 +45,7 @@ def return_all_bugs(sorting="oldest"):
     else:
         sorting = "-upvotes"
 
-    return Suggestion.objects.filter(is_feature=False).annotate(upvotes=Count("upvote")).annotate(comments=Count("comment")).order_by(sorting)
+    return Suggestion.objects.filter(~Q(suggestionadminpage__status=3), is_feature=False).annotate(upvotes=Count("upvote", distinct=True)).annotate(comments=Count("comment", distinct=True, filter=Q(comment__admin_page_comment=False))).order_by(sorting)
     
 
 def return_public_suggestion_comments(suggestion, comment_sorting="oldest"):

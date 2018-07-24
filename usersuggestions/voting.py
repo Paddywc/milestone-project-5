@@ -10,12 +10,18 @@ from market.coins import add_coins
 def add_suggestion_upvote_to_database(user, suggestion):
     """
     """
-    upvote = Upvote(user=user, suggestion=suggestion)
-    upvote.save()
+    if settings.COINS_ENABLED==False or suggestion.is_feature==False:
+        if len(Upvote.objects.filter(user=user, suggestion=suggestion)) == 0:
+            upvote = Upvote(user=user, suggestion=suggestion)
+            upvote.save()
+    else:
+        upvote = Upvote(user=user, suggestion=suggestion)
+        upvote.save()
     
 def add_comment_upvote_to_database(user, comment):
-    upvote = Upvote(user=user, comment=comment)
-    upvote.save()
+    if len(Upvote.objects.filter(user=user, comment=comment)) == 0:
+        upvote = Upvote(user=user, comment=comment)
+        upvote.save()
     
 def get_voting_end_date():
     """

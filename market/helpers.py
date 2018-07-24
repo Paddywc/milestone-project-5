@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404
 from .cart import Cart
 from .models import StoreItem
+from .coins import return_minimum_coins_purchase
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
+import market.suggestion_promotion_discounts as discounts 
 
 def set_current_url_as_session_url(request):
     """
@@ -31,7 +32,7 @@ def purchase_coins_for_action(request):
     cart.add(item=coins_store_item)
     return HttpResponseRedirect(reverse('pay'))
     
-def purchase_coins_for_feature_promotion(request, user_coins):
+def purchase_coins_for_feature_promotion(request, user_coins, prices):
     """
     """
     set_current_url_as_session_url(request)
@@ -40,5 +41,10 @@ def purchase_coins_for_feature_promotion(request, user_coins):
     cart = Cart(request)
     cart.add(coins)
     return HttpResponseRedirect(reverse('pay'))
+    
+def get_promote_feature_discount_rates():
+    """
+    """
+    return {2: discounts.two, 3: discounts.three, 4:discounts.four, 5:discounts.five}
     
     
