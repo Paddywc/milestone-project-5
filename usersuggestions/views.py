@@ -50,7 +50,7 @@ def add_suggestion(request):
             if form.is_valid():
                 saved_suggestion_object = form.save()
                 if is_feature == 'True' and settings.COINS_ENABLED:
-                    remove_coins(request.user, get_coins_price("Suggestion"), saved_suggestion_object, 1)
+                    remove_coins(request.user, get_coins_price("Suggestion"),1)
                     user_coins = return_user_coins(request.user)
 
                 if saved_suggestion_object.delay_submission:
@@ -171,7 +171,7 @@ def upvote_suggestion(request, id):
     """
     suggestion = get_object_or_404(Suggestion, id=id)
     if settings.COINS_ENABLED and suggestion.is_feature:
-        remove_coins(request.user, get_coins_price("Upvote"), suggestion, 2)
+        remove_coins(request.user, get_coins_price("Upvote"), 2)
         add_coins(suggestion.user, coin_rewards.suggestion_upvoted, 7)
     add_suggestion_upvote_to_database(request.user, suggestion)
     return redirect("view_suggestion", id)
@@ -244,7 +244,7 @@ def promote_feature(request):
             else:
                 submit_feature_promotion(request)
                 price = prices["{}".format(request.POST.get("promotionDays"))]
-                remove_coins(request.user, price, True, 9)
+                remove_coins(request.user, price, 9)
                 return redirect("home")
 
         return render(request, "promote_feature.html", {"features": features,

@@ -6,25 +6,18 @@ from market.cart import Cart
 from market.models import StoreItem
 from usersuggestions.models import Suggestion
 from .models import UserCoins, CoinsPurchase, StoreItem, UserCoinHistory
+from usersuggestions.helpers import set_current_url_as_session_url
 
 
-def set_current_url_as_session_url(request):
-    """
-    Helper function. Repeated here to avoid circular import
-    """
-    request.session["session_url"] = str(request.build_absolute_uri())
-
-def add_transaction_to_user_coin_history(user, amount, purchase=False, transaction=0):
+def add_transaction_to_user_coin_history(user, amount, transaction=0, purchase=False):
     """
     """
     user_coins_row = UserCoins.objects.get(user=user)
-    if purchase:
-        if isinstance(purchase, Suggestion):
-            transaction = UserCoinHistory(user=user, coins_change=amount, suggestion=purchase, transaction=transaction)
-        else:
-            transaction = UserCoinHistory(user=user, coins_change=amount, transaction=transaction)
+    if purchase and isinstance(purchase, Suggestion):
+        transaction = UserCoinHistory(user=user, coins_change=amount, suggestion=purchase, transaction=transaction)
     else:
-        transaction = UserCoinHistory(user=user, coins_change=amount)
+        transaction = UserCoinHistory(user=user, coins_change=amount, transaction=transaction)
+    
     transaction.save()
 
 
@@ -40,10 +33,10 @@ def add_coins(user, amount, transaction=0):
     old_coins_value = user_row.coins
     user_row.coins = old_coins_value + amount
     user_row.save()
-    add_transaction_to_user_coin_history(user, amount, True, transaction)
+    add_transaction_to_user_coin_history(user, amount, transaction)
 
 
-def remove_coins(user, amount, purchase=False, transaction=0):
+def remove_coins(user, amount,  transaction=0):
     """
     adds the amount specfied in the second
     argument to the argument user. Adds transaction
@@ -55,10 +48,7 @@ def remove_coins(user, amount, purchase=False, transaction=0):
     user_row.coins = old_coins_value - amount
     user_row.save()
 
-    if purchase:
-        add_transaction_to_user_coin_history(user, (0 - amount), purchase, transaction)
-    else:
-        add_transaction_to_user_coin_history(user, (0 - amount))
+    add_transaction_to_user_coin_history(user, (0 - amount), transaction)
 
 
 def return_user_coins(user):
