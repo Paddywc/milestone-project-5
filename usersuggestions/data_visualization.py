@@ -129,7 +129,7 @@ def get_data_for_june_completions_chart():
 
     admin_suggestion_data = return_data_for_completion_dates_chart()
 
-    june_days = [day for day in range(0, 31)]
+    june_days = [day for day in range(1, 31)]
 
     bugs = admin_suggestion_data["bugs"]
     features = admin_suggestion_data["features"]
