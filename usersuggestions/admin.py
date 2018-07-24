@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, Flag, PromotedFeatureSuggestion
+
 # Register your models here.
 
 admin.site.register(Suggestion)

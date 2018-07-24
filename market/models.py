@@ -1,38 +1,38 @@
 from django.db import models
 from django_countries.fields import CountryField
-from phonenumber_field.modelfields import PhoneNumberField
+
 from accounts.models import User
-from usersuggestions.models import Suggestion, Comment
+from usersuggestions.models import Suggestion
+
 
 # below class taken from ecommerce project
 class StoreItem(models.Model):
     name = models.CharField(max_length=200, default="")
-    description= models.TextField()
+    description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     image = models.ImageField(upload_to='images')
     delivery_required = models.BooleanField(blank=False)
     is_coins = models.BooleanField(blank=False, default=False)
     coins_amount = models.PositiveIntegerField(blank=True, null=True)
 
-    
-    def __str__(self):
-        return self.name
-        
-class CoinsPurchase(models.Model):
-    name = models.CharField(max_length=200, default="")
-    description= models.TextField(blank=True)
-    coins_price =models.PositiveIntegerField(blank=False)
-    
     def __str__(self):
         return self.name
 
-        
+
+class CoinsPurchase(models.Model):
+    name = models.CharField(max_length=200, default="")
+    description = models.TextField(blank=True)
+    coins_price = models.PositiveIntegerField(blank=False)
+
+    def __str__(self):
+        return self.name
+
+
 class Delivery(models.Model):
     """
     Delivery details
     """
-    
-    
+
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     full_name = models.CharField(max_length=50, blank=False)
     # phone_number = PhoneNumberField()
@@ -44,9 +44,10 @@ class Delivery(models.Model):
     county = models.CharField(max_length=50, blank=False)
     country = CountryField()
     current_delivery_method = models.BooleanField(default=True)
+
     def __str__(self):
         return "{0}:{1},{2},{3}".format(self.user, self.full_name, self.street_address1, self.postcode)
-    
+
     # Code for turning other current_delivery_method values
     # to False once a new value saved as a True
     # Code from: https://stackoverflow.com/questions/1455126/unique-booleanfield-value-in-django
@@ -61,7 +62,7 @@ class Delivery(models.Model):
                 pass
         super(Delivery, self).save(*args, **kwargs)
 
-    
+
 class Order(models.Model):
     """
     """
@@ -71,7 +72,8 @@ class Order(models.Model):
 
     def __str__(self):
         return "{0}-{1}".format(self.user, self.date_time.date())
-        
+
+
 class OrderItem(models.Model):
     """
     """
@@ -82,31 +84,30 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return "{0}-{1}-{2}".format(self.quantity, self.item.name, self.item.price)
-        
+
 
 class UserCoins(models.Model):
     """
     """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     coins = models.PositiveIntegerField(null=True, default=0)
-    
+
     def __str__(self):
-      return "{0}-{1}".format(self.user, self.coins)
-      
+        return "{0}-{1}".format(self.user, self.coins)
+
 
 class UserCoinHistory(models.Model):
     """
     """
-    transaction_choices = ((1,'submission'),(2,'upvote'), (3, 'referral'),
-    (4, 'store purchase'), (5, 'initial signup'), (6, 'received referral'), 
-    (7, 'suggestion upvoted'), (8, 'suggestion successful'), (9, 'feature suggestion promoted'))
-    
-    
+    transaction_choices = ((1, 'submission'), (2, 'upvote'), (3, 'referral'),
+                           (4, 'store purchase'), (5, 'initial signup'), (6, 'received referral'),
+                           (7, 'suggestion upvoted'), (8, 'suggestion successful'), (9, 'feature suggestion promoted'))
+
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     coins_change = models.IntegerField(null=False)
     date_time = models.DateTimeField(auto_now_add=True)
     suggestion = models.ForeignKey(Suggestion, null=True, blank=True, on_delete=models.CASCADE)
-    transaction =   models.PositiveSmallIntegerField(choices=transaction_choices, blank=False, null=False)
+    transaction = models.PositiveSmallIntegerField(choices=transaction_choices, blank=False, null=False)
+
     def __str__(self):
         return "{0}: {1}".format(self.user, self.coins_change)
-    
