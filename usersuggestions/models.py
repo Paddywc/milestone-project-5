@@ -23,7 +23,7 @@ class SuggestionAdminPage(models.Model):
     status_choices = ((0,"not scheduled"), (1,"to do"), (2,"doing"), (3, "done"))
     priority_choices = ((0,"low"),(1,'normal'),(2,'high'))
     
-    suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.PROTECT)
+    suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField(choices=status_choices, default=0)
     developer_assigned = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT)
     priority = models.PositiveSmallIntegerField(choices=priority_choices, null=True, blank=True, default=1)

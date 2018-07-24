@@ -106,7 +106,7 @@ class UserCoinHistory(models.Model):
     coins_change = models.IntegerField(null=False)
     date_time = models.DateTimeField(auto_now_add=True)
     suggestion = models.ForeignKey(Suggestion, null=True, blank=True, on_delete=models.CASCADE)
-    transaction =   models.PositiveSmallIntegerField(choices=transaction_choices, blank=True, null=True)
+    transaction =   models.PositiveSmallIntegerField(choices=transaction_choices, blank=False, null=False)
     def __str__(self):
         return "{0}: {1}".format(self.user, self.coins_change)
     

@@ -175,5 +175,5 @@ def get_promoted_features():
     """
     """
     current_date = datetime.date.today()
-    promoted_feature_suggestions = PromotedFeatureSuggestion.objects.filter(end_date__gt=current_date)
+    promoted_feature_suggestions = PromotedFeatureSuggestion.objects.filter(end_date__gt=current_date, start_date__lte=current_date)
     return promoted_feature_suggestions
