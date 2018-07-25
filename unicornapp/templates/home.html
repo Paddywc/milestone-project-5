@@ -1,6 +1,33 @@
 {% extends 'base.html' %} 
-
+{% load bootstrap_tags %}
 {% block content %}
 
-<h2>Hello World!</h2>
+<div id="home-header">
+    <div class="row">
+         {% if not user.is_authenticated %}
+
+        <div class="col-5 offset-6">
+    <form id="home-signup-form" method="POST">
+            {% csrf_token %}
+
+        <div class="card">
+  <div class="card-header">
+    <h5 class="card-title">Sign Up</h5>
+    Sign up now to use our app. It's completely free!
+  </div>
+  <div class="card-body">
+    <p class="card-text">  {{ form|as_bootstrap }}</p>
+    
+    <input type="submit" value="Sign Up" class="btn btn-primary">
+
+  </div>
+</div>
+        
+        
+    </form>
+    </div>
+    {% endif %}
+    </div>
+</div>
+
 {% endblock %}
