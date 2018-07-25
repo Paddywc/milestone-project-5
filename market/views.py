@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect
 
 from .cart import Cart
 from .checkout import get_user_delivery_addresses, process_stripe_payment, process_order, \
@@ -27,7 +28,8 @@ def cart_add(request, item_id):
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
     cart.add(item=item)
-    return redirect('store')
+    # return redirect('store')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def cart_remove(request, item_id):
@@ -38,7 +40,7 @@ def cart_remove(request, item_id):
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
     cart.remove(item)
-    return redirect('view_cart')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def view_cart(request):
@@ -64,7 +66,9 @@ def delivery(request):
 @login_required()
 def pay(request):
     """
-    Post request can only occur if stripe accepts payment
+    Post request can only occur if stripe accepts payment. Redirect
+    to delivery page if cart has an item that needs delivery and 
+    user has no delivery addresses in database.
     """
 
     if request.method == "POST":
@@ -79,11 +83,20 @@ def pay(request):
 
     user_addresses = get_user_delivery_addresses(request.user)
     cart_contains_delivery_item = cart_contains_item_needing_delivery(request)
-
-    return render(request, 'pay.html',
+    
+    
+    cart = Cart(request)
+    if cart_contains_delivery_item and (len(user_addresses)==0):
+        return redirect("delivery")
+    
+    elif len(cart)==0:
+        return redirect("store")
+        
+    else:
+        return render(request, 'pay.html',
                   {"addresses": user_addresses, "cart_contains_delivery_item": cart_contains_delivery_item})
 
-
+@login_required()
 def earn_coins(request):
     """
     """

@@ -4,12 +4,13 @@ from django.contrib.auth import login
 from market.coins import add_coins
 from django.conf import settings
 import market.coin_prices.coin_rewards as coin_rewards
-
+from usersuggestions.voting import get_voting_end_date
 # Create your views here.
 def render_home(request):
     """
     """
     form = UserSignupForm
+    voting_end_date = get_voting_end_date()
     if request.method == "POST":
         form = UserSignupForm(request.POST)
         if form.is_valid():
@@ -17,4 +18,4 @@ def render_home(request):
             if settings.COINS_ENABLED:
                 add_coins(new_user, coin_rewards.signup, 5)
                 login(request, new_user)
-    return render(request, "home.html", {"form": form})
+    return render(request, "home.html", {"form": form, "voting_end_date":voting_end_date})

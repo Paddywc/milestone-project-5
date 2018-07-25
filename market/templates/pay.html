@@ -4,25 +4,38 @@
 
 
 
-{% block title %} Pay {% endblock %}
+{% block title %}Pay{% endblock %}
 {% block content %}
-{% if cart|length > 0 %}
 
-{% for item in cart %}
- <p>{{ item.item.name }}, {{ item.quantity }} X €{{ item.price }}} = €{{ item.total_price }} </p> 
-{% endfor %}
-<br>
-<p>Total: €{{ cart.get_total_price }}</p>
-<form id="deliverySelectionForm" >
-</form>
+<main id="pay">
+
+
 
 <form method="POST">
     {% csrf_token %}
 
 {% if cart_contains_delivery_item %}
+
+<div class="card-group">
+
 {% for address in addresses %}
-<p>{{ address }}</p>
-<div class="form-check">
+
+<div class="card" >
+  <div class="card-body">
+    <h6 class="card-subtitle mb-2 text-muted">{{ address.full_name }}</h6>
+    <p class="card-text">{{ address.street_address1 }}</p>
+    {% if address.street_address2 %}
+    <p class="card-text">{{ address.street_address2 }}</p>
+    {% endif %}
+    {% if address.postcode %}
+    <p class="card-text">{{ address.postcode }}</p>
+    {% endif %}
+    <p class="card-text">{{ address.town_or_city }}</p>
+    <p class="card-text">{{ address.county }}</p>
+    <p class="card-text">{{ address.country }}</p>
+  </div>
+  <div class="card-footer">
+    <div class="form-check">
     {% if address.current_delivery_method %}
   <input class="form-check-input" type="radio" name="deliverySelection" id="{{ address.id }}" add value="{{ address.id }}" checked >
   {% else %}
@@ -33,9 +46,17 @@
   </label>
 </div>
 
-<br><br><br>
+    </div>
+</div>
+
+
 {% endfor %}
+</div>
 {% endif %}
+
+<p>Total: €{{ cart.get_total_price }}</p>
+
+
   <script
   
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -52,8 +73,6 @@
     <input type="hidden" name="next" value="{{ request.path }}">
   
 </form>
+</main>
 
-{% else %}
-<p>Cart is empty</p>
-{% endif %}
 {% endblock %}

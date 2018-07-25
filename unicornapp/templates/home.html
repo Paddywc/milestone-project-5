@@ -1,33 +1,99 @@
-{% extends 'base.html' %} 
-{% load bootstrap_tags %}
-{% block content %}
+{% extends 'base.html' %} {% load bootstrap_tags %} {% block content %}
 
-<div id="home-header">
+<div id="home-header" class="container-fluid">
     <div class="row">
-         {% if not user.is_authenticated %}
+        {% if not user.is_authenticated %}
+        <div class=" col-xs-12 col-md-7">
+            <div id="header-text">
+                <h1 id="header-title">Attract Unicorns. Gain Immortality.</h1>
+                <h4 id="header-subtitle">With our app you can attract unicorns, whose blood holds the secret to immortality <br><br>Our app is completely free. Optionally, you can use coins to have your say in future feature developments</h4>
+            </div>
+            <div id="header-buttons">
+                        <a role="button" href="{% url 'store' %}" class="btn btn-primary">Visit Store</a>
+                         <a role="button" href="{% url 'login' %}" class="btn btn-primary">Login</a>
 
-        <div class="col-5 offset-6">
-    <form id="home-signup-form" method="POST">
-            {% csrf_token %}
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <form id="home-signup-form" method="POST">
+                {% csrf_token %}
 
-        <div class="card">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Sign Up</h5>
+                        Sign up now to use our app. It's completely free!
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"> {{ form|as_bootstrap }}</p>
+
+                        <input type="submit" value="Sign Up" class="btn btn-primary">
+
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+        {% else %}
+        <h2>PRESS TO ATTRACT UNICORNS</h2>
+        
+        {% endif %}
+    </div>
+</div>
+
+<main>
+    <div id="have-your-say-section" class="container-fluid">
+        <div class="row">
+                <h5 class="home-subsection-header">Have your say</h5>
+</div>
+    <div class="row">
+        <div class="card-deck">
+  <div class="card">
+      <div class="card-header">
+    1:
+  </div>
+    <div class="card-body">
+      <h5 class="card-title">Get some coins</h5>
+      <p class="card-text">Coins allow you to do cool things like submitting your own feature suggestions. Coins can be earned for free or purchased from our store</p>
+      <!--<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+           
+    </div>
+        <div class="card-footer">
+
+     <p class="card-text"> <a href="{% url 'earn_coins' %}" class="card-link">Earn Coins</a>
+ <a href="{% url 'store' %}" class="card-link">Visit Store</a></p> 
+</div>
+  </div>
+  
+  <div class="card">
   <div class="card-header">
-    <h5 class="card-title">Sign Up</h5>
-    Sign up now to use our app. It's completely free!
+    2:
+  </div>    <div class="card-body">
+      <h5 class="card-title">Have your say in the future of our app </h5>
+      <p class="card-text">Comment on, or upvote, feature suggestions and bug fixes. Alternatively,
+      post your own suggestion!
+      </p>
+ </div>
+ <div class="card-footer">
+   <p class="card-text"><a href="{% url 'issue_tracker' %}" class="card-link">View User Suggestions</a>
+    <a href="{% url 'add_suggestion' %}" class="card-link">Submit Suggestion</a></p>   
   </div>
-  <div class="card-body">
-    <p class="card-text">  {{ form|as_bootstrap }}</p>
-    
-    <input type="submit" value="Sign Up" class="btn btn-primary">
-
   </div>
-</div>
-        
-        
-    </form>
-    </div>
-    {% endif %}
-    </div>
-</div>
+  
+  <div class="card">
+  <div class="card-header">
+    3:
+  </div>    <div class="card-body">
+      <h5 class="card-title">Users like you determine the winner</h5>
+      <p class="card-text">The voting cycle ends once complete work on the previous winning suggestion. Whichever feature suggestion has the most upvotes at that time is declared the winner. We promise to spend 50% of our development time working on this feature</p>
 
+    </div>
+<div class="card-footer">
+     <p class="text-muted">Current voting cycle end date: {{ voting_end_date }}</p>
+</div>
+</div>
+    </div>
+    </div>
+    </div>
+</main>
 {% endblock %}

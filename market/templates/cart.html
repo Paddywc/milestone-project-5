@@ -1,26 +1,54 @@
 {% extends 'base.html' %} 
-{% block title %} Cart {% endblock %}
+{% block title %}Cart{% endblock %}
 {% block content %}
-{% for item in cart %}
-{{ item }}
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="{{ item.item.image.url }}" alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">{{ item.item.name }}</h5>
-    <p class="card-text">{{ item.item.description }}</p>
-    <p class="card-text">€{{ item.price }}</p>
-        <p class="card-text">Quantity:{{ item.quantity}}</p>
-    <p class="card-text">€{{ item.total_price }}</p>
+
+<h1 id="store-header">Cart</h1>
+
+<main id="cart">
+
+<div class="row">
+  <div class="col-8 offset-2">
+<div id="accordion">
+  
+  {% for item in cart %}
+  <div class="card">
+    <div class="card-header" id="header-{{ item.item.id }}">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#{{ item.item.id }}" aria-expanded="false" aria-controls="collapseOne">
+         {{ item.item.name }}   <span class="badge badge-primary badge-pill">{{ item.quantity }}</span></a>
+        </button>
+      </h5>
+    </div>
+
+    <div id="{{ item.item.id }}" class="collapse collapsed" aria-labelledby="header-{{ item.item.id }}" data-parent="#accordion">
+     
+
+      <div class="card-body">
+        <p class="text-muted">{{ item.item.description }}</p>
+        <br>
+        <p class="card-text">Quantity:{{ item.quantity}} X €{{ item.price }} = €{{ item.total_price }} </p>
 
     <a href="/cart/add/{{ item.item.id }}" class="btn btn-primary">Add Another</a>
     <a href="/cart/remove/{{ item.item.id }}" class="btn btn-primary">Remove One</a>
-
+      </div>
+    </div>
   </div>
+  {% endfor %}
+
 </div>
-{% endfor %}
+</div>
+</div>
 
-<br><br><br>
-Cart total:{{ cart.get_total_price }}
+<div class="row">
+  <div class="col-8 offset-2">
+    
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Cart Total: </strong>€{{ cart.get_total_price }}
+    <a href="{% url 'pay' %}" class="btn checkout-btn btn-primary">Checkout</a>
+  </button>
+</div>
+</div>
+</div>
 
-
+</main>
 {% endblock %}

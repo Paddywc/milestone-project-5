@@ -1,19 +1,26 @@
 {% extends 'base.html' %} 
-{% block title %} Store {% endblock %}
+{% block title %}Store{% endblock %}
 {% block content %}
-{% for item in store_items %}
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="{{ item.image.url }}" alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">{{ item.name }}</h5>
-    <p class="card-text">{{ item.description }}</p>
-    <p class="card-text">€{{ item.price }}</p>
-    <a href="/cart/add/{{ item.id }}" class="btn btn-primary">Add to cart</a>
+<header>
+  <h1 id="store-header">Store</h1>
+</header>
+
+<main id="store">
+  <div class="card-columns">
+    {% for item in store_items %}
+    <div class="col-10 offset-1">
+    <div class="card">
+      <img class="card-img-top" src="{{ item.image.url }}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.name }}</h5>
+        <p class="card-text">{{ item.description }}</p>
+        <p class="card-text">€{{ item.price }}</p>
+        <a href="/cart/add/{{ item.id }}" class="btn btn-primary">Add to cart</a>
+      </div>
+    </div>
   </div>
-</div>
 
-
-
-
-{% endfor %}
+    {% endfor %}
+  </div>
+</main>
 {% endblock %}
