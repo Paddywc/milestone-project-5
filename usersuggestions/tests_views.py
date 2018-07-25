@@ -123,14 +123,14 @@ class TestViews(TestCase):
         self.assertEqual(session["form_title"], "test title")
         self.assertEqual(session["form_details"], "test details")
 
-    def test_get_home_page(self):
+    def test_get_issue_tracker_page(self):
         """
-        Test to check that the home page returns a response
-        code of 200 and uses the home.html template
+        Test to check that the issue_tracker page returns a response
+        code of 200 and uses the issue_tracker.html template
         """
-        page = self.client.get(reverse("home"))
+        page = self.client.get(reverse("issue_tracker"))
         self.assertEqual(page.status_code, 200)
-        self.assertTemplateUsed(page, "home.html")
+        self.assertTemplateUsed(page, "issue_tracker.html")
 
     def test_get_view_suggestion_page(self):
         """
@@ -243,7 +243,7 @@ class TestViews(TestCase):
         """
         Test to check that the userpage page returns a response
         code of 200 and uses the userpage.html template. Should redirect
-        to home if userpage is not the userpage of the logged in user
+        to issue_tracker if userpage is not the userpage of the logged in user
         """
         self.client.force_login(User.objects.get_or_create(username="testuser", email="testuser@email.com")[0])
         logged_in_user_id = User.objects.get(username="testuser").id
@@ -252,13 +252,13 @@ class TestViews(TestCase):
         self.assertTemplateUsed(page, "userpage.html")
 
         page = self.client.get(reverse("userpage", kwargs={"user_id": 1}), follow=True)
-        self.assertTemplateUsed(page, "home.html")
+        self.assertTemplateUsed(page, "issue_tracker.html")
 
     def test_get_promote_feature_page(self):
         """
         Test to check that the promote_feature page returns a response
         code of 200 and uses the promote_feature.html template. If
-        coins are not enabled, should redirect to home
+        coins are not enabled, should redirect to issue_tracker
         """
         self.client.force_login(User.objects.get_or_create(username="testuser", email="testuser@email.com")[0])
         page = self.client.get(reverse("promote_feature"), follow=True)
@@ -266,7 +266,7 @@ class TestViews(TestCase):
         if settings.COINS_ENABLED:
             self.assertTemplateUsed(page, "promote_feature.html")
         else:
-            self.assertTemplateUsed(page, "home.html")
+            self.assertTemplateUsed(page, "issue_tracker.html")
 
     def test_user_can_promote_feature(self):
         """

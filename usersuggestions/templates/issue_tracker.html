@@ -1,5 +1,5 @@
 {% extends 'base.html' %} 
-{% block title %} Home {% endblock %}
+{% block title %} issue_tracker {% endblock %}
 
 {% block content %}
 
@@ -27,11 +27,11 @@
       Sort results by
     </button>
     <div class="dropdown-menu" aria-labelledby="orderResultsButtonGroup">
-      <a class="dropdown-item" href="{% url 'home'  'oldest' %}">Oldest</a>
-      <a class="dropdown-item" href="{% url 'home' 'newest' %}">Newest</a>
-            <a class="dropdown-item" href="{% url 'home' 'comments' %}">Most Commented</a>
+      <a class="dropdown-item" href="{% url 'issue_tracker'  'oldest' %}">Oldest</a>
+      <a class="dropdown-item" href="{% url 'issue_tracker' 'newest' %}">Newest</a>
+            <a class="dropdown-item" href="{% url 'issue_tracker' 'comments' %}">Most Commented</a>
 
-        <a class="dropdown-item" href="{% url 'home' 'upvotes' %}">Most Popular</a>
+        <a class="dropdown-item" href="{% url 'issue_tracker' 'upvotes' %}">Most Popular</a>
       
     </div>
   </div>
@@ -92,11 +92,11 @@
       Sort results by
     </button>
     <div class="dropdown-menu" aria-labelledby="orderResultsButtonGroup">
-      <a class="dropdown-item" href="{% url 'home'  'oldest' %}#bugs">Oldest</a>
-      <a class="dropdown-item" href="{% url 'home' 'newest' %}#bugs">Newest</a>
-         <a class="dropdown-item" href="{% url 'home' 'comments' %}#bugs">Most Commented</a>
+      <a class="dropdown-item" href="{% url 'issue_tracker'  'oldest' %}#bugs">Oldest</a>
+      <a class="dropdown-item" href="{% url 'issue_tracker' 'newest' %}#bugs">Newest</a>
+         <a class="dropdown-item" href="{% url 'issue_tracker' 'comments' %}#bugs">Most Commented</a>
 
-        <a class="dropdown-item" href="{% url 'home' 'upvotes' %}#bugs">Most Encountered</a>
+        <a class="dropdown-item" href="{% url 'issue_tracker' 'upvotes' %}#bugs">Most Encountered</a>
     </div>
   </div>
 

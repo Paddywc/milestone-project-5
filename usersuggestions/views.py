@@ -73,7 +73,7 @@ def add_suggestion(request):
                    "coin_options": coin_options, "minimum_coins": minimum_coins})
 
 
-def render_home(request, sorting="oldest"):
+def render_issue_tracker(request, sorting="oldest"):
     """
     """
     # for testing
@@ -84,7 +84,7 @@ def render_home(request, sorting="oldest"):
     bugs = return_all_current_bugs(sorting)
     previous_winners = return_previous_winners()
     promoted_features = get_promoted_features()
-    return render(request, "home.html", {"features": current_features, "bugs": bugs,
+    return render(request, "issue_tracker.html", {"features": current_features, "bugs": bugs,
                                          "voting_end_date": voting_end_date, "promoted_features": promoted_features})
 
 
@@ -218,7 +218,7 @@ def render_userpage(request, user_id):
                                                  })
 
     else:
-        return redirect("home")
+        return redirect("issue_tracker")
 
 
 @login_required()
@@ -245,7 +245,7 @@ def promote_feature(request):
                 submit_feature_promotion(request)
                 price = prices["{}".format(request.POST.get("promotionDays"))]
                 remove_coins(request.user, price, 9)
-                return redirect("home")
+                return redirect("issue_tracker")
 
         return render(request, "promote_feature.html", {"features": features,
                                                         "user_coins": user_coins, "discount_rates": discount_rates,
@@ -253,7 +253,7 @@ def promote_feature(request):
                                                         "max_date": max_date, "tomorrow": tomorrow})
 
     else:
-        return redirect("home")
+        return redirect("issue_tracker")
 
 
 def view_data(request):
