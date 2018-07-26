@@ -51,6 +51,7 @@ class Delivery(models.Model):
     # Code for turning other current_delivery_method values
     # to False once a new value saved as a True
     # Code from: https://stackoverflow.com/questions/1455126/unique-booleanfield-value-in-django
+    # Added user=self.user
     def save(self, *args, **kwargs):
         if self.current_delivery_method:
             try:
