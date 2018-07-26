@@ -39,7 +39,7 @@ class TestViews(TestCase):
 
         admin_page_1 = SuggestionAdminPage(suggestion=suggestion_2, current_winner=False)
         admin_page_1.save()
-        admin_page_2 = SuggestionAdminPage(suggestion=suggestion_1, current_winner=False)
+        admin_page_2 = SuggestionAdminPage(suggestion=suggestion_1, current_winner=True, expected_completion_date= datetime.date(2019, 2, 8))
         admin_page_2.save()
         admin_page_3 = SuggestionAdminPage(suggestion=suggestion_3, current_winner=False)
         admin_page_3.save()

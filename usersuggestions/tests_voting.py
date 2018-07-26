@@ -10,7 +10,7 @@ from usersuggestions.models import Suggestion, Comment, SuggestionAdminPage, Upv
 from usersuggestions.voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, \
     get_voting_end_date, set_expected_compilation_date_if_none_exists, remove_all_suggestions_from_current_voting_cycle, \
     set_suggestions_success_result, declare_winner, trigger_delayed_suggestions, end_voting_cycle_if_current_end_date, \
-    return_previous_winners
+    return_completed_suggestions
 
 
 class TestVoting(TestCase):
@@ -32,6 +32,9 @@ class TestVoting(TestCase):
         suggestion_3 = Suggestion.objects.create(is_feature=False, user=user_2, title="Test Suggestion 3",
                                                  details="Any old detials", delay_submission=False)
         suggestion_3.save()
+        suggestion_4 = Suggestion.objects.create(is_feature=True, user=user_1, title="Test Suggestion 4",
+                                                 details="Any old detials", delay_submission=False)
+        suggestion_4.save()
 
         comment_1 = Comment(user=user_1, suggestion=suggestion_2, comment="test comment")
         comment_1.save()
@@ -44,6 +47,8 @@ class TestVoting(TestCase):
         admin_page_2.save()
         admin_page_3 = SuggestionAdminPage(suggestion=suggestion_3, current_winner=False)
         admin_page_3.save()
+        admin_page_4 = SuggestionAdminPage(suggestion=suggestion_4, current_winner=False)
+        admin_page_4.save()
 
         upvote_suggestion_1_1 = Upvote(user=user_1, suggestion=suggestion_1)
         upvote_suggestion_1_1.save()
@@ -309,20 +314,20 @@ class TestVoting(TestCase):
         should_be_false = end_voting_cycle_if_current_end_date()
         self.assertEqual(str(should_be_false), "False")
 
-    def test_can_return_previous_winners(self):
+    def test_can_return_completed_suggestions(self):
         """
-        Test to check that return_previous_winners returns all Suggestion
-        objects that were successful
+        Test to check that return_completed_suggestions returns all 
+        suggestions whose admin page has a status value of 3 (done)
         """
-        random_number_from_0_to_3 = randint(0, 3)
+        random_number_from_1_to_3 = randint(1, 4)
         all_suggestion_admin_objects = SuggestionAdminPage.objects.all()
-        for i in range(random_number_from_0_to_3):
+        for i in range(random_number_from_1_to_3):
             admin_page_object = all_suggestion_admin_objects[i]
-            admin_page_object.was_successful = True
+            admin_page_object.status = 3
             admin_page_object.save()
 
-        previous_winners = return_previous_winners()
-        self.assertEqual(len(previous_winners), random_number_from_0_to_3)
+        completed_suggestions = return_completed_suggestions()
+        self.assertEqual(len(completed_suggestions), random_number_from_1_to_3)
 
     def test_free_upvotes_limited(self):
         """

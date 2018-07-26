@@ -54,7 +54,7 @@ class Delivery(models.Model):
     def save(self, *args, **kwargs):
         if self.current_delivery_method:
             try:
-                temp = Delivery.objects.get(current_delivery_method=True)
+                temp = Delivery.objects.get(current_delivery_method=True, user=self.user)
                 if self != temp:
                     temp.current_delivery_method = False
                     temp.save()

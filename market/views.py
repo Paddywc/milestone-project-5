@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
-
 from .cart import Cart
 from .checkout import get_user_delivery_addresses, process_stripe_payment, process_order, \
     cart_contains_item_needing_delivery

@@ -10,7 +10,9 @@
     {% for item in store_items %}
     <div class="col-10 offset-1">
     <div class="card">
+      {% if item.image %}
       <img class="card-img-top" src="{{ item.image.url }}" alt="Card image cap">
+      {% endif %}
       <div class="card-body">
         <h5 class="card-title">{{ item.name }}</h5>
         <p class="card-text">{{ item.description }}</p>
