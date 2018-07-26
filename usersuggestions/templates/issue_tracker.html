@@ -1,16 +1,18 @@
 {% extends 'base.html' %} 
-{% block title %} issue_tracker {% endblock %}
+{% block title %}Issue Tracker{% endblock %}
 
 {% block content %}
 
-
-
+<main id="issue-tracker">
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="features-tab" data-toggle="tab" href="#features" role="tab" aria-controls="features" aria-selected="true">Suggestions</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="bugs-tab" data-toggle="tab" href="#bugs" role="tab" aria-controls="bugs" aria-selected="false">Bugs</a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab" aria-controls="completed" aria-selected="false">Completed</a>
   </li>
   
 </ul>
@@ -35,56 +37,52 @@
       
     </div>
   </div>
+  
+  
+  <input type="text" id="searhFeature"  placeholder="Search for feature suggestion..">    
 
+  
+<!--</header>-->
 
+<!--<main id="issue-tracker">-->
 
 {% for feature in promoted_features %}
 
-<div class="card">
-  <div class="card-header">
-
-   PROMOTED 
+<div class="jumbotron">
+  <h1 class="suggestion-title display-4">{{ feature.title }}</h1>
+  <p class="suggestion-meta lead">PROMOTED</p>
+  <hr class="my-4">
+    <div class="suggestion-details">
+  <p>{{ feature.details|safe }}</p>
   </div>
-  <div class="card-body">
-    <h5 class="card-title">{{ feature.suggestion.title }}</h5>
-    <p class="card-text">{{ feature.suggestion.details|safe }}</p>
-    <a href="{% url 'view_suggestion' feature.suggestion.id %}" class="btn btn-primary">View Feature Suggestion</a>
-  </div>
-    <div class="card-footer text-muted">
-    From {{ feature.suggestion.user }}
-  </div>
-  
+  <p class="lead">
+<a href="{% url 'view_suggestion' feature.id %}" class="btn view-suggestion-btn btn-primary btn-lg">View Feature Suggestion</a>
+</p>
 </div>
-
-<br><br>
 
 
 {% endfor %}
 
 {% for feature in features %}
 
-<div class="card">
-  <div class="card-header">
-
-    <p>Upvotes: {{ feature.upvotes }}</p>
-    <p>Comments: {{ feature.comments }}</p>
+<div class="jumbotron">
+  <h1 class="suggestion-title display-4">{{ feature.title }}</h1>
+  <p class="suggestion-meta lead">Upvotes: {{ feature.upvotes }} | Comments: {{ feature.comments }} | Date Posted: {{ feature.date_time.date }} | User: {{ feature.user }}</p>
+  <hr class="my-4">
+    <div class="suggestion-details">
+  <p>{{ feature.details|safe }}</p>
   </div>
-  <div class="card-body">
-    <h5 class="card-title">{{ feature.title }}</h5>
-    <p class="card-text">{{ feature.details|safe }}</p>
-    <a href="{% url 'view_suggestion' feature.id %}" class="btn btn-primary">View Feature Suggestion</a>
-  </div>
-    <div class="card-footer text-muted">
-    From {{ feature.user }}
-  </div>
-  
+  <p class="lead">
+<a href="{% url 'view_suggestion' feature.id %}" class="btn view-suggestion-btn btn-primary btn-lg">View Feature Suggestion</a>
+</p>
 </div>
 
-<br><br>
-{% endfor %}
 
-      
+{% endfor %}
       </div>
+      
+      
+      
   <div class="tab-pane fade" id="bugs" role="tabpanel" aria-labelledby="bugs-tab">
       
       <div class="btn-group" role="group">
@@ -100,31 +98,73 @@
     </div>
   </div>
 
+  <input type="text" id="searhBug"  placeholder="Search for bug..">    
+
             
       
 {% for bug in bugs %}
 
-<div class="card">
-  <div class="card-header">
-      <p>Upvotes: {{ bug.upvotes }}</p>
-    <p>Comments: {{ bug.comments }}</p>
+
+<div class="jumbotron">
+  <h1 class="suggestion-title display-4">{{ bug.title }}</h1>
+  <p class="suggestion-meta lead">Upvotes: {{ bug.upvotes }} | Comments: {{ bug.comments }} | Date Posted: {{ bug.date_time.date }} | User: {{ bug.user }}</p>
+  <hr class="my-4">
+    <div class="suggestion-details">
+  <p>{{ bug.details|safe }}</p>
   </div>
-  <div class="card-body">
-    <h5 class="card-title">{{ bug.title }}</h5>
-   <p class="card-text">{{ bug.details|safe }}</p>
-    <a href="{% url 'view_suggestion' bug.id %}" class="btn btn-primary">View Bug</a>
-  </div>
-      <div class="card-footer text-muted">
-    From {{ bug.user }}
-  </div>
+  <p class="lead">
+<a href="{% url 'view_suggestion' bug.id %}" class="btn view-suggestion-btn btn-primary btn-lg">View Bug</a>
+</p>
 </div>
 
 <br><br>
 {% endfor %}
+   
+  </div>
+  
+  
+  
+  
+    <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
       
+    
+
+  <input type="text" id="searchCompleted"  placeholder="Search completed suggestions...">    
+
+      <div class="jumbotron">
+  <h1 class="suggestion-title display-4">MOST RECENT WINNER: {{ current_winner.suggestion.title }}</h1>
+  <p class="suggestion-meta lead">Expected compilation date: {{ voting_end_date }}</p>
+  <hr class="my-4">
+    <div class="suggestion-details">
+  <p>{{ current_winner.suggestion.details|safe }}</p>
+  </div>
+  <p class="lead">
+<a href="{% url 'view_suggestion' current_winner.suggestion.id %}" class="btn view-suggestion-btn btn-primary btn-lg">View suggestion</a>
+</p>
+</div>      
+      
+{% for suggestion in completed_suggestions %}
+
+
+<div class="jumbotron">
+  <h1 class="suggestion-title display-4">{{ suggestion.title }}</h1>
+  <p class="suggestion-meta lead">{% if suggestion.is_feature %}Feature{% else %}Bug{% endif %} | Completed: {{ suggestion.date_time }}</p>
+  <hr class="my-4">
+    <div class="suggestion-details">
+  <p>{{ suggestion.details|safe }}</p>
+  </div>
+  <p class="lead">
+<a href="{% url 'view_suggestion' suggestion.id %}" class="btn view-suggestion-btn btn-primary btn-lg">View suggestion</a>
+</p>
+</div>
+
+<br><br>
+{% endfor %}
+   
   </div>
 
 </div>
+
 
 <script>
 // code from: https://stackoverflow.com/questions/7862233/twitter-bootstrap-tabs-go-to-specific-tab-on-page-reload-or-hyperlink
@@ -133,9 +173,35 @@ if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
 } 
 
+
+// searchFunction code largely from: https://www.w3schools.com/jquery/jquery_filters.asp
+let searchFuntion = function(){
+  $("#searhFeature").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#features .jumbotron").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+    $("#searhBug").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#bugs .jumbotron").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+    $("#searchCompleted").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#completed .jumbotron").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+};
+
+$(document).ready(searchFuntion)
+
+
   
 </script>
 
 
-
+</main>
 {% endblock %}

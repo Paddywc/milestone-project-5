@@ -2,6 +2,7 @@ import datetime
 
 from django.conf import settings
 from django.db.models import Count
+from itertools import chain
 
 import market.coin_prices.coin_rewards as coin_rewards
 from market.coins import add_coins
@@ -125,7 +126,12 @@ def end_voting_cycle_if_current_end_date():
         return False
 
 
-def return_previous_winners():
+def return_completed_suggestions():
     """
     """
-    return Suggestion.objects.filter(suggestionadminpage__was_successful=True)
+    suggestions =  Suggestion.objects.filter(suggestionadminpage__status=3)
+    for suggestion in suggestions:
+        suggestion.date_time = SuggestionAdminPage.objects.get(suggestion=suggestion).date_completed
+        
+    return suggestions
+   

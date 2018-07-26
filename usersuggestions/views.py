@@ -9,7 +9,7 @@ from accounts.models import User
 from market.coins import return_user_coins, add_coins, get_coins_price, remove_coins, return_all_store_coin_options, \
     return_minimum_coins_purchase, purchase_coins_for_action, purchase_coins_for_feature_promotion
 from market.helpers import get_promote_feature_discount_rates, get_feature_promotion_prices
-from usersuggestions.helpers import get_promoted_features
+from usersuggestions.helpers import get_promoted_features, set_current_url_as_session_url
 from .data_visualization import create_most_upvoted_chart, create_coin_spending_chart
 from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
 from .helpers import get_userpage_values, return_current_features, \
@@ -20,8 +20,7 @@ from .helpers import get_userpage_values, return_current_features, \
     submit_feature_promotion
 from .models import Suggestion, Comment, SuggestionAdminPage, Flag
 from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, \
-    get_voting_end_date, \
-    return_previous_winners
+    get_voting_end_date, return_completed_suggestions
 
 
 @login_required()
@@ -82,10 +81,11 @@ def render_issue_tracker(request, sorting="oldest"):
     voting_end_date = get_voting_end_date()
     current_features = return_current_features(sorting)
     bugs = return_all_current_bugs(sorting)
-    previous_winners = return_previous_winners()
+    completed_suggestions = return_completed_suggestions()
+    current_winner = SuggestionAdminPage.objects.get(current_winner=True)
     promoted_features = get_promoted_features()
     return render(request, "issue_tracker.html", {"features": current_features, "bugs": bugs,
-                                         "voting_end_date": voting_end_date, "promoted_features": promoted_features})
+                                         "voting_end_date": voting_end_date, "promoted_features": promoted_features, "completed_suggestions": completed_suggestions, "current_winner": current_winner})
 
 
 def view_suggestion(request, id, comment_sorting="oldest"):

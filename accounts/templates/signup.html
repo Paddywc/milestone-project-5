@@ -1,11 +1,25 @@
 {% extends 'base.html' %} 
 {% load bootstrap_tags %}
-{% block title %} Sign Up {% endblock %}
+{% block title %}Sign Up{% endblock %}
 {% block content %}
-<form class="accounts-form" method="post">
-    {{ form|as_bootstrap }}
-    {% csrf_token %}
-    <input type="submit" value="Sign Up">
-</form>
 
+<main id="signup">
+        <div class="col-xs-10 col-md-8 offset-md-2 offset-xs-1">
+
+<h1 id="store-header">Sign Up</h1>
+
+<form class="accounts-form" method="post">
+    {{ form|as_bootstrap_inline }}
+    {% csrf_token %}
+    <div class="row">
+    <input type="submit" id="signup-btn" value="Sign Up">
+    </div>
+</form>
+</div>
+<div id="have-account-section">
+    <h5 id="have-account-text"> Already have an account?</h5>
+<a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+
+</div>
+</main>
 {% endblock %}

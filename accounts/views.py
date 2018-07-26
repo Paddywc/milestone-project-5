@@ -3,9 +3,12 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect, get_object_or_404
 
 import market.coin_prices.coin_rewards as coin_rewards
+from market.cart import Cart
+
 from market.coins import add_coins
 from .forms import UserSignupForm, UserLoginForm
 from .models import User
+from django.http import HttpResponseRedirect
 
 
 def create_user(request):
@@ -54,6 +57,11 @@ def login_user(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            cart = Cart(request)
+            if len(cart) > 0:
+                return redirect("view_cart")
+            else:
+                return redirect("home")
     else:
         form = UserLoginForm()
 
