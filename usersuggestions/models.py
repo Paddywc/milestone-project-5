@@ -22,7 +22,7 @@ class Suggestion(models.Model):
 
 
 class SuggestionAdminPage(models.Model):
-    status_choices = ((0, "not scheduled"), (1, "to do"), (2, "doing"), (3, "done"))
+    status_choices = ((0, "not scheduled"), (1, "scheduled"), (2, "in progress"), (3, "completed"))
     priority_choices = ((0, "low"), (1, 'normal'), (2, 'high'))
 
     suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.CASCADE)

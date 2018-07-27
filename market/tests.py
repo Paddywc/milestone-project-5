@@ -485,50 +485,5 @@ class TestModels(TestCase):
                 without_price.save()
                 
                 
-    def test_creating_delivery_requires_all_fields_except_address_2_and_current_method(self):
-        """
-        Test to check that all fields except street_address_2 and current_delivery_method 
-        are required  when creating a Delivery object. Country is a CountryField from 
-        the django-countries extension. It can not be set as required   therefore is not 
-        tested here, but it cannot be blank when completing form
-        """
-        
-        user = User.objects.get(id=1)
-        
-                    
-        test_saves_with_all_values = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
-        test_saves_with_all_values.save()
-                    
-                    
-        with self.assertRaises(IntegrityError):
-            
-
-            with transaction.atomic():
-                without_full_name = Delivery(user=user, phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
-                without_full_name.save()
-                
-            with transaction.atomic():
-                without_full_name = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
-                without_full_name.save()
-                
-                
-            with transaction.atomic():
-                without_phone_number = Delivery(user=user, full_name= "I'm a test", street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
-                without_phone_number.save()
-                
-            with transaction.atomic():
-                without_street_address_1 = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
-                without_street_address_1.save()
-                
-            with transaction.atomic():
-                without_postcode = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", town_or_city = "Springfield", county="Dublin", country = "AU")
-                without_postcode.save()
-                
-            with transaction.atomic():
-                without_town = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001",  county="Dublin", country = "AU")
-                without_town.save()
-                
-            with transaction.atomic():
-                without_county = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", country="AU")
-                without_county.save()
+  
                 

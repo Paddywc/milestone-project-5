@@ -215,7 +215,7 @@ def render_userpage(request, user_id):
         return render(request, "userpage.html", {"user": user,
                                                  "votes": values["votes"], "purchases": values["purchases"],
                                                  "coin_history": values["coin_history"],
-                                                 "suggestions": values["suggestions"]
+                                                 "suggestions": values["suggestions"],
                                                  })
 
     else:

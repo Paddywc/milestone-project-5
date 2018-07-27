@@ -3,7 +3,7 @@ import datetime
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
 
-from market.models import Order, UserCoinHistory, OrderItem
+from market.models import Order, UserCoinHistory, OrderItem, UserCoins
 from usersuggestions.models import PromotedFeatureSuggestion
 from .forms import SuggestionForm
 from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, PromotedFeatureSuggestion
@@ -136,7 +136,8 @@ def get_userpage_values(user):
     votes = Upvote.objects.filter(user=user).order_by("-date_time")
     purchases = Order.objects.filter(user=user).order_by("-date_time")
     coin_history = UserCoinHistory.objects.filter(user=user).order_by("-date_time")
-    suggestions = Suggestion.objects.filter(user=user).order_by("-date_time")
+    suggestions = SuggestionAdminPage.objects.filter(suggestion__user=user).order_by("-suggestion__date_time")
+    
 
     for purchase in purchases:
         purchase.items = OrderItem.objects.filter(order=purchase)

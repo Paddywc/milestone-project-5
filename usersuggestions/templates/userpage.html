@@ -1,94 +1,172 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %} {% block title %} {{ user }} {% endblock %} {% block content %}
 
-{% block title %} Userpage {% endblock %}
+<main id="userpage">
 
-{% block content %}
+    <h1 id="header">{{ user }}</h1>
 
+    <div class="row">
+        <div class="offset-1">
+            <h2 class="section-header">Submissions:</h2>
+        </div>
+    </div>
 
-<p>{{ user }}</p>
+    {% if suggestions|length == 0 %}
+    <p>You have not submitted any suggestions</p>
+    {% else %}
 
-<h2>Submissions</h2>
+    <div class="row">
+        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+            <table class="table table-striped">
 
-{% if suggestions|length == 0 %}
-<p>You have not submitted any suggestions</p>
-{% else %}
+                <thead>
+                    <tr>
+                        <th scope="col">Suggestion</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Date Posted</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for suggestion in suggestions %}
+                    <tr>
+                        <td><a href="{% url 'view_suggestion' suggestion.suggestion.id %}">{{ suggestion.suggestion.title }}</a> </td>
 
-{% for suggestion in suggestions %}
-<p>{{ suggestion.title }}</p>
-{% endfor %}
+                        <td>{{ suggestion.suggestion.get_is_feature_display }}</td>
+                        <td>{{ suggestion.suggestion.date_time.date }}</td>
+                        <td>
+                            {% if suggestion.suggestion.is_feature %} {% if suggestion.in_current_voting_cycle %} Vote ongoing {% elif suggestion.suggestion.delay_submission %} Submission delayed till next voting cycle {% elif suggestion.was_successful == True %} Suggestion Successful
+                            {% else %} Suggestion unsuccessful {% endif %} {% else %} {{ suggestion.get_status_display }} {% endif %}
 
-{% endif %}
-
-<h2>Votes</h2>
-
-{% if votes|length == 0 %}
-<p>You have not cast any votes</p>
-{% else %}
-
-
-{% for vote in votes %}
-<div class="row">
-{% if vote.suggestion %}
-<p>Suggestion: {{ vote.suggestion.title }}</p>
-{% else %}
-<p>Comment: {{  vote.comment.comment|safe }}</p>
-{% endif %}
-</div>
-{% endfor %}
-
-{% endif %}
-
-<h2>Favorites</h2>
-{% if favorites|length == 0 %}
-<p>You have no favorites</p>
-{% else %}
-
-{% for favorite in favorites %}
-{{ favorite.suggestion.title }}
-{% endfor %}
-
-{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
 
 
-<h2>Coin History</h2>
-{% if coin_history|length == 0 %}
-<p>You have no coin transaction</p>
-{% else %}
+    <div class="row">
+        <div class="offset-1">
+            <h2>Votes</h2>
+        </div>
+    </div>
+    {% if votes|length == 0 %}
+    <p>You have not cast any votes</p>
+    {% else %}
+    <div class="row">
+        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+            <table class="table table-striped">
 
-{% for entry in coin_history %}
-<p>{{ entry }}
+                <thead>
+                    <tr>
+                        <th scope="col">Upvoted</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-{% if entry.transaction %}
-{{ entry.get_transaction_display }}
-{% endif %}
-{% if entry.suggestion %}
-,
-:{{ entry.suggestion.title }}
-{% endif %}
+                    {% for vote in votes %}
+                    <div class="row">
+                        <tr>
+                            <td>
+                                {% if vote.comment %}
+                                <a href="{% url 'view_suggestion' vote.comment.suggestion.id %}#{{ vote.comment.id }}">Comment by {{ vote.comment.user }} on {{ vote.comment.suggestion.title }}</a> {% else %}
+                                <a href="{% url 'view_suggestion' vote.suggestion.id %}">{{ vote.suggestion.get_is_feature_display }}: {{ vote.suggestion.title }}</a> {% endif %}
 
-</p>
-{% endfor %}
-{% endif %}
+                            </td>
 
-
-<h2>Store Purchases</h2>
-{% if purchases|length == 0 %}
-<p>You have made no purchases at our store</p>
-{% else %}
-
-{% for purchase in purchases %}
-<p>{{ purchase.date_time }}
-
-{% for item in purchase.items %}
-{{ item.quantity }}:{{ item.item }}. 
-{% endfor %}
-Total: €{{ purchase.total_cost }}
-</p>
-
-{% endfor %}
-
-{% endif %}
+                            <td>{{ vote.date_time }}</td>
+                        </tr>
 
 
+                        {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        {% endif %}
 
+
+
+        <div class="row">
+            <div class="offset-1">
+                <h2>Coin History</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Transaction</th>
+                            <th scope="col">Change</th>
+                            <th scope="col">Time</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        {% for entry in coin_history %}
+                        <tr>
+                            <td>{{ entry.get_transaction_display }}{% if entry.suggestion %}: <a href="{% url 'view_suggestion' entry.suggestion.id %}"> {{ entry.suggestion.title }}</a> {% endif %}
+                            </td>
+                            <td>{% if entry.coins_change > 0 %} <span class="positive-change">+{% else %}<span class="negative-change">{% endif %}{{ entry.coins_change }}</span></td>
+                            <td>{{ entry.date_time }}
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="offset-1">
+                <h2>Store Purchases</h2>
+            </div>
+        </div>
+        {% if purchases|length == 0 %}
+
+        <p>You have made no purchases at our store</p>
+        {% else %}
+        <div class="row">
+            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Time</th>
+                            <th scope="col">Cart</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for purchase in purchases %}
+                        <tr>
+                            <td>{{ purchase.date_time }}</td>
+                            <td>
+                                {% for item in purchase.items %}
+                                <div class="row">
+                                    {{ item.quantity }} X {{ item.item }}
+                                </div>
+                                {% endfor %}
+                            </td>
+                            <td>Total: €{{ purchase.total_cost }}</td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+
+</main>
 {% endblock %}
