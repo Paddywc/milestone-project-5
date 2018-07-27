@@ -17,6 +17,12 @@
 
 
     <h1 id="suggestion-title">{{ feature.title }}</h1>
+    <div class="row admin-row">
+        <div class="col-xs-10 col-md-6 offset-xs-1 offset-md-3">
+            <div id="admin-status"> <span class="admin-key">  Status:</span>{{ suggestion_admin.get_status_display }} </div>
+            <div id="admin-estimated-time"><span class="admin-key"> Estimated Time to Complete: </span>{% if not suggestion_admin.estimated_days_to_complete %}N/A {% else %}{{ suggestion_admin.estimated_days_to_complete }} Days {% endif %}</div>
+        </div>
+    </div>
 
 
     <div class="row btn-row">
@@ -90,6 +96,12 @@ Flag Suggestion
         </div>
     </div>
 
+
+    <div class="row">
+        <div class="offset-1">
+            <h3 id="details-title">Feature Idea:</h3>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
@@ -194,14 +206,14 @@ Flag Suggestion
                     </div>
                     <div class="card-footer text-muted">
                         Upvotes: {{ comment.upvotes }} <a class="btn upvote-btn btn-success " href="{% url 'upvote_comment' comment.id %}" role="button">
-                                <i class="material-icons"> thumb_up</i>Upvote Comment</a>
-                        
-                         <!-- Flag comment modal trigger -->
-        <button type="button" class="btn flag-btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#flagCommentModal">
+                                <i class="material-icons">thumb_up</i>Upvote Comment</a>
+
+                        <!-- Flag comment modal trigger -->
+                        <button type="button" class="btn flag-btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#flagCommentModal">
 Flag Comment
 </button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -209,7 +221,7 @@ Flag Comment
         <!--<a class="btn btn-danger" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>-->
 
 
-       
+
 
         <!--Flag comment model-->
 
@@ -298,23 +310,23 @@ Flag Comment
         $("#flagCommentReasonSelect").change(showAppropriateButton)
         $("#flagSuggestionReasonSelect").change(showAppropriateButton)
     </script>
-    
-    
-     <div class="row">
-            <div class="offset-1">
-                <h5 id="add-comment-title">Add Comment:</h5>
-            </div>
+
+
+    <div class="row">
+        <div class="offset-1">
+            <h5 id="add-comment-title">Add Comment:</h5>
         </div>
-      <div class="row">
-            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
-    <form method="POST">
-
-        
-        {{ form|as_bootstrap }} {% csrf_token %}
-        <input type="submit"  value="Submit" name="postComment">
-
-    </form>
     </div>
+    <div class="row">
+        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+            <form method="POST">
+
+
+                {{ form|as_bootstrap }} {% csrf_token %}
+                <input type="submit" value="Submit" name="postComment">
+
+            </form>
+        </div>
     </div>
     </div>
 </footer>

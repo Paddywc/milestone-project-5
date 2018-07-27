@@ -33,8 +33,8 @@ class SuggestionAdminPage(models.Model):
     estimated_days_to_complete = models.PositiveSmallIntegerField(null=True, blank=True)
     expected_completion_date = models.DateField(null=True, blank=True)
     date_completed = models.DateField(null=True, blank=True)
-    github_branch = models.CharField(null=True, blank=True, max_length=50)
     in_current_voting_cycle = models.BooleanField(blank=False, default=True)
+    github_branch = models.CharField(null=True, blank=True, max_length=50)
     was_successful = models.NullBooleanField(blank=True, null=True)
     current_winner = models.BooleanField(blank=False, default=False)
 
@@ -99,7 +99,6 @@ class Flag(models.Model):
     """
 
     flagged_item_choices = ((1, "comment"), (2, 'suggestion'))
-    status_choices = ((0, "not scheduled"), (1, "to do"), (2, "doing"), (3, "done"))
     reason_choices = ((0, "Spam"), (1, "Hate Speech"), (2, "Graphic Content"), (3, "Harassment or Bullying"))
 
     flagged_item_type = models.PositiveSmallIntegerField(choices=flagged_item_choices, null=False)
@@ -110,12 +109,10 @@ class Flag(models.Model):
     date_time_marked = models.DateTimeField(auto_now_add=True)
     admin_assigned = models.ForeignKey(User, related_name="admin_assigned", null=True, blank=True,
                                        on_delete=models.PROTECT)
-    status = models.PositiveSmallIntegerField(choices=status_choices, default=0)
-    deemed_inappropriate = models.NullBooleanField(blank=True, null=True)
+    result = models.NullBooleanField(blank=True, null=True)
 
     def __str__(self):
-        return "Flagged {0}. {1}. {2}".format(self.get_flagged_item_type_display(), self.date_time_marked,
-                                              self.get_status_display())
+        return "Flagged {0}. {1}".format(self.get_flagged_item_type_display(), self.date_time_marked)
 
 
 class PromotedFeatureSuggestion(models.Model):

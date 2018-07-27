@@ -1,198 +1,269 @@
-{% extends 'base.html' %} 
-{% block title %} View Bug {% endblock %}
-{% block head %}
-{% load bootstrap_tags %}
+{% extends 'base.html' %} {% block title %}View Bug{% endblock %} {% block head %} {% load bootstrap_tags %}
 <!--Script for ckeditor-->
-    {{ form.media }}
-    
-{% endblock %}
-{% block content %}
+{{ form.media }} {% endblock %} {% block content %}
+<main id="suggestion">
 
-{% if request.user.is_staff %}
-<div class="row">
-<a class="btn btn-primary" href="{% url 'admin_page' bug.id %}" role="button">View admin page</a>
-</div>
-{% endif %}
 
-<p>{{ bug.title }}</p>
-<p>{{ bug.details|safe }}</p>
+    {% if request.user.is_staff %}
+    <div class="row btn-row">
+        <div class="col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+            <a class="btn btn-outline-primary" href="{% url 'admin_page' bug.id %}" role="button">View admin page</a>
+        </div>
+    </div>
+    {% endif %}
 
 
 
-   <!-- Flag suggestion modal trigger -->
-<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#flagSuggestionModal">
+    <h1 id="suggestion-title">{{ bug.title }}</h1>
+    <div class="row admin-row">
+        <div class="col-xs-10 col-md-6 offset-xs-1 offset-md-3">
+            <div id="admin-status"> <span class="admin-key">  Status:</span>{{ suggestion_admin.get_status_display }} </div>
+            <div id="admin-estimated-time"><span class="admin-key"> Estimated Time to Complete: </span>{% if not suggestion_admin.estimated_days_to_complete %}N/A {% else %}{{ suggestion_admin.estimated_days_to_complete }} Days {% endif %}</div>
+        </div>
+    </div>
+
+
+
+    <div class="row btn-row">
+        <div class="col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+            <a class="btn btn-warning" href="{% url 'upvote_suggestion' bug.id %}" role="button"> <i class="material-icons">bug_report</i>
+I have this bug</a>
+        </div>
+    </div>
+    <!-- Flag suggestion modal trigger -->
+    <div class="row btn-row">
+        <div class="col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+            <!-- Flag suggestion modal trigger -->
+            <button type="button" class="btn btn-outline-danger btn-sm " data-toggle="modal" data-target="#flagSuggestionModal">
 Flag Suggestion
 </button>
+        </div>
+    </div>
 
-<!--Flag suggestion model-->
 
-<div class="modal fade" id="flagSuggestionModal" tabindex="-1" role="dialog" aria-labelledby="flagSuggestionModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="flagSuggestionModalLabel">Flag Suggestion</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+    <!--Flag suggestion model-->
+
+    <div class="modal fade" id="flagSuggestionModal" tabindex="-1" role="dialog" aria-labelledby="flagSuggestionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="flagSuggestionModalLabel">Flag Suggestion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-     
-    <form id="flagForm" method="GET">
-        <!--from bootstrap documentation-->
-  <div class="form-row align-items-center">
-    <div class="col-auto my-1">
-      <select class="custom-select mr-sm-2" name="flagSuggestionReasonSelect" id="flagSuggestionReasonSelect">
+                </div>
+                <div class="modal-body">
+
+                    <form id="flagForm" method="GET">
+                        <!--from bootstrap documentation-->
+                        <div class="form-row align-items-center">
+                            <div class="col-auto my-1">
+                                <select class="custom-select mr-sm-2" name="flagSuggestionReasonSelect" id="flagSuggestionReasonSelect">
        <option selected>Suggestion contains...</option>
         <option value="0">Spam</option>
          <option value="1" >Hate Speech</option>
        <option value="2" >Graphic Content</option>
         <option value="3" >Harassment or Bullying</option>
       </select>
-      
+
+                            </div>
+                            <div class="col-auto my-1">
+                                <a class="flagBtn btn btn-danger" id="suggestionSpanBtn" href="{% url 'flag' 2 bug.id 0 %}" role="button">Flag </a>
+                                <a class="flagBtn btn btn-danger" id="suggestionHateBtn" href="{% url 'flag' 2 bug.id 1 %}" role="button">Flag </a>
+                                <a class="flagBtn btn btn-danger" id="suggestionGraphicBtn" href="{% url 'flag' 2 bug.id 2 %}" role="button">Flag </a>
+                                <a class="flagBtn btn btn-danger" id="suggestionBullyingBtn" href="{% url 'flag' 2 bug.id 3 %}" role="button">Flag </a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
     </div>
-   
-    <div class="col-auto my-1">
-    <a class="flagBtn btn btn-danger" id="suggestionSpanBtn" href="{% url 'flag' 2 bug.id 0 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="suggestionHateBtn" href="{% url 'flag' 2 bug.id 1 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="suggestionGraphicBtn" href="{% url 'flag' 2 bug.id 2 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="suggestionBullyingBtn" href="{% url 'flag' 2 bug.id 3 %}" role="button">Flag </a>
 
+    <div class="row">
+        <div class="offset-1">
+            <h3 id="details-title">Bug:</h3>
+        </div>
     </div>
 
-  </div>
-  </form>
-        
-      </div>
-     
+
+    <div class="row">
+        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+            <div id="details-section">
+                <p>{{ bug.details|safe }}</p>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 
-<a class="btn btn-primary" href="{% url 'upvote_suggestion' bug.id %}" role="button">I have this bug</a>
 
- <div id="comments">
+<footer id="suggestion-comments">
+    <div id="comments">
 
-  <div class="btn-group" role="group">
-    <button id="orderCommentsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="row">
+            <div class="offset-1">
+                <h3 id="comments-title">Comments:</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-1">
+                <div class="btn-group" role="group">
+                    <button id="orderCommentsButtonGroup" type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Sort comments by
     </button>
-    <div class="dropdown-menu" aria-labelledby="orderCommentsButtonGroup">
-      <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'oldest' %}#comments">Oldest</a>
-      <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'newest' %}#comments">Newest</a>
-        <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'upvotes' %}#comments">Most Popular</a>
-    </div>
-  </div>
-</div>
-     
+                    <div class="dropdown-menu" aria-labelledby="orderCommentsButtonGroup">
+                        <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'oldest' %}#comments">Oldest</a>
+                        <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'newest' %}#comments">Newest</a>
+                        <a class="dropdown-item" href="{% url 'view_suggestion' bug.id  'upvotes' %}#comments">Most Popular</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        {% for comment in comments %}
 
+        <div class="row">
+            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
 
-{% for comment in comments %}
-<div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}. Upvotes {{ comment.upvotes }}</p></div>
-<a class="btn btn-primary" href="{% url 'upvote_comment' comment.id %}" role="button">Upvote Comment</a>
+                <div class="card">
 
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p>{{ comment.comment|safe }}</p>
+                            <footer class="blockquote-footer">{{ comment.user }}<cite title="Source Title">, {{ comment.date_time }}</cite></footer>
+                        </blockquote>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Upvotes: {{ comment.upvotes }} <a class="btn upvote-btn btn-success " href="{% url 'upvote_comment' comment.id %}" role="button">
+                                <i class="material-icons">thumb_up</i>Upvote Comment</a>
 
-   <!-- Flag comment modal trigger -->
-<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#flagCommentModal">
+                        <!-- Flag comment modal trigger -->
+                        <button type="button" class="btn flag-btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#flagCommentModal">
 Flag Comment
 </button>
+                    </div>
 
-<!--Flag comment model-->
+                </div>
+            </div>
+        </div>
 
-<div class="modal fade" id="flagCommentModal" tabindex="-1" role="dialog" aria-labelledby="flagCommentModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="flagCommentModalLabel">Flag Comment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+        <!--<a class="btn btn-danger" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>-->
+
+
+
+
+        <!--Flag comment model-->
+
+        <div class="modal fade" id="flagCommentModal" tabindex="-1" role="dialog" aria-labelledby="flagCommentModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="flagCommentModalLabel">Flag Comment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-     
-    <form id="flagForm" method="GET">
-        <!--from bootstrap documentation-->
-  <div class="form-row align-items-center">
-    <div class="col-auto my-1">
-      <select class="custom-select mr-sm-2" name="flagCommentReasonSelect" id="flagCommentReasonSelect">
+                    </div>
+                    <div class="modal-body">
+
+                        <form id="flagForm" method="GET">
+                            <!--from bootstrap documentation-->
+                            <div class="form-row align-items-center">
+                                <div class="col-auto my-1">
+                                    <select class="custom-select mr-sm-2" name="flagCommentReasonSelect" id="flagCommentReasonSelect">
        <option selected>Comment contains...</option>
         <option value="0">Spam</option>
          <option value="1" >Hate Speech</option>
        <option value="2" >Graphic Content</option>
         <option value="3" >Harassment or Bullying</option>
       </select>
-      
-    </div>
-   
-    <div class="col-auto my-1">
-    <a class="flagBtn btn btn-danger" id="commentSpanBtn" href="{% url 'flag' 1 comment.id 0 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="commentHateBtn" href="{% url 'flag' 1 comment.id 1 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="commentGraphicBtn" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>
-    <a class="flagBtn btn btn-danger" id="commentBullyingBtn" href="{% url 'flag' 1 comment.id 3 %}" role="button">Flag </a>
+
+                                </div>
+
+                                <div class="col-auto my-1">
+                                    <a class="flagBtn btn btn-danger" id="commentSpanBtn" href="{% url 'flag' 1 comment.id 0 %}" role="button">Flag </a>
+                                    <a class="flagBtn btn btn-danger" id="commentHateBtn" href="{% url 'flag' 1 comment.id 1 %}" role="button">Flag </a>
+                                    <a class="flagBtn btn btn-danger" id="commentGraphicBtn" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>
+                                    <a class="flagBtn btn btn-danger" id="commentBullyingBtn" href="{% url 'flag' 1 comment.id 3 %}" role="button">Flag </a>
+
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
 
     </div>
+    <script>
+        let showAppropriateButton = function() {
+            $(".flagBtn").hide()
+            if ($("#flagCommentReasonSelect").val() == "0") {
+                $("#commentSpanBtn").show()
+            }
+            else if ($("#flagCommentReasonSelect").val() == "1") {
+                $("#commentHateBtn").show()
+            }
+            else if ($("#flagCommentReasonSelect").val() == "2") {
+                $("#commentGraphicBtn").show()
+            }
+            else if ($("#flagCommentReasonSelect").val() == "3") {
+                $("#commentBullyingBtn").show()
+            }
 
-   
-   
-  </div>
-  </form>
-        
-        
-        
-      </div>
-     
+            if ($("#flagSuggestionReasonSelect").val() == "0") {
+                $("#suggestionSpanBtn").show()
+            }
+            else if ($("#flagSuggestionReasonSelect").val() == "1") {
+                $("#suggestionHateBtn").show()
+            }
+            else if ($("#flagSuggestionReasonSelect").val() == "2") {
+                $("#suggestionGraphicBtn").show()
+            }
+            else if ($("#flagSuggestionReasonSelect").val() == "3") {
+                $("#suggestionBullyingBtn").show()
+            }
+
+
+
+        };
+
+        $(document).ready(function() {
+            showAppropriateButton()
+        })
+
+        $("#flagCommentReasonSelect").change(showAppropriateButton)
+        $("#flagSuggestionReasonSelect").change(showAppropriateButton)
+    </script>
+
+
+    <div class="row">
+        <div class="offset-1">
+            <h5 id="add-comment-title">Add Comment:</h5>
+        </div>
     </div>
-  </div>
-</div>
-
-{% endfor %}
-
-</div>
-   <script>
-    let showAppropriateButton = function() {
-        $(".flagBtn").hide()
-        if ($("#flagCommentReasonSelect").val()=="0"){
-           $("#commentSpanBtn").show()
-        } else if ($("#flagCommentReasonSelect").val()=="1"){
-           $("#commentHateBtn").show()
-        } else if ($("#flagCommentReasonSelect").val()=="2"){
-           $("#commentGraphicBtn").show()
-        } else if ($("#flagCommentReasonSelect").val()=="3"){
-           $("#commentBullyingBtn").show()
-        }
-        
-         if ($("#flagSuggestionReasonSelect").val()=="0"){
-           $("#suggestionSpanBtn").show()
-        } else if ($("#flagSuggestionReasonSelect").val()=="1"){
-           $("#suggestionHateBtn").show()
-        } else if ($("#flagSuggestionReasonSelect").val()=="2"){
-           $("#suggestionGraphicBtn").show()
-        } else if ($("#flagSuggestionReasonSelect").val()=="3"){
-           $("#suggestionBullyingBtn").show()
-        }
-        
-        
-     
-    };
-    
-     $(document).ready(function(){
-         showAppropriateButton()
-     })
-
-    $("#flagCommentReasonSelect").change(showAppropriateButton)
-    $("#flagSuggestionReasonSelect").change(showAppropriateButton)
+    <div class="row">
+        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+            <form method="POST">
 
 
-</script>
+                {{ form|as_bootstrap }} {% csrf_token %}
+                <input type="submit" value="Submit" name="postComment">
 
-   
+            </form>
+        </div>
+    </div>
+    </div>
+</footer>
 
-<form method="POST">
 
-    {{ form|as_bootstrap }}
-    {% csrf_token %}
-    <input type="submit" value="Post Comment" name="postComment">
 
-</form>
+
+
 {% endblock %}

@@ -1,55 +1,109 @@
-{% extends 'base.html' %} 
-{% block title %} Suggestion Admin Page {% endblock %}
-{% load bootstrap_tags %}
-{% block head %}
+{% extends 'base.html' %} {% block title %} Suggestion Admin Page {% endblock %} {% load bootstrap_tags %} {% block head %}
 <!--Script for ckeditor-->
-    {{ comment_form.media }}
-{% endblock %}
-{% block content %}
+{{ comment_form.media }} {% endblock %} {% block content %}
+
+<main id="suggestion">
+
+    <div class="row btn-row">
+        <div class="col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+            <a class="btn btn-outline-primary" href="{% url 'view_suggestion' suggestion.id %}" role="button">View public page</a>
+        </div>
+    </div>
+
+    <h1 id="suggestion-title">{{ suggestion.title }}</h1>
 
 
-<p>{{ suggestion.title }}</p>
-<p>{{ suggestion.get_is_feature_display }}</p>
+    <div class="row">
+        <div class="offset-1">
+            <h3 id="details-title">{{ suggestion.get_is_feature_display }}:</h3>
+        </div>
+    </div>
 
-<p>{{ suggestion.details|safe }}</p>
-<form method="POST">
-  {{ form|as_bootstrap }}
-  <div id="fullGitHubUrl"></div>
-    
-    <script>
-  
-  
- let showFullGitHubUrl = function(){
-      $("#fullGitHubUrl").empty()
-      $("#fullGitHubUrl").append(
-          `<a target="_blank" href="https://github.com/Paddywc/milestone-project-5/tree/${$("#id_github_branch").val()}">
+    <div class="row">
+        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+            <div id="details-section">
+                <p>{{ suggestion.details|safe }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-10 col-md-8 offset-md-2 offset-xs-1">
+
+    <form id ="admin-page-form" method="POST">
+        {{ form|as_bootstrap }}
+        <div id="fullGitHubUrl"></div>
+
+        <script>
+            let showFullGitHubUrl = function() {
+                $("#fullGitHubUrl").empty()
+                $("#fullGitHubUrl").append(
+                    `<a target="_blank" href="https://github.com/Paddywc/milestone-project-5/tree/${$("#id_github_branch").val()}">
             https://github.com/Paddywc/milestone-project-5/tree/${$("#id_github_branch").val()}
             </a>
-          `)};
-  
-  $(document).ready(showFullGitHubUrl)
-  $("#id_github_branch").keyup(showFullGitHubUrl)
-  
+          `)
+            };
 
-</script>
+            $(document).ready(showFullGitHubUrl)
+            $("#id_github_branch").keyup(showFullGitHubUrl)
+        </script>
 
-  
-    {% csrf_token %}
-    <input type="submit" value="submit changes" name="adminPageSubmit">
-    </form>
-    
-    
-    {% for comment in comments %}
-<div class="row"><p>{{ comment.user }}:{{ comment.comment|safe }}, {{ comment.date_time }}. Upvotes {{ comment.upvotes }}</p></div>
-<a class="btn btn-primary" href="{% url 'upvote_comment' comment.id %}" role="button">Upvote Comment</a>
 
-{% endfor %}
-    
-    <form method="POST">
-        {{ comment_form|as_bootstrap }}
         {% csrf_token %}
-            <input type="submit" value="Post Comment" name="postComment">
-
+        <input type="submit" value="submit changes" name="adminPageSubmit">
     </form>
+    </div>
+    
+</main>
 
+<footer id="suggestion-comments">
+    <div id="comments">
+
+        <div class="row">
+            <div class="offset-1">
+                <h3 id="comments-title">Comments:</h3>
+            </div>
+        </div>
+
+
+        {% for comment in comments %}
+
+        <div class="row">
+            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+
+                <div class="card">
+
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p>{{ comment.comment|safe }}</p>
+                            <footer class="blockquote-footer">{{ comment.user }}<cite title="Source Title">, {{ comment.date_time }}</cite></footer>
+                        </blockquote>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Upvotes: {{ comment.upvotes }} <a class="btn upvote-btn btn-success " href="{% url 'upvote_comment' comment.id %}" role="button">
+                                <i class="material-icons">thumb_up</i>Upvote Comment</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        <div class="row">
+            <div class="offset-1">
+                <h5 id="add-comment-title">Add Comment:</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+                <form method="POST">
+
+
+                    {{ comment_form|as_bootstrap }} {% csrf_token %}
+                    <input type="submit" value="Submit" name="postComment">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</footer>
 {% endblock %}

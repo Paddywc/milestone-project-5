@@ -93,6 +93,7 @@ def view_suggestion(request, id, comment_sorting="oldest"):
     """
     coins_enabled = settings.COINS_ENABLED
     suggestion = get_object_or_404(Suggestion, id=id)
+    suggestion_admin = get_object_or_404(SuggestionAdminPage, suggestion=suggestion)
     comments = return_public_suggestion_comments(suggestion, comment_sorting)
     form = CommentForm(initial={"user": request.user, "suggestion": suggestion})
 
@@ -124,11 +125,11 @@ def view_suggestion(request, id, comment_sorting="oldest"):
         return render(request, "view_feature.html",
                       {"form": form, "comments": comments, "feature": suggestion, "coins_enabled": coins_enabled,
                        "price": price, "user_coins": user_coins, "minimum_coins": minimum_coins,
-                       "coin_options": coin_options})
+                       "coin_options": coin_options, "suggestion_admin": suggestion_admin})
 
     else:
         return render(request, "view_bug.html",
-                      {"form": form, "comments": comments, "bug": suggestion, "coins_enabled": coins_enabled})
+                      {"form": form, "comments": comments, "bug": suggestion, "coins_enabled": coins_enabled, "suggestion_admin": suggestion_admin})
 
     return True
 
