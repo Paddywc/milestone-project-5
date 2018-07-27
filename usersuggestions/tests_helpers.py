@@ -195,8 +195,8 @@ class TestHelpers(TestCase):
     def test_can_get_userpage_values(self):
         """
         Test that get_userpage_values retrieves a dictionary with
-        the votes, purchases, coin_history, and suggestions for that
-        user
+        the votes, purchases, coin_history, and SuggestionAdminPages
+        for that user
         """
         new_user = User(username="userpage user", email="userpage@email.com", password="password")
         new_user.save()
@@ -207,6 +207,11 @@ class TestHelpers(TestCase):
         suggestion_2 = Suggestion(is_feature=True, user=new_user, title="Userpage suggestion 2",
                                   details="Any old detials")
         suggestion_2.save()
+        
+        suggestion_admin_1 = SuggestionAdminPage(suggestion=suggestion_1)
+        suggestion_admin_1.save()
+        suggestion_admin_2 = SuggestionAdminPage(suggestion= suggestion_2)
+        suggestion_admin_2.save()
 
         for i in range(5):
             random_suggestion = choice(Suggestion.objects.all())
@@ -233,8 +238,8 @@ class TestHelpers(TestCase):
         self.assertTrue(isinstance(random_coin_history, UserCoinHistory))
         random_vote = choice(userpage_values["votes"])
         self.assertTrue(isinstance(random_vote, Upvote))
-        random_suggestion = choice(userpage_values["suggestions"])
-        self.assertTrue(isinstance(random_suggestion, Suggestion))
+        random_suggestion_admin = choice(userpage_values["suggestions"])
+        self.assertTrue(isinstance(random_suggestion_admin, SuggestionAdminPage))
 
     def test_get_promoted_features_returns_only_current_promoted_features(self):
         """
