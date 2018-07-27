@@ -223,7 +223,7 @@ class TestModels(TestCase):
 
         current_date = datetime.date.today()
         self.assertEqual(new_flag.date_time_marked.date(), current_date)
-        self.assertEqual(new_flag.status, 0)
+        self.assertEqual(new_flag.result, None)
 
     def test_creating_flag_requires_item_type_and_user_and_reason(self):
         """
@@ -261,12 +261,11 @@ class TestModels(TestCase):
         random_user = choice(User.objects.all())
         random_suggestion = choice(Suggestion.objects.all())
         new_flag = Flag(flagged_item_type=2, flagged_by=random_user, suggestion=random_suggestion,
-                        reason=0, status=3)
+                        reason=0)
         new_flag.save()
 
         self.assertEqual(new_flag.get_flagged_item_type_display(), "suggestion")
         self.assertEqual(new_flag.get_reason_display(), "Spam")
-        self.assertEqual(new_flag.get_status_display(), "done")
 
     def test_user_and_suggestion_and_start_date_and_end_date_required_to_create_user_promoted_feature_suggestion(self):
         """

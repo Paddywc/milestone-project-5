@@ -23,9 +23,9 @@
 <div class="card" >
   <div class="card-body">
     <h6 class="card-subtitle mb-2 text-muted">{{ address.full_name }}</h6>
-    <p class="card-text">{{ address.street_address1 }}</p>
-    {% if address.street_address2 %}
-    <p class="card-text">{{ address.street_address2 }}</p>
+    <p class="card-text">{{ address.street_address_1 }}</p>
+    {% if address.street_address_2 %}
+    <p class="card-text">{{ address.street_address_2 }}</p>
     {% endif %}
     {% if address.postcode %}
     <p class="card-text">{{ address.postcode }}</p>

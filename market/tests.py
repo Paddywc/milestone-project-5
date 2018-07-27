@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.conf import settings
+from django.db import IntegrityError, transaction
 from importlib import import_module
 from django.http import HttpRequest
 from .models import CoinsPurchase, StoreItem, UserCoinHistory, Order, OrderItem, UserCoins, Delivery
@@ -10,6 +11,8 @@ from usersuggestions.models import Suggestion
 from .coins import add_transaction_to_user_coin_history, return_minimum_coins_purchase, add_coins,remove_coins, return_user_coins, get_coins_price, return_all_store_coin_options
 from .cart import Cart
 from .views import cart_add, cart_remove, pay
+
+
 class TestCoins(TestCase):
     
     @classmethod
@@ -174,10 +177,7 @@ class TestCoins(TestCase):
         possible_options_2 = [option.coins_amount for option in coin_options if (option.coins_amount + 300) >= random_item_cost_under_1000]
         self.assertEqual(min(possible_options_2), minimum_purchase_2.coins_amount)
  
-import os      
-if os.path.exists('env.py'):
-    import env
-        
+
 class TestViews(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -297,7 +297,7 @@ class TestViews(TestCase):
         logged_in_user_id = User.objects.get(username="testuser").id
 
         form_data = {"user": logged_in_user_id, "full_name": "I'm a test", "phone_number": 424242424242,
-                     "street_address1": "123 Fake Street", "postcode": "10001", 
+                     "street_address_1": "123 Fake Street", "postcode": "10001", 
                     "town_or_city": "Springfield", "county": "Dublin", "country": "AU"}
                     
         response = self.client.post(reverse("delivery"), form_data, follow=True)
@@ -306,7 +306,7 @@ class TestViews(TestCase):
         self.assertEqual(retrieved_delivery.phone_number, "424242424242")
         self.assertEqual(retrieved_delivery.country,  "AU")
         self.assertEqual(retrieved_delivery.town_or_city,  "Springfield")
-        self.assertEqual(retrieved_delivery.street_address1,  "123 Fake Street")
+        self.assertEqual(retrieved_delivery.street_address_1,  "123 Fake Street")
         self.assertEqual(retrieved_delivery.postcode,  "10001")
         self.assertEqual(retrieved_delivery.current_delivery_method, True)
         self.assertTemplateUsed("pay.html")
@@ -325,7 +325,7 @@ class TestViews(TestCase):
         logged_in_user = User.objects.get(username="testuser")
 
         form_data = {"user": logged_in_user.id, "full_name": "test 1", "phone_number": 424242424242,
-                     "street_address1": "123 Fake Street", "postcode": "10001", 
+                     "street_address_1": "123 Fake Street", "postcode": "10001", 
                     "town_or_city": "Springfield", "county": "Dublin", "country": "AU"}
                     
         self.client.post(reverse("delivery"), form_data, follow=True)
@@ -387,4 +387,148 @@ class TestViews(TestCase):
         self.assertEqual(page.status_code, 200)
         self.assertTemplateUsed(page, "earn_coins.html")    
         
+class TestModels(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+
+        user_1 = User(username="Test User")
+        user_1.save()
+        user_2 = User(username="Another Test User", email="example@email.com")
+        user_2.save()
+        user_3 = User(username="withpassword", password="password", email="withpassword@email.com")
+        user_3.save()
         
+        suggestion_1 = Suggestion(is_feature=True, user=user_1, title="Test Suggestion 1", details="Any old detials",
+                                  delay_submission=False)
+        suggestion_1.save()
+        suggestion_2 = Suggestion(is_feature=True, user=user_2, title="Test Suggestion 2", details="Any old detials",
+                                  delay_submission=True)
+        suggestion_2.save()
+        suggestion_3 = Suggestion.objects.create(is_feature=True, user=user_2, title="Test Suggestion 3",
+                                                 details="Any old detials", delay_submission=False)
+        suggestion_3.save()
+        
+        user_1_usercoins = UserCoins(user=user_1, coins=100)
+        user_1_usercoins.save()
+        user_2_usercoins = UserCoins(user=user_2, coins=500)
+        user_2_usercoins.save()
+        user_3_usercoins = UserCoins(user=user_3, coins=0)
+        user_3_usercoins.save()
+
+        coins_purchase_1 = CoinsPurchase(name="coins purchase 1", coins_price=200)
+        coins_purchase_1.save()
+        coins_purchase_2 = CoinsPurchase(name="coins purchase 2", coins_price=500)
+        coins_purchase_2.save()
+        suggestion_coins_purchase = CoinsPurchase(name="Suggestion", coins_price=500)
+        suggestion_coins_purchase.save()
+        upvote_coins_purchase = CoinsPurchase(name="Upvote", coins_price=100)
+        upvote_coins_purchase.save()
+        promote_feature_purchase = CoinsPurchase(name="Feature Suggestion Promotion", coins_price=600)
+        promote_feature_purchase.save()
+
+        coins_store_item_500 = StoreItem(name="500 coins", price=0, delivery_required=False, is_coins=True,
+                                         coins_amount=500)
+        coins_store_item_500.save()
+        coins_store_item_200 = StoreItem(name="200 coins", price=2, delivery_required=False, is_coins=True,
+                                         coins_amount=200)
+        coins_store_item_200.save()
+        coins_store_item_1000 = StoreItem(name="1000 coins", price=10, delivery_required=False, is_coins=True,
+                                         coins_amount=1000)
+        coins_store_item_1000.save()
+        
+        non_coins_store_item = StoreItem(name="not coins", price=5, delivery_required=True, is_coins=False)
+        non_coins_store_item.save()
+        
+     
+    def test_store_item_defaults_as_desired(self):
+        """
+        Test to check that when creating a StoreItem, default
+        values are assigned as follows: is_coins: False
+        """
+        new_store_item = StoreItem(name="Test Defaults", description="Blank", price=12.99, delivery_required=False)
+        new_store_item.save()
+        retrieved_new_item = StoreItem.objects.get(name="Test Defaults")
+        self.assertFalse(retrieved_new_item.is_coins)
+        
+    def test_creating_store_item_requires_name_price_and_delivery_required(self):
+        """
+        Test to check that a name, price, and delivery_required value need to 
+        be provided when creating a StoreItem
+        """
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                without_name = StoreItem(price=99.99, delivery_required=True)
+                without_name.save()
+
+            with transaction.atomic():
+                without_price = StoreItem(name="A Name", delivery_required=False)
+                without_price.save()
+
+            with transaction.atomic():
+                without_delivery = StoreItem(name="Another Name", price=10.50)
+                without_delivery.save()
+                
+                
+    def test_creating_coins_purchase_requires_name_and_coins_price(self):
+        """
+        Test to check that a name and coins price are required to create
+        a CoinsPurchase object 
+        """
+        
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                without_name = CoinsPurchase(coins_price=500)
+                without_name.save()
+
+            with transaction.atomic():
+                without_price = CoinsPurchase(name="A Name")
+                without_price.save()
+                
+                
+    def test_creating_delivery_requires_all_fields_except_address_2_and_current_method(self):
+        """
+        Test to check that all fields except street_address_2 and current_delivery_method 
+        are required  when creating a Delivery object. Country is a CountryField from 
+        the django-countries extension. It can not be set as required   therefore is not 
+        tested here, but it cannot be blank when completing form
+        """
+        
+        user = User.objects.get(id=1)
+        
+                    
+        test_saves_with_all_values = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
+        test_saves_with_all_values.save()
+                    
+                    
+        with self.assertRaises(IntegrityError):
+            
+
+            with transaction.atomic():
+                without_full_name = Delivery(user=user, phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
+                without_full_name.save()
+                
+            with transaction.atomic():
+                without_full_name = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
+                without_full_name.save()
+                
+                
+            with transaction.atomic():
+                without_phone_number = Delivery(user=user, full_name= "I'm a test", street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
+                without_phone_number.save()
+                
+            with transaction.atomic():
+                without_street_address_1 = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", county="Dublin", country = "AU")
+                without_street_address_1.save()
+                
+            with transaction.atomic():
+                without_postcode = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", town_or_city = "Springfield", county="Dublin", country = "AU")
+                without_postcode.save()
+                
+            with transaction.atomic():
+                without_town = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001",  county="Dublin", country = "AU")
+                without_town.save()
+                
+            with transaction.atomic():
+                without_county = Delivery(user=user, full_name= "I'm a test", phone_number= 42424242424, street_address_1= "123 Fake Street", street_address_2= "Fictional Land", postcode= "10001", town_or_city = "Springfield", country="AU")
+                without_county.save()
+                

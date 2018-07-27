@@ -7,12 +7,12 @@ from usersuggestions.models import Suggestion
 
 # below class taken from ecommerce project
 class StoreItem(models.Model):
-    name = models.CharField(max_length=200, default="")
+    name = models.CharField(max_length=200, null=False, blank=False)
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     image = models.ImageField(upload_to='images')
-    delivery_required = models.BooleanField(blank=False)
-    is_coins = models.BooleanField(blank=False, default=False)
+    delivery_required = models.BooleanField(blank=False, null=False)
+    is_coins = models.BooleanField(default=False, null=False)
     coins_amount = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
@@ -20,7 +20,7 @@ class StoreItem(models.Model):
 
 
 class CoinsPurchase(models.Model):
-    name = models.CharField(max_length=200, default="")
+    name = models.CharField(max_length=200, null=False, blank=False)
     description = models.TextField(blank=True)
     coins_price = models.PositiveIntegerField(blank=False)
 
@@ -35,18 +35,17 @@ class Delivery(models.Model):
 
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     full_name = models.CharField(max_length=50, blank=False)
-    # phone_number = PhoneNumberField()
     phone_number = models.CharField(max_length=20, blank=False)
-    street_address1 = models.CharField(max_length=40, blank=False)
-    street_address2 = models.CharField(max_length=40, blank=True)
-    postcode = models.CharField(max_length=20, blank=True)
-    town_or_city = models.CharField(max_length=40, blank=False)
-    county = models.CharField(max_length=50, blank=False)
-    country = CountryField()
+    street_address_1 = models.CharField(max_length=40, blank=False)
+    street_address_2 = models.CharField(max_length=40, blank=True)
+    postcode = models.CharField(max_length=20, blank=False, null=False)
+    town_or_city = models.CharField(max_length=40, null=False, blank=False)
+    county = models.CharField(max_length=50, blank=False, null=False)
+    country = CountryField(blank=False, null=False)
     current_delivery_method = models.BooleanField(default=True)
 
     def __str__(self):
-        return "{0}:{1},{2},{3}".format(self.user, self.full_name, self.street_address1, self.postcode)
+        return "{0}:{1},{2},{3}".format(self.user, self.full_name, self.street_address_1, self.postcode)
 
     # Code for turning other current_delivery_method values
     # to False once a new value saved as a True
