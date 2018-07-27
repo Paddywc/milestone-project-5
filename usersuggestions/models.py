@@ -101,18 +101,20 @@ class Flag(models.Model):
     flagged_item_choices = ((1, "comment"), (2, 'suggestion'))
     reason_choices = ((0, "Spam"), (1, "Hate Speech"), (2, "Graphic Content"), (3, "Harassment or Bullying"))
 
+    result_choices = ((True, 'Deemed Inappropriate'), (False, 'Deemed Not Inappropriate'), (None, "To Do"))
+
     flagged_item_type = models.PositiveSmallIntegerField(choices=flagged_item_choices, null=False)
     flagged_by = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
-    suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.SET_NULL)
-    comment = models.ForeignKey(Comment, null=True, on_delete=models.SET_NULL)
+    suggestion = models.ForeignKey(Suggestion, null=True, blank=True, on_delete=models.SET_NULL)
+    comment = models.ForeignKey(Comment, null=True, blank=True, on_delete=models.SET_NULL)
     reason = models.PositiveSmallIntegerField(choices=reason_choices, null=False, blank=False)
     date_time_marked = models.DateTimeField(auto_now_add=True)
-    admin_assigned = models.ForeignKey(User, related_name="admin_assigned", null=True, blank=True,
+    responsible_admin = models.ForeignKey(User, related_name="admin_assigned", null=True, blank=True,
                                        on_delete=models.PROTECT)
-    result = models.NullBooleanField(blank=True, null=True)
+    result = models.NullBooleanField(blank=True, null=True, choices=result_choices)
 
     def __str__(self):
-        return "Flagged {0}. {1}".format(self.get_flagged_item_type_display(), self.date_time_marked)
+        return "Flagged {0}. {1}. {2}".format(self.get_flagged_item_type_display(), self.date_time_marked, self.get_result_display())
 
 
 class PromotedFeatureSuggestion(models.Model):

@@ -267,3 +267,32 @@ def view_data(request):
     return render(request, "view_data.html",
                   {"upvoted_chart": upvoted_chart, "coin_spending_chart": coin_spending_chart,
                    "june_completions_chart_url": june_completions_chart_url})
+
+@login_required()
+def render_flags_page(request):
+    """
+    """
+    if not request.user.is_staff:
+        return redirect("issue_tracker")
+    flags = Flag.objects.all()
+    return render(request, "view_flags.html", {"flags": flags})
+    
+@login_required()
+def flag_response(request, flag_id, result):
+    """
+    """
+    if not request.user.is_staff:
+        return redirect("issue_tracker")
+        
+    flag = get_object_or_404(Flag, id=flag_id)
+    if result == "True":
+        flag_result = True
+    elif result == "False":
+        flag_result = False
+    else:
+        flag_result = None
+    flag.responsible_admin = request.user
+    flag.result = flag_result
+    flag.save()
+    return redirect("flags")
+    

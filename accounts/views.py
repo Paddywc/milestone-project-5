@@ -22,6 +22,7 @@ def create_user(request):
             new_user = form.save()
             if settings.COINS_ENABLED:
                 add_coins(new_user, coin_rewards.signup, 5)
+            return redirect("login")
     else:
         form = UserSignupForm()
 
@@ -40,6 +41,7 @@ def create_referred_user(request, ref_user_id):
                 add_coins(new_user, coin_rewards.signup, 5)
                 add_coins(ref_user, coin_rewards.referral, 3)
                 add_coins(new_user, coin_rewards.received_referral, 6)
+            return redirect("login")
     else:
         form = UserSignupForm()
 
@@ -73,8 +75,8 @@ def logout_user(request):
     """
     if request.method == "POST":
         logout(request)
+        return redirect("home")
 
-        # TEMP. for testing. Remove once button created
     else:
         logout(request)
 
