@@ -70,16 +70,13 @@ https://stripe.com/docs/stripe-js/reference
                             <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                         </div>
                     </li>
-
-                    <li class="nav-item dropdown">
-         <a class="nav-link dropdown-toggle" id="navbarDropdownCoins" role="button"  href="#"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Coins <span class="badge badge-light">{{ usercoins }}</span></a>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownCoins">
-                            <a class="dropdown-item" href="{% url 'earn_coins' %}">Earn Coins</a>
-                           
-                        </div>
+                    
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'earn_coins' %}"> Coins <span class="badge badge-light">{{ usercoins }}</span></a></a>
                     </li>
 
+       
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'signup' %}">Signup</a>

@@ -9,6 +9,8 @@
     {{ form|as_bootstrap_inline }}
     {% csrf_token %}
     <input type="submit" value="Login">
+     <p><a href="{% url 'password_reset' %}">Forgot my password</a></p>
+
 </form>
 
 <div id="no-account-section">

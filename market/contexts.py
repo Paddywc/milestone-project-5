@@ -8,6 +8,13 @@ def cart(request):
 
 
 def usercoins(request):
-    user = request.user
-    coins_amount = UserCoins.objects.get(user=user).coins
-    return {"usercoins":coins_amount}
+    """
+    Else statement required to avoid error
+    when user is not signed in
+    """
+    if request.user.is_authenticated:
+        user = request.user
+        coins_amount = UserCoins.objects.get(user=user).coins
+        return {"usercoins":coins_amount}
+    else:
+        return {"usercoins": None}

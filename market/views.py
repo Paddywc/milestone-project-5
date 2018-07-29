@@ -7,7 +7,7 @@ from .checkout import get_user_delivery_addresses, process_stripe_payment, proce
     cart_contains_item_needing_delivery
 from .forms import DeliveryForm
 from .helpers import retrieve_session_url
-from .models import StoreItem
+from .models import StoreItem, CoinsPurchase
 
 
 # Create your views here.
@@ -101,6 +101,7 @@ def pay(request):
 def earn_coins(request):
     """
     """
+    coin_purchases = CoinsPurchase.objects.all()
     if request.method == "POST":
         email = request.POST.get("refereeEmail")
         referral_link = "{0}{1}".format(request.get_host(), redirect("referred_signup", request.user.id).url)
@@ -109,4 +110,4 @@ def earn_coins(request):
         body = "click this link to sign up now: {}".format(referral_link)
         email = EmailMessage(subject, body, to=[email])
         email.send()
-    return render(request, "earn_coins.html")
+    return render(request, "earn_coins.html", {"coin_purchases":coin_purchases})
