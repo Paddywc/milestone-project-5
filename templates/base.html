@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    
-    
-<!--bootstrap-->
+
+
+    <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -13,21 +13,19 @@
     <link rel="stylesheet" href="/static/css/styles.css" type="text/css" />
 
 
-<!--Import google icons-->
- <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+    <!--Import google icons-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
 
-<!--Stripe JavaScript
+    <!--Stripe JavaScript
 Documentation recommends inclusion on every page of website
 https://stripe.com/docs/stripe-js/reference
 -->
-<script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 
-{% block head %}
-{% endblock %}
- 
+    {% block head %} {% endblock %}
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -38,42 +36,76 @@ https://stripe.com/docs/stripe-js/reference
     <!--From bootstrap documentation
     https://getbootstrap.com/docs/4.0/components/navbar/-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
-  <a class="navbar-brand" href="{% url 'home' %}">UnicornAttractor</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="{% url 'home' %}">UnicornAttractor</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-    <form class="inline">
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'issue_tracker' %}">Issue Tracker<span class="sr-only">(current)</span></a>
-      </li>
+        <form class="inline">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
 
-         {% if user.is_authenticated %}
-       <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-      </li>
-        <li class="nav-item">
-        <a class="nav-link" href="{% url 'userpage' user.id %}">Profile</a>
-      </li>
-      {% else %}
-        <li class="nav-item">
-        <a class="nav-link" href="{% url 'signup' %}">Signup</a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="{% url 'login' %}">Login</a>
-      </li>
-      {% endif %}
-         <li class="nav-item">
-        <a class="nav-link" href="{% url 'view_cart' %}">Cart <span class="badge badge-light">{% if cart|length > 0 %}{{ cart|length }}{% endif %}</span></a>
-      </li>
-      </ul>
-  </div>
-  </form>
-</nav>
-    
-    
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{% url 'issue_tracker' %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Suggestions
+        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'issue_tracker' %}">Suggestions Home</a>
+                            <a class="dropdown-item" href="{% url 'add_suggestion' %}">Add Suggestion</a>
+                            <a class="dropdown-item" href="{% url 'promote_feature' %}">Promote Feature Suggestion</a>
+                            <a class="dropdown-item" href="{% url 'view_data' %}">View Data</a>
+                        </div>
+                    </li>
+
+
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ user.username }}
+        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+                            <a class="dropdown-item" href="{% url 'userpage' user.id %}">View Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+         <a class="nav-link dropdown-toggle" id="navbarDropdownCoins" role="button"  href="#"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Coins <span class="badge badge-light">{{ usercoins }}</span></a>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownCoins">
+                            <a class="dropdown-item" href="{% url 'earn_coins' %}">Earn Coins</a>
+                           
+                        </div>
+                    </li>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    {% endif %}
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'store' %}">Store</a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_cart' %}">Cart <span class="badge badge-light">{% if cart|length > 0 %}{{ cart|length }}{% endif %}</span></a>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </nav>
+
+
 </header>
+
 <body>
     {% block content %}{% endblock %}
 </body>

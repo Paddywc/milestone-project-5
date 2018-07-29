@@ -93,7 +93,9 @@ def pay(request):
         
     else:
         return render(request, 'pay.html',
-                  {"addresses": user_addresses, "cart_contains_delivery_item": cart_contains_delivery_item})
+                  {"addresses": user_addresses, "cart_contains_delivery_item": cart_contains_delivery_item,
+                      "cart": cart,
+                  })
 
 @login_required()
 def earn_coins(request):
