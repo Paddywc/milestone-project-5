@@ -1,6 +1,9 @@
-{% extends 'base.html' %} {% load bootstrap_tags %} {% block content %}
+{% extends 'base.html' %} {% load bootstrap_tags %} 
+{% block title %}Home{% endblock %}
+{% block content %}
 
 <div id="home-header" class="container-fluid">
+    <h1 id="home-title">UnicornAttractor</h1>
     <div class="row">
         {% if not user.is_authenticated %}
         <div class=" col-xs-12 col-md-7">
@@ -35,9 +38,23 @@
             </form>
         </div>
         {% else %}
-        <h2>PRESS TO ATTRACT UNICORNS</h2>
-        
+                <div class="col-xs-12 col-md-7">
+            <div id="header-text">
+                <h1 id="header-title">Attracting Unicorns to your Location.</h1>
+                <h4 id="header-subtitle">Be Prepared</h4>
+            </div>
+            </div>
+       
+
+ <div class="col-xs-12 col-md-4">
+     <div id="attracting-unicorns-section">
+<!--Embedded gif code from: https://tenor.com/view/sound-wave-wave-sound-gif-3535566-->
+<div class="tenor-gif-embed" data-postid="3535566" data-share-method="host" data-width="100%" data-aspect-ratio="1.775"><a href="https://tenor.com/view/sound-wave-wave-sound-gif-3535566">Yas GIF</a> from <a href="https://tenor.com/search/soundwave-gifs">Soundwave GIFs</a></div><script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+</div>
+</div>
+
         {% endif %}
+       
     </div>
 </div>
 
