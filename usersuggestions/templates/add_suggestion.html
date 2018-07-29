@@ -7,7 +7,10 @@
 {% endblock %}
 {% block content %}
 
-
+<main id="submit-suggestion">
+<h1 id="submit-suggestion-title">Submit Suggestion</h1>
+  <div class="row">
+        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
 <form method="post">
     {{ form|as_bootstrap }}
     {% csrf_token %}
@@ -79,7 +82,8 @@
  
     
 </form>
-
+</div>
+</div>
 <script>
     let showAppropriateButton = function() {
         if ($("#id_is_feature").val() == "True") {
@@ -111,7 +115,7 @@
 
 </script>
 
-
+</main>
 {% endif %}
 
 {% endblock %}

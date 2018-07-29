@@ -19,7 +19,7 @@
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="features" role="tabpanel" aria-labelledby="features-tab">
       
-<h3>Voting end date: {{ voting_end_date }} </h3>   
+<h3 id="voting-end-date">Voting end date: {{ voting_end_date }} </h3>   
 
 
 
@@ -39,7 +39,7 @@
   </div>
   
   
-  <input type="text" id="searhFeature"  placeholder="Search for feature suggestion..">    
+  <input type="text" id="searchFeature"  placeholder="Search feature suggestions..">    
 
   
 <!--</header>-->
@@ -98,7 +98,7 @@
     </div>
   </div>
 
-  <input type="text" id="searhBug"  placeholder="Search for bug..">    
+  <input type="text" id="searchBug"  placeholder="Search bugs...">    
 
             
       
@@ -176,13 +176,13 @@ if (url.match('#')) {
 
 // searchFunction code largely from: https://www.w3schools.com/jquery/jquery_filters.asp
 let searchFuntion = function(){
-  $("#searhFeature").on("keyup", function() {
+  $("#searchFeature").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     $("#features .jumbotron").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
   });
-    $("#searhBug").on("keyup", function() {
+    $("#searchBug").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     $("#bugs .jumbotron").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
