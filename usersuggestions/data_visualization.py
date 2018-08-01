@@ -14,6 +14,7 @@ import matplotlib
 from market.models import UserCoinHistory
 from .models import Suggestion, SuggestionAdminPage
 
+plt.style.use('fivethirtyeight')
 
 def get_highest_vote_totals(limit):
     """
@@ -77,6 +78,9 @@ def return_data_for_completion_dates_chart():
 
 
 def create_most_upvoted_chart(limit):
+    
+    
+
     colors = "rgbymc"
     top_voted = get_highest_vote_totals(limit)
     x = [suggestion.title for suggestion in top_voted]
@@ -84,7 +88,6 @@ def create_most_upvoted_chart(limit):
     y = [suggestion.upvotes for suggestion in top_voted]
 
     fig = plt.figure()
-    plt.style.use('fivethirtyeight')
 
     plt.bar(x, y, color=colors)
 
@@ -92,16 +95,15 @@ def create_most_upvoted_chart(limit):
     for i in range(len(x)):
         bar = mpatches.Patch(color=colors[i], label=x[i])
         handles_list.append(bar)
-
+        
     plt.legend(handles=handles_list, shadow=True, title="SUGGESTION TITLE")
     plt.title("Most Upvoted Feature Suggestions")
     plt.ylabel("VOTES")
     plt.xlabel("SUGGESTION")
 
     plt.xticks([])
-    # fig.axis.get_xaxis().set_visable(False)
     chart = fig_to_html(fig)
-
+    plt.close(fig)
     return chart
 
 
@@ -113,13 +115,12 @@ def create_coin_spending_chart():
     labels = ["Upvoting Suggestions", "Promoting Suggestions", "Submitting Suggestions"]
 
     fig = plt.figure()
-
     plt.pie(slices, labels=None, autopct='%1.1f%%', startangle=90)
     plt.title("How Coins are Spent")
     plt.legend(labels=labels)
 
     chart = fig_to_html(fig)
-
+    plt.close(fig)
     return chart
 
 
@@ -214,3 +215,5 @@ def create_completions_in_june_chart():
     bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
     bucket.put_object(Body=img_data, ContentType='image/png',
                       Key="{}/images/june_completions_chart.png".format(settings.MEDIAFILES_LOCATION))
+    plt.close(fig)
+

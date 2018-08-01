@@ -1,204 +1,211 @@
-{% extends 'base.html' %} 
-{% block title %} Promote Feature {% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %} Promote Feature {% endblock %} {% block content %}
 
 <main id="promote-feature">
 
-<h1 id="header">Promote Feature</h1>
-
-<div class="row">
-    
-<div class="offset-1">
-    <h3 class="section-header">Select Feature</h3>
-<input type="text" id="searchFeature"  placeholder="Search feature suggestions">  
-</div>
-</div>
-
-     <div class="row">
-            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
-<form method="POST" id="featureSuggestionForm">
-    
-        {% csrf_token %}
-
-<div class="card-columns">
-
-{% for feature in features %}
-<div class="card" >
-    <div class="card-header">
-    <h5 class="card-title">    <td><a target="_blank" href="{% url 'view_suggestion' feature.id %}">{{ feature.title }}</a> </td></h5>
-     <h6 class="card-subtitle mb-2 text-muted">{{ feature.user }}</h6>
-</div>
-     <div class="card-body">
-
-    <div class="suggestion-details">
-    <p class="card-text">{{ feature.details|safe }}</p>
+    <h1 id="header">Promote Feature</h1>
+    <div class="row">
+        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+            <h3 id="subheader">Make a feature suggestion appear at the top of the Suggestions page </h3>
+        </div>
     </div>
+
+    <div class=" row">
+
+        <div class="offset-1">
+            <h3 class="section-header">Select Feature</h3>
+            <input type="text" id="searchFeature" placeholder="Search feature suggestions">
+        </div>
     </div>
-  <div class="card-footer">
-    <div class="form-check">
-   <input class="form-check-input" type="radio" required name="featureSuggestion"id="{{ feature.id }}" value="{{ feature.id }}" >
-  <label class="form-check-label" >
+
+    <div class="row">
+        <div class="col-xs-12 col-md-8 offset-md-2">
+            <form method="POST" id="featureSuggestionForm">
+
+                {% csrf_token %}
+
+                <div class="card-columns">
+
+                    {% for feature in features %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <td><a target="_blank" href="{% url 'view_suggestion' feature.id %}">{{ feature.title }}</a> </td>
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ feature.user }}</h6>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="suggestion-details">
+                                <p class="card-text">{{ feature.details|safe }}</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" required name="featureSuggestion" id="{{ feature.id }}" value="{{ feature.id }}">
+                                <label class="form-check-label">
     Select this feature
   </label>
-  </div>
-</div>
-</div>
-{% endfor %}
-</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
 
-  <div class="form-group">
-    <label for="promotionDays">Promotion Time</label>
-    <select class="form-control" id="promotionDays" name="promotionDays" required>
+                <div class="form-group">
+                    <label for="promotionDays">Promotion Time</label>
+                    <select class="form-control" id="promotionDays" name="promotionDays" required>
       <option value=1>1 day: {{ prices.1 }} coins</option>
       <option value=2>2 days: {{ prices.2 }} coins <span class="discount">({{ discount_rates.2 }}% off)</span></option>
       <option value=3>3 days: {{ prices.3 }} coins <span class="discount">({{ discount_rates.3 }}% off)</span></option>
       <option value=4>4 days: {{ prices.4 }} coins <span class="discount">({{ discount_rates.4 }}% off)</span></option>
       <option value=5>5 days: {{ prices.5 }} coins<span class="discount"> ({{ discount_rates.5 }}% off)</span></option>
     </select>
-  </div>
-  
-
-  <div class="form-row">
-
-<div class="col-xs-12 col-md-6">
-  <input class="form-control" id="startDate" type="date" required min="{{ tomorrow.year }}-0{{ tomorrow.month }}-{{ tomorrow.day }}" max="{{ max_date.year }}-0{{ max_date.month }}-{{ max_date.day }}"  value="{{ tomorrow.year }}-0{{ tomorrow.month }}-{{ tomorrow.day }}" name="startDate"/>
-  </div>
-  <div class="col-xs-12 col-md-6">
-<div class="form-control" id="endDate"></div>
-</div>
-</div>
+                </div>
 
 
-<div class="form-row">
-    
-    <div class="alert alert-warning  confirm-purchase-alert show" role="alert">
-  <strong>Coins: </strong>{{ user_coins }}
-  <div id="price">
+                <div class="form-row">
+
+                    <div class="col-xs-12 col-md-6">
+                        <input class="form-control" id="startDate" type="date" required min="{{ tomorrow.year }}-0{{ tomorrow.month }}-{{ tomorrow.day }}" max="{{ max_date.year }}-0{{ max_date.month }}-{{ max_date.day }}" value="{{ tomorrow.year }}-0{{ tomorrow.month }}-{{ tomorrow.day }}"
+                            name="startDate" />
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-control" id="endDate"></div>
+                    </div>
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="alert alert-warning  confirm-purchase-alert show" role="alert">
+                        <strong>Coins: </strong>{{ user_coins }}
+                        <div id="price">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="purchaseCoins" name="purchaseCoins">Purchase more coins</button>
+                        <button type="submit" class="btn btn-primary" id="confirm">Confirm Purchase</button>
+
+                    </div>
+                </div>
+
+                <div id="price">
+
+                </div>
+
+
+
+            </form>
+            <script>
+                // searchFunction code largely from: https://www.w3schools.com/jquery/jquery_filters.asp
+                let searchFuntion = function() {
+                    $("#searchFeature").on("keyup", function() {
+                        var value = $(this).val().toLowerCase();
+                        $("#featureSuggestionForm .card").filter(function() {
+                            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        });
+                    });
+                };
+
+                //from from:https://stackoverflow.com/questions/563406/add-days-to-javascript-date
+                function addDays(date, days) {
+                    var result = new Date(date);
+                    result.setDate(result.getDate() + days);
+                    return result;
+                }
+
+                let showEndDate = function() {
+                    let startDate = $("#startDate").val()
+                    let startDateJS = new Date(startDate);
+                    let daysToAdd = Number($("#promotionDays").val())
+                    let endDate = addDays(startDateJS, daysToAdd);
+                    let endDateString = `${endDate.getDate()}/${endDate.getMonth()+1}/${endDate.getFullYear()}`;
+                    if (endDateString.includes("NaN")){
+                        endDateString=""
+                    }
+                    $("#endDate").html("End date: " + endDateString);
+                }
+
+                let showAppropriateButton = function() {
+
+                    var price;
+
+                    switch ($("#promotionDays").val()) {
+
+                        case "2":
+                            price = {{ prices.2 }}
+                            break;
+                        case "3":
+                            price = {{ prices.3 }}
+                            break;
+
+                        case "4":
+                            price = {{ prices.4 }}
+                            break;
+
+                        case "5":
+                            price = {{ prices.5 }}
+                            break;
+
+                        default:
+                            price = {{ prices.1 }}
+                    }
+
+                    let userCoins = {{ user_coins }}
+
+                    if (userCoins >= price) {
+                        $("#purchaseCoins").hide();
+                        $("#confirm").show();
+                    }
+                    else {
+                        $("#purchaseCoins").show();
+                        $("#confirm").hide();
+                    }
+
+                }
+
+                let showPrice = function() {
+
+                    var price;
+
+                    switch ($("#promotionDays").val()) {
+
+                        case "2":
+                            price = {{ prices.2 }}
+                            break;
+                        case "3":
+                            price = {{ prices.3 }}
+                            break;
+
+                        case "4":
+                            price = {{ prices.4 }}
+                            break;
+
+                        case "5":
+                            price = {{ prices.5 }}
+                            break;
+
+                        default:
+                            price = {{ prices.1 }}
+                    }
+
+                    $("#price").html("<strong>Price: </strong>" + price);
+                }
+                $("#promotionDays").change(function() {
+                    showAppropriateButton();
+                    showPrice()
+                    showEndDate()
+                })
+
+                $("#startDate").change(showEndDate)
+
+                $(document).ready(function() {
+                    showAppropriateButton()
+                    showPrice()
+                    searchFuntion()
+                    showEndDate()
+                });
+            </script>
+        </div>
     </div>
-      <button type="submit" class="btn btn-primary" id="purchaseCoins" name="purchaseCoins">Purchase more coins</button>
-        <button type="submit" class="btn btn-primary" id="confirm">Confirm Purchase</button>
-
-</div>
-</div>
-
-    <div id="price">
-        
-    </div>
-     
-
-
-</form>
-<script>
-
-// searchFunction code largely from: https://www.w3schools.com/jquery/jquery_filters.asp
-let searchFuntion = function(){
-  $("#searchFeature").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#featureSuggestionForm .card").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-};
-
-//from from:https://stackoverflow.com/questions/563406/add-days-to-javascript-date
-function addDays(date, days) {
-  var result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-}
-
-let showEndDate = function(){
-         let startDate = $("#startDate").val()
-         let startDateJS = new Date(startDate);
-         let daysToAdd = Number($("#promotionDays").val())
-         let endDate =  addDays(startDateJS, daysToAdd);
-         let endDateString = `${endDate.getDate()}/${endDate.getMonth()+1}/${endDate.getFullYear()}`;
-         $("#endDate").html("End date: " + endDateString);
-     }
-     
-let showAppropriateButton = function(){
-    
-    var price;
-
-    switch ($("#promotionDays").val()) {
-        
-        case "2" :
-            price = {{ prices.2 }} 
-            break;
-        case "3" :
-            price = {{ prices.3 }} 
-            break;
-            
-        case "4" :
-            price = {{ prices.4 }} 
-            break;
-            
-        case "5" :
-            price = {{ prices.5 }} 
-            break;
-        
-        default:
-            price = {{ prices.1 }}
-    }
-    
-    let userCoins = {{ user_coins }}
-    
-    if (userCoins >= price){
-        $("#purchaseCoins").hide();
-        $("#confirm").show();
-    }else{
-         $("#purchaseCoins").show();
-        $("#confirm").hide();
-    }
-    
-}
-
-let showPrice = function(){
-    
-    var price;
-
-    switch ($("#promotionDays").val()) {
-        
-        case "2" :
-            price = {{ prices.2 }} 
-            break;
-        case "3" :
-            price = {{ prices.3 }} 
-            break;
-            
-        case "4" :
-            price = {{ prices.4 }} 
-            break;
-            
-        case "5" :
-            price = {{ prices.5 }} 
-            break;
-        
-        default:
-            price = {{ prices.1 }}
-    }
-    
-   $("#price").html("<strong>Price: </strong>" + price);
-}
-    $("#promotionDays").change(function(){
-        showAppropriateButton();
-        showPrice()
-        showEndDate()
-    })
-
-$("#startDate").change(showEndDate)
-
-$(document).ready(function(){
-    showAppropriateButton()
-    showPrice()
-    searchFuntion()
-    showEndDate()
-});
-
-</script>
-</div>
-</div>
 </main>
 
 {% endblock %}

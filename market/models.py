@@ -110,4 +110,4 @@ class UserCoinHistory(models.Model):
     transaction = models.PositiveSmallIntegerField(choices=transaction_choices, blank=False, null=False)
 
     def __str__(self):
-        return "{0}: {1}".format(self.user, self.coins_change)
+        return "{0}: {1} : {2}".format(self.user, self.get_transaction_display(), self.coins_change)

@@ -1,9 +1,32 @@
-{% extends 'base.html' %} 
-{% block title %} View Data {% endblock %}
+{% extends 'base.html' %} {% block title %} View Data {% endblock %} {% block content %}
+<main id="view-data">
+    <h1 id="header">View Data</h1>
 
-{% block content %}
+    <div class="row">
+        <div class="col-xs-12 col-lg-8  offset-lg-1">
+            <div class="row">
+                {{ upvoted_chart|safe }}
+            </div>
+            <div class="row">
+                {{ coin_spending_chart|safe }}
+            </div>
+            <div class="row">
+                <img src="{{ june_completions_chart_url }}" alt="June completions chart"></img>
+            </div>
+        </div>
+    </div>
 
-{{ upvoted_chart|safe }}
-{{ coin_spending_chart|safe }}
-<img src="{{ june_completions_chart_url }}" alt="June completions chart"></img>
+
+<script>
+//  So that the navbar will cover the entire 
+//  page on mobile devices. Required because
+//  content width > vw on mobile. 620 
+//  represents content width
+  let windowWidth = $(window).width()
+  if (windowWidth <= 620){
+  $(".navbar").css("width", 620)
+  }
+  
+</script>
+</main>
 {% endblock %}

@@ -240,7 +240,7 @@ def promote_feature(request):
 
         if request.method == "POST":
             if 'purchaseCoins' in request.POST:
-                purchase_coins_for_feature_promotion(request, user_coins, prices)
+                return purchase_coins_for_feature_promotion(request, user_coins, prices)
 
             else:
                 submit_feature_promotion(request)
