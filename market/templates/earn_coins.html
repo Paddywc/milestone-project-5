@@ -5,35 +5,35 @@
 
 
   <div class="row">
-    <div class="offset-1">
+    <div class="offset-md-1">
       <h2 class="section-header">What are Coins?</h2>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+    <div class="col-xs-12 col-md-8 offset-md-2">
       <p class="coins-answer">
         Coins are what allow you to shape the future of UnicornAttractor. With coins, you can submit, vote for, and promote feature suggestions. At the end of the current voting cycle, the feature suggestion with the most votes is declared the winner, and will
         be implemented into UnicornAttractor. Current prices are below
       </p>
-
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Action</th>
-            <th scope="col">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for purchase in coin_purchases %}
-          <tr>
-            <td>{{ purchase.name }}</td>
-            <td>{{ purchase.coins_price }} Coins</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
+      <div class="col-xs-12 div-col col-md-10 offset-md-1">
+        <table class="table table-sm table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Action</th>
+              <th scope="col">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for purchase in coin_purchases %}
+            <tr>
+              <td>{{ purchase.name }}</td>
+              <td>{{ purchase.coins_price }} Coins</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
     </div>
   </div>
@@ -44,7 +44,7 @@
 
 
   <div class="row">
-    <div class="offset-1">
+    <div class="offset-md-1">
       <h2 class="section-header">How do I Earn Coins?</h2>
     </div>
   </div>
@@ -52,45 +52,46 @@
 
 
   <div class="row">
-    <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+    <div class="col-md-8  div-col offset-md-2">
       <p class="coins-answer">
         You already have! You earned 100 coins when you first signed up. There are other ways to earn coins too. You get 5 coins every time a user votes for your feature suggestion. If your suggestion wins, you also get refunded the coins you paid to submit the
-        suggestion. <br> You can also refer other users to UnicornAttractor using your unique link below. For every user that signs up using that link, you earn 200 coins. They’ll also get an additional 100 coins upon signup. Alternatively, you
+        suggestion. <br> <br>You can also refer other users to UnicornAttractor using your unique link below. For every user that signs up using that link, you earn 200 coins. They’ll also get an additional 100 coins upon signup. Alternatively, you
         can enter their email address below, and we’ll send the link for you.
       </p>
-      <h6 class="referral-subtitle">Referral Link:</h6>
-      <p>Link: {{ request.get_host }}{% url 'referred_signup' request.user.id %}</p>
-      <h6 class="referral-subtitle">Send Referral Email:</h6>
-      <form method="POST">
-        {% csrf_token %}
-           <div class="form-group row">
-    <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-    <div class="col-sm-6">
-  <input type="email" class="form-control" name="refereeEmail" id="refereeEmail" placeholder="name@example.com">
+      <div class="col-xs-12 div-col col-md-10 offset-md-1">
+
+        <h6 class="referral-subtitle">Referral Link:</h6>
+        <a href="{{ request.get_host }}{% url 'referred_signup' request.user.id %}">{{ request.get_host }}{% url 'referred_signup' request.user.id %}</a>
+        <h6 class="referral-subtitle">Send Referral Email:</h6>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="col">
+              <input type="email" class="form-control" name="refereeEmail" id="refereeEmail" placeholder="name@example.com">
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary sm-2">Submit</button>
+            </div>
+          </div>
+      </div>
     </div>
-    
-       <button type="submit" class="btn btn-primary sm-2">Submit</button>
-
-   
-  </div>
-  </div>
   </div>
 
-  
-  
+
+
   <div class="row">
-    <div class="offset-1">
+    <div class="offset-md-1">
       <h2 class="section-header">Can I Purchase Coins?</h2>
     </div>
   </div>
-  
-    <div class="row">
-    <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+
+  <div class="row">
+    <div class="col-md-8 col-xs-12  div-col  offset-md-2">
       <p class="coins-answer">
-      You sure can. Coins are available to purchase at our <a href="{% url 'store'%}">store</a>.
+        You sure can. Coins are available to purchase at our <a href="{% url 'store'%}">store</a>.
       </p>
-      </div>
-      </div>
-  
+    </div>
+  </div>
+
   {% endblock %}
 </main>

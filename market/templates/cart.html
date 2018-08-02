@@ -2,12 +2,12 @@
 {% block title %}Cart{% endblock %}
 {% block content %}
 
-<h1 id="store-header">Cart</h1>
 
 <main id="cart">
+<h1 id="page-header">Cart</h1>
 
 <div class="row">
-  <div class="col-8 offset-2">
+  <div class="col-md-8 div-col col-xs-10 offset-xs-1 offset-md-2">
 <div id="accordion">
   {%  if cart|length  > 0 %}
   {% for item in cart %}
@@ -40,11 +40,11 @@
 </div>
 
 <div class="row">
-  <div class="col-8 offset-2">
+  <div class="col-md-8 div-col col-xs-10 offset-xs-1 offset-md-2">
     
     <div class="alert alert-warning show" role="alert">
   <strong>Cart Total: </strong>€{{ cart.get_total_price }}
-    <a href="{% url 'pay' %}" class="btn checkout-btn btn-primary">Checkout</a>
+    <a href="{% url 'pay' %}" class="btn btn-sm checkout-btn btn-primary">Checkout</a>
 </div>
 </div>
 </div>
