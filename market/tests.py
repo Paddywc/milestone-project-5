@@ -4,6 +4,7 @@ from django.db import IntegrityError, transaction
 from importlib import import_module
 from django.http import HttpRequest
 from .models import CoinsPurchase, StoreItem, UserCoinHistory, Order, OrderItem, UserCoins, Delivery
+import datetime
 from django.urls import reverse
 from random import choice
 from accounts.models import User
@@ -439,6 +440,13 @@ class TestModels(TestCase):
         non_coins_store_item = StoreItem(name="not coins", price=5, delivery_required=True, is_coins=False)
         non_coins_store_item.save()
         
+        order_1 = Order(user=user_1)
+        order_1.save()
+        order_2 = Order(user=user_2)
+        order_2.save()
+        order_3 = Order(user=user_3)
+        order_3.save()
+        
      
     def test_store_item_defaults_as_desired(self):
         """
@@ -484,6 +492,90 @@ class TestModels(TestCase):
                 without_price = CoinsPurchase(name="A Name")
                 without_price.save()
                 
+    
+    def test_creating_order_requires_a_user_value_only(self):
+        """
+        Test to check that creating an Order object only requires
+        a value for user. delivery_address is optional. date_time should 
+        be set to current datetime
+        """
+        new_user = User.objects.create(username="Order test user", email="otu@email.com", password="something secret")
+        only_user_order = Order(user=new_user)
+        only_user_order.save()
+        retrieved_order = Order.objects.get(user=new_user)
+        self.assertEqual(retrieved_order.date_time.date(), datetime.date.today())
+        
+        with self.assertRaises(IntegrityError):
+            order_without_user = Order()
+            order_without_user.save()
+            
+            
+    def test_all_fields_required_to_create_order_item(self):
+        """
+        Test to check that all fields are mandatory when creating an 
+        OrderItem. These fields are: order, item, quantity, total_purchase_price
+        """
+             
+        random_order = choice(Order.objects.all())
+        random_item = choice(StoreItem.objects.all())
+        random_quantity_from_1_to_10  = choice(range(1,11))
+        total_purchase_price = (random_item.price * random_quantity_from_1_to_10)
+           
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                without_order = OrderItem(item=random_item, quantity=random_quantity_from_1_to_10, total_purchase_price= total_purchase_price)
+                without_order.save()
+
+            with transaction.atomic():
+                without_item = OrderItem(order=random_order, quantity=random_quantity_from_1_to_10, total_purchase_price= total_purchase_price)
+                without_item.save()
                 
-  
+            with transaction.atomic():
+                without_quantity = OrderItem(order=random_order, item=random_item, total_purchase_price= total_purchase_price)
+                without_quantity.save()
                 
+            with transaction.atomic():
+                without_total_price = OrderItem(order=random_order, item=random_item, quantity=random_quantity_from_1_to_10)
+                without_total_price.save()
+                
+                
+    def test_creating_user_coins_requires_user_value_only(self):
+        """
+        Test to check that creating a UserCoins requires  a value
+        for user and nothing more
+        """
+        random_user = choice(User.objects.all())
+        UserCoins.objects.create(user=random_user)
+        
+        with self.assertRaises(IntegrityError):
+            UserCoins.objects.create()
+            
+            
+    def test_user_coins_change_and_transaction_required_to_create_user_coins_history(self):
+        """
+        Test to check that a value for user, coins_change, and transaction are required
+        in order to create a UserCoinHistory object. A UserCoinHistory objects
+        should be able to be created with these values only
+        """
+        random_user = choice(User.objects.all())
+        coins_change = choice([100, 223, 1000, -50, -900, 2])
+        random_transaction = choice(range(1,10))
+        with_all_3 = UserCoinHistory(user=random_user, coins_change=coins_change, transaction=random_transaction)
+        with_all_3.save()
+        
+        self.assertEqual(with_all_3.date_time.date(), datetime.date.today())
+        
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                without_user = UserCoinHistory(coins_change=coins_change, transaction=random_transaction)
+                without_user.save()
+
+            with transaction.atomic():
+                without_coins_change = UserCoinHistory(user=random_user, transaction=random_transaction)
+                without_coins_change.save()
+                
+            with transaction.atomic():
+                without_transaction = UserCoinHistory(user= random_user, coins_change=coins_change)
+                without_transaction.save()
+                
+    
