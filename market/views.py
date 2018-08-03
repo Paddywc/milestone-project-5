@@ -3,11 +3,11 @@ from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from .cart import Cart
-from .checkout import get_user_delivery_addresses, process_stripe_payment, process_order, \
+from .checkout import process_stripe_payment, process_order, \
     cart_contains_item_needing_delivery
 from .forms import DeliveryForm
 from .helpers import retrieve_session_url
-from .models import StoreItem, CoinsPurchase
+from .models import StoreItem, CoinsPurchase, Delivery
 
 
 # Create your views here.
@@ -80,7 +80,7 @@ def pay(request):
         else:
             return (redirect("store"))
 
-    user_addresses = get_user_delivery_addresses(request.user)
+    user_addresses = Delivery.objects.filter(user=request.user)
     cart_contains_delivery_item = cart_contains_item_needing_delivery(request)
     
     

@@ -6,18 +6,6 @@ from .coins import add_coins
 from .models import Delivery, Order, OrderItem
 
 
-def get_user_delivery_addresses(user):
-    """
-    """
-    return Delivery.objects.filter(user=user)
-
-
-def get_full_delivery_object(pk):
-    """
-    """
-    return Delivery.objects.get(pk=pk)
-
-
 def process_stripe_payment(request):
     """
     from stipe documentation
@@ -46,7 +34,7 @@ def process_order(request, user, transaction=0):
     """
     try:
         delivery_pk = request.POST.get("deliverySelection")
-        delivery_object = get_full_delivery_object(delivery_pk)
+        delivery_object = Delivery.objects.get(pk=delivery_pk)
         order = Order(user=user, delivery_address=delivery_object)
     except:
         order = Order(user=user)
