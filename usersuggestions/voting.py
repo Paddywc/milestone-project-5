@@ -16,15 +16,22 @@ def add_suggestion_upvote_to_database(user, suggestion):
         if len(Upvote.objects.filter(user=user, suggestion=suggestion)) == 0:
             upvote = Upvote(user=user, suggestion=suggestion)
             upvote.save()
+            return False
+        else: 
+            return True
     else:
         upvote = Upvote(user=user, suggestion=suggestion)
         upvote.save()
+        return False
 
 
 def add_comment_upvote_to_database(user, comment):
     if len(Upvote.objects.filter(user=user, comment=comment)) == 0:
         upvote = Upvote(user=user, comment=comment)
         upvote.save()
+        return False
+    else:
+        return True
 
 
 def get_voting_end_date():

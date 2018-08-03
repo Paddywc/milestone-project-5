@@ -1,83 +1,98 @@
 {% extends 'base.html' %} {% block title %}Flags{% endblock %} {% block content %}
 
+<main id="flags">
 
-<h1>Flags</h1>
+    <h1 id="page-header">Flags</h1>
 
-<h2> Pending:</h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Suggestion/Comment</th>
-            <th scope="col">Date Flagged</th>
-            <th scope="col">Reason</th>
-            <th scope="col">Result</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for flag in flags %} {% if flag.result == None %}
-        <tr>
-            <td>
-                {% if flag.flagged_item_type == 1 %}
-                <a href="{% url 'view_suggestion' flag.comment.suggestion.id %}#{{ flag.comment.id }}" target="_blank">Comment by {{ flag.comment.user }}, {{ flag.comment.date_time.date }}</a> {% else %}
-                <a href="{% url 'view_suggestion' flag.suggestion.id %}" target="_blank">{{ flag.suggestion.title }}</a> {% endif %}
+    <div class="row">
+        <div class="offset-md-1">
+            <h2 class="section-header">Submissions:</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table-col col-md-10 offset-md-1">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Suggestion/Comment</th>
+                        <th scope="col">Date Flagged</th>
+                        <th scope="col">Reason</th>
+                        <th scope="col">Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flag in flags %} {% if flag.result == None %}
+                    <tr>
+                        <td>
+                            {% if flag.flagged_item_type == 1 %}
+                            <a href="{% url 'view_suggestion' flag.comment.suggestion.id %}#{{ flag.comment.id }}" target="_blank">Comment by {{ flag.comment.user }}, {{ flag.comment.date_time.date }}</a> {% else %}
+                            <a href="{% url 'view_suggestion' flag.suggestion.id %}" target="_blank">{{ flag.suggestion.title }}</a> {% endif %}
 
-            </td>
-            <td>{{ flag.date_time_marked.date }}</td>
-            <td>{{ flag.get_reason_display }}</td>
-            <td>
-                <button id="flagResultButtonGroup" type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </td>
+                        <td>{{ flag.date_time_marked.date }}</td>
+                        <td>{{ flag.get_reason_display }}</td>
+                        <td>
+                            <button id="flagResultButtonGroup" type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
      To Do
     </button>
-                <div class="dropdown-menu" aria-labelledby="flagResultButtonGroup">
-                    <!--<a class="dropdown-item" href="{% url 'flag_response' flag.id   'None' %}">To Do</a>-->
-                    <a class="dropdown-item" href="{% url 'flag_response' flag.id   'True' %}">Inappropriate</a>
-                    <a class="dropdown-item" href="{% url 'flag_response' flag.id  'False' %}">Not Inappropriate</a>
-                </div>
+                            <div class="dropdown-menu" aria-labelledby="flagResultButtonGroup">
+                                <!--<a class="dropdown-item" href="{% url 'flag_response' flag.id   'None' %}">To Do</a>-->
+                                <a class="dropdown-item" href="{% url 'flag_response' flag.id   'True' %}">Inappropriate</a>
+                                <a class="dropdown-item" href="{% url 'flag_response' flag.id  'False' %}">Not Inappropriate</a>
+                            </div>
 
-            </td>
-        </tr>
+                        </td>
+                    </tr>
 
-        {% endif %} {% endfor %}
-    </tbody>
-</table>
+                    {% endif %} {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<h2>Completed:</h2>
+    <div class="row">
+        <div class="offset-md-1">
+            <h2 class="section-header">Completed:</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table-col col-md-10 offset-md-1">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Suggestion/Comment</th>
+                        <th scope="col">Reason</th>
+                        <th scope="col">Admin Responsible</th>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Suggestion/Comment</th>
-            <th scope="col">Reason</th>
-            <th scope="col">Admin Responsible</th>
-
-            <th scope="col">Result</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for flag in flags %}
-        {% if flag.result is not None %}
-        <tr>
-            <td>
-                {% if flag.flagged_item_type == 1 %}
-                <a href="{% url 'view_suggestion' flag.comment.suggestion.id %}#{{ flag.comment.id }}" target="_blank">Comment by {{ flag.comment.user }}, {{ flag.comment.date_time.date }}</a> {% else %}
-                <a href="{% url 'view_suggestion' flag.suggestion.id %}" target="_blank">{{ flag.suggestion.title }}</a> {% endif %}
-            </td>
-         <td>{{ flag.get_reason_display }}</td>
-             <td>{{ flag.responsible_admin }}</td>
-            <td>  {{ flag.get_result_display }}
-                <button id="flagResultButtonGroup" type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <th scope="col">Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flag in flags %} {% if flag.result is not None %}
+                    <tr>
+                        <td>
+                            {% if flag.flagged_item_type == 1 %}
+                            <a href="{% url 'view_suggestion' flag.comment.suggestion.id %}#{{ flag.comment.id }}" target="_blank">Comment by {{ flag.comment.user }}, {{ flag.comment.date_time.date }}</a> {% else %}
+                            <a href="{% url 'view_suggestion' flag.suggestion.id %}" target="_blank">{{ flag.suggestion.title }}</a> {% endif %}
+                        </td>
+                        <td>{{ flag.get_reason_display }}</td>
+                        <td>{{ flag.responsible_admin }}</td>
+                        <td> 
+                            <button id="flagResultButtonGroup" type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
      {{ flag.get_result_display }}
     </button>
-                <div class="dropdown-menu" aria-labelledby="flagResultButtonGroup">
-                    <a class="dropdown-item disabled" href="#" disabled>Change Result:</a>
-                    <a class="dropdown-item" href="{% url 'flag_response' flag.id   'True' %}">Inappropriate</a>
-                    <a class="dropdown-item" href="{% url 'flag_response' flag.id  'False' %}">Not Inappropriate</a>
-                </div>
-            </td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-    </tbody>
+                            <div class="dropdown-menu" aria-labelledby="flagResultButtonGroup">
+                                <a class="dropdown-item disabled" href="#" disabled>Change Result:</a>
+                                <a class="dropdown-item" href="{% url 'flag_response' flag.id   'True' %}">Inappropriate</a>
+                                <a class="dropdown-item" href="{% url 'flag_response' flag.id  'False' %}">Not Inappropriate</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %} {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-
+</main>
 {% endblock %}

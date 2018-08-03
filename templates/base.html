@@ -85,6 +85,12 @@ https://stripe.com/docs/stripe-js/reference
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
                     {% endif %}
+                    
+                     {% if request.user.is_staff %}
+     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flags' %}">Flags</a>
+                    </li>
+    {% endif %}
 
 
                     <li class="nav-item">

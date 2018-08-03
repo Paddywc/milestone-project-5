@@ -177,14 +177,22 @@ def upvote_suggestion(request, id):
     if settings.COINS_ENABLED and suggestion.is_feature:
         remove_coins(request.user, get_coins_price("Upvote"), 2)
         add_coins(suggestion.user, coin_rewards.suggestion_upvoted, 7)
-    add_suggestion_upvote_to_database(request.user, suggestion)
+    already_upvoted = add_suggestion_upvote_to_database(request.user, suggestion)
+    if already_upvoted:
+        messages.info(request, "You have already upvoted this suggestion")
+    else:
+        messages.info(request, "Suggestion upvoted")
     return redirect("view_suggestion", id)
 
 
 @login_required
 def upvote_comment(request, id):
     comment = get_object_or_404(Comment, id=id)
-    add_comment_upvote_to_database(request.user, comment)
+    already_upvoted = add_comment_upvote_to_database(request.user, comment)
+    if already_upvoted:
+        messages.info(request, "You have already upvoted this comment")
+    else:
+        messages.info(request, "Comment upvoted")
     return redirect("view_suggestion", comment.suggestion.id)
 
 
@@ -193,6 +201,7 @@ def flag_item(request, item_type, item_id, reason):
     """
     """
     # if flagged item is a commment
+    messages.info(request, "Item flagged. Thank you for your help in keeping UnicornAttractor safe and fun for all")
     if item_type == "1":
         comment = get_object_or_404(Comment, id=int(item_id))
         flag = Flag(flagged_item_type=int(item_type), comment=comment,
