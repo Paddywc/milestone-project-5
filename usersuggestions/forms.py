@@ -8,7 +8,8 @@ class SuggestionForm(forms.ModelForm):
         exclude = ["date_time"]
         widgets = {"user": forms.HiddenInput()} #value set in views
         labels = {
-            "is_feature": "Suggestion Type"
+            "is_feature": "Suggestion Type",
+            "delay_submission": "Delay Submission Till Next Voting Cycle"
         }
     
 class CommentForm(forms.ModelForm):

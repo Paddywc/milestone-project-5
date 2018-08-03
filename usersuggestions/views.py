@@ -3,6 +3,7 @@ import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 import market.coin_prices.coin_rewards as coin_rewards
 from accounts.models import User
@@ -55,8 +56,10 @@ def add_suggestion(request):
                 if saved_suggestion_object.delay_submission:
                     suggestion_admin_page = SuggestionAdminPage(suggestion=saved_suggestion_object,
                                                                 in_current_voting_cycle=False)
+                    messages.success(request, "Suggestion successfully submitted. It will be posted as the end of the current voting cycle")
                 else:
                     suggestion_admin_page = SuggestionAdminPage(suggestion=saved_suggestion_object)
+                    messages.success(request, "Suggestion successfully submitted!")
                 suggestion_admin_page.save()
                 set_session_form_values_as_false(request)
                 return (redirect("view_suggestion", saved_suggestion_object.id))

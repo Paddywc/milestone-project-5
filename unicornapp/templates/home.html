@@ -2,7 +2,13 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
+
+
+
 <div id="home-header" class="container-fluid">
+    
+    
+    
     <h1 id="home-title">UnicornAttractor</h1>
     <div class="row">
         {% if not user.is_authenticated %}
@@ -48,7 +54,6 @@
 
  <div class="col-xs-12 col-md-4">
      <div id="attracting-unicorns-section">
-<!--Embedded gif code from: https://tenor.com/view/sound-wave-wave-sound-gif-3535566-->
 <div class="tenor-gif-embed" data-postid="3535566" data-share-method="host" data-width="100%" data-aspect-ratio="1.775"><a href="https://tenor.com/view/sound-wave-wave-sound-gif-3535566">Yas GIF</a> from <a href="https://tenor.com/search/soundwave-gifs">Soundwave GIFs</a></div><script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 </div>
 </div>
@@ -76,7 +81,7 @@
     <div class="card-body">
       <h5 class="card-title">Get some coins</h5>
       <p class="card-text">Coins allow you to do cool things like submitting your own feature suggestions. Coins can be earned for free or purchased from our store</p>
-      <!--<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
            
     </div>
         <div class="card-footer">
@@ -117,4 +122,6 @@
     </div>
     </div>
 </main>
+
+
 {% endblock %}

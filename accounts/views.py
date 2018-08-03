@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 import market.coin_prices.coin_rewards as coin_rewards
 from market.cart import Cart
@@ -22,6 +23,7 @@ def create_user(request):
             new_user = form.save()
             if settings.COINS_ENABLED:
                 add_coins(new_user, coin_rewards.signup, 5)
+            messages.info(request, "Your account has been created. Please login")
             return redirect("login")
     else:
         form = UserSignupForm()
@@ -41,6 +43,7 @@ def create_referred_user(request, ref_user_id):
                 add_coins(new_user, coin_rewards.signup, 5)
                 add_coins(ref_user, coin_rewards.referral, 3)
                 add_coins(new_user, coin_rewards.received_referral, 6)
+            messages.info(request, "Your account has been created. Please login")
             return redirect("login")
     else:
         form = UserSignupForm()
@@ -57,6 +60,7 @@ def login_user(request):
     if request.method == "POST":
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
+            messages.success(request, "You have successfully logged in")
             user = form.get_user()
             login(request, user)
             cart = Cart(request)
@@ -73,11 +77,6 @@ def login_user(request):
 def logout_user(request):
     """
     """
-    if request.method == "POST":
-        logout(request)
-        return redirect("home")
-
-    else:
-        logout(request)
-
-    return redirect("login")
+    logout(request)
+    messages.success(request, 'You have successfully logged out')
+    return redirect("home")

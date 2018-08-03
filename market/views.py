@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 from .cart import Cart
 from .checkout import process_stripe_payment, process_order, \
     cart_contains_item_needing_delivery
@@ -27,7 +28,7 @@ def cart_add(request, item_id):
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
     cart.add(item=item)
-    # return redirect('store')
+    messages.info(request, "Item added to cart")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -39,6 +40,7 @@ def cart_remove(request, item_id):
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
     cart.remove(item)
+    messages.info(request, "Item removed from cart")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -74,6 +76,8 @@ def pay(request):
         process_stripe_payment(request)
         process_order(request, request.user, 4)
         redirect_url = retrieve_session_url(request)
+        messages.success(request, "Purchase successful. Thank you")
+
         if redirect_url:
             print(redirect_url)
             return redirect(redirect_url)
@@ -110,4 +114,5 @@ def earn_coins(request):
         body = "click this link to sign up now: {}".format(referral_link)
         email = EmailMessage(subject, body, to=[email])
         email.send()
+        messages.info(request, "Email sent")
     return render(request, "earn_coins.html", {"coin_purchases":coin_purchases})

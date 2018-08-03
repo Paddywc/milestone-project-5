@@ -1,55 +1,58 @@
-{% extends 'base.html' %} 
-{% load bootstrap_tags %}
-{% block title %} Submit Suggestion {% endblock %}
-{% block head %}
+{% extends 'base.html' %} {% load bootstrap_tags %} {% block title %} Submit Suggestion {% endblock %} {% block head %}
 <!--Script for ckeditor-->
-    {{ form.media }}
-{% endblock %}
-{% block content %}
+{{ form.media }} {% endblock %} {% block content %}
 
 <main id="submit-suggestion">
-<h1 id="submit-suggestion-title">Submit Suggestion</h1>
+  <h1 id="submit-suggestion-title">Submit Suggestion</h1>
   <div class="row">
-        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
-<form method="post">
-    {{ form|as_bootstrap }}
-    {% csrf_token %}
-  
-    {% if not coins_enabled %}
-    <input type="submit" value="Submit" id="bugFixSubmit">
+    <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+      <div class="alert alert-info" role="alert">
+        <div class="row">
+          <div class="col-6">
+            Bug Fixes: Free
+          </div>
+          <div class="col-6">
+            Feature Suggestions: {{ price }}Coins
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+      <form method="post">
+        {{ form|as_bootstrap }} {% csrf_token %} {% if not coins_enabled %}
+        <input type="submit" value="Submit" id="bugFixSubmit"> {% else %}
+        <input type="submit" value="Submit" id="bugFixSubmit">
 
-      {% else %}
-    <input type="submit" value="Submit" id="bugFixSubmit">
-    
-   <!-- Button trigger modal -->
-<button type="button" id="featureSubmit" class="btn btn-primary" data-toggle="modal" data-target="#featureSubmitModal">
+        <!-- Button trigger modal -->
+        <button type="button" id="featureSubmit" class="btn btn-primary" data-toggle="modal" data-target="#featureSubmitModal">
   Post Suggestion
 </button>
 
-<!-- Modal -->
-<div class="modal fade" id="featureSubmitModal" tabindex="-1" role="dialog" aria-labelledby="featureSubmitModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="featureSubmitModalLabel">Submit Suggestion</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <!-- Modal -->
+        <div class="modal fade" id="featureSubmitModal" tabindex="-1" role="dialog" aria-labelledby="featureSubmitModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="featureSubmitModalLabel">Submit Suggestion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-     
-        <p>Suggestion Price: {{ price }} coins </p>
-        Current coins: {{ user_coins }}
-           {% if price > user_coins %}
-        <p>You have insufficient coins to make this purchase</p>
-        <form method="POST">
-       
-    
-        <!--from bootstrap documentation-->
-  <div class="form-row align-items-center">
-    <div class="col-auto my-1">
-      <label class="mr-sm-2" for="purchaseCoinsSelect">Add more coins</label>
-      <select class="custom-select mr-sm-2" name="purchaseCoinsSelect" id="purchaseCoinsSelect">
+              </div>
+              <div class="modal-body">
+
+                <p>Suggestion Price: {{ price }} coins </p>
+                Current coins: {{ user_coins }} {% if price > user_coins %}
+                <p>You have insufficient coins to make this purchase</p>
+                <form method="POST">
+
+
+                  <!--from bootstrap documentation-->
+                  <div class="form-row align-items-center">
+                    <div class="col-auto my-1">
+                      <label class="mr-sm-2" for="purchaseCoinsSelect">Add more coins</label>
+                      <select class="custom-select mr-sm-2" name="purchaseCoinsSelect" id="purchaseCoinsSelect">
         {% for coin_option in coin_options %}
         {% if coin_option == minimum_coins %}
         <option value="{{ coin_option.id }}" selected> {{ coin_option }}: €{{ coin_option.price }}  </option>
@@ -59,63 +62,60 @@
                 {% endfor %}
 
       </select>
-    </div>
-    <div class="col-auto my-1">
-      <button type="submit" class="btn btn-primary" name="purchaseCoins">Purchase coins</button>
+                    </div>
+                    <div class="col-auto my-1">
+                      <button type="submit" class="btn btn-primary" name="purchaseCoins">Purchase coins</button>
+                    </div>
+                  </div>
+
+                </form>
+                {% endif %}
+
+
+              </div>
+              {% if user_coins >= price %}
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Confirm Submission</button>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+
+      </form>
     </div>
   </div>
-        
-        </form>
-        {% endif %}
-        
-        
-      </div>
-      {% if user_coins >= price %}
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Confirm Submission</button>
-      </div>
-      {% endif %}
-    </div>
-  </div>
-</div>
- 
-    
-</form>
-</div>
-</div>
-<script>
+  <script>
     let showAppropriateButton = function() {
-        if ($("#id_is_feature").val() == "True") {
-            $("#bugFixSubmit").hide();
-            $("#featureSubmit").show();
-        }
-        else {
-            $("#bugFixSubmit").show();
-            $("#featureSubmit").hide();
-        }
+      if ($("#id_is_feature").val() == "True") {
+        $("#bugFixSubmit").hide();
+        $("#featureSubmit").show();
+      }
+      else {
+        $("#bugFixSubmit").show();
+        $("#featureSubmit").hide();
+      }
     };
-    
-    let showOrHideDelaySubmissionCheckbox = function(){
-       if ($("#id_is_feature").val() == "True"){
-         $(".checkbox").show()
-       }else{
-         $(".checkbox").hide()
-       }
-    }; 
-    
-     $(document).ready(function(){
-         showAppropriateButton()
-         showOrHideDelaySubmissionCheckbox()
-     })
+
+    let showOrHideDelaySubmissionCheckbox = function() {
+      if ($("#id_is_feature").val() == "True") {
+        $(".checkbox").show()
+      }
+      else {
+        $(".checkbox").hide()
+      }
+    };
+
+    $(document).ready(function() {
+      showAppropriateButton()
+      showOrHideDelaySubmissionCheckbox()
+    })
 
     $("#id_is_feature").change(showAppropriateButton)
     $("#id_is_feature").change(showOrHideDelaySubmissionCheckbox)
-
-
-</script>
+  </script>
 
 </main>
-{% endif %}
-
-{% endblock %}
+{% endif %} {% endblock %}
