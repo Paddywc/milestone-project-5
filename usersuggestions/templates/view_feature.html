@@ -3,12 +3,12 @@
 {{ form.media }} {% endblock %} {% block content %}
 
 
-<main id="suggestion">
+<main id="view-suggestion">
 
 
     {% if request.user.is_staff %}
     <div class="row btn-row">
-        <div class="col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+        <div class="div-col col-xs-6 col-md-4 offset-xs-3 offset-md-4">
             <a class="btn btn-outline-primary" href="{% url 'admin_page' feature.id %}" role="button">View admin page</a>
         </div>
     </div>
@@ -18,15 +18,15 @@
 
     <h1 id="suggestion-title">{{ feature.title }}</h1>
     <div class="row admin-row">
-        <div class="col-xs-10 col-md-6 offset-xs-1 offset-md-3">
-            <div id="admin-status"> <span class="admin-key">  Status:</span>{{ suggestion_admin.get_status_display }} </div>
+        <div class="div-col col-xs-10 col-md-6 offset-xs-1 offset-md-3">
+            <div id="admin-status"> <span class="admin-key">  Status: </span>{{ suggestion_admin.get_status_display }} </div>
             <div id="admin-estimated-time"><span class="admin-key"> Estimated Time to Complete: </span>{% if not suggestion_admin.estimated_days_to_complete %}N/A {% else %}{{ suggestion_admin.estimated_days_to_complete }} Days {% endif %}</div>
         </div>
     </div>
 
 
     <div class="row btn-row">
-        <div class="col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+        <div class="div-col col-xs-6 col-md-4 offset-xs-3 offset-md-4">
             {% if not coins_enabled %}
             <a class="btn btn-success" href="{% url 'upvote_suggestion' feature.id %}" role="button"> <i class="material-icons"> thumb_up</i>
 Upvote Suggestion</a> {% else %}
@@ -88,7 +88,7 @@ Upvote Suggestion</a> {% else %}
         </div>
     </div>
     <div class="row btn-row">
-        <div class="col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+        <div class="div-col col-xs-6 col-md-4 offset-xs-3 offset-md-4">
             <!-- Flag suggestion modal trigger -->
             <button type="button" class="btn btn-outline-danger btn-sm " data-toggle="modal" data-target="#flagSuggestionModal">
 Flag Suggestion
@@ -98,13 +98,13 @@ Flag Suggestion
 
 
     <div class="row">
-        <div class="offset-1">
-            <h3 id="details-title">Feature Idea:</h3>
+        <div class="offset-md-1">
+            <h6 id="details-title">Feature Idea:</h6>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+        <div class="div-col col-xs-12 col-md-8 offset-md-2">
             <div id="details-section">
                 <p>{{ feature.details|safe }}</p>
             </div>
@@ -172,12 +172,12 @@ Flag Suggestion
     <div id="comments">
 
         <div class="row">
-            <div class="offset-1">
-                <h3 id="comments-title">Comments:</h3>
+            <div class="offset-md-1">
+                <h6 class="comments-title">Comments:</h6>
             </div>
         </div>
         <div class="row">
-            <div class="offset-1">
+            <div class="offset-md-1">
                 <div class="btn-group" role="group">
                     <button id="orderCommentsButtonGroup" type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Sort comments by
@@ -194,7 +194,7 @@ Flag Suggestion
         {% for comment in comments %}
 
         <div class="row">
-            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+            <div class="div-col col-xs-12 col-md-8 offset-md-2">
 
                 <div id="{{ comment.id }}" class="card">
 
@@ -205,7 +205,7 @@ Flag Suggestion
                         </blockquote>
                     </div>
                     <div class="card-footer text-muted">
-                        Upvotes: {{ comment.upvotes }} <a class="btn upvote-btn btn-success " href="{% url 'upvote_comment' comment.id %}" role="button">
+                        Upvotes: {{ comment.upvotes }} <a class="btn btn-sm upvote-btn btn-success  " href="{% url 'upvote_comment' comment.id %}" role="button">
                                 <i class="material-icons">thumb_up</i>Upvote Comment</a>
 
                         <!-- Flag comment modal trigger -->
@@ -313,12 +313,12 @@ Flag Comment
 
 
     <div class="row">
-        <div class="offset-1">
-            <h5 id="add-comment-title">Add Comment:</h5>
+        <div class="offset-md-1">
+            <h6 class="comments-title">Add Comment:</h6>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+        <div class="div-col col-xs-10 col-md-8 offset-xs-1 offset-md-2">
             <form method="POST">
 
 
