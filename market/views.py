@@ -14,7 +14,7 @@ from .models import StoreItem, CoinsPurchase, Delivery
 # Create your views here.
 def render_store(request):
     """
-    from ecommerce project
+    From ecommerce project
     """
     store_items = StoreItem.objects.all()
     return render(request, "store.html", {"store_items": store_items})
@@ -22,7 +22,7 @@ def render_store(request):
 
 def cart_add(request, item_id):
     """
-    code partly from:
+    Code partly from:
     https://muva.co.ke/blog/creating-shopping-cart-views-shop-products-django-2-0-python-3-6/
     """
     cart = Cart(request)
@@ -34,7 +34,7 @@ def cart_add(request, item_id):
 
 def cart_remove(request, item_id):
     """
-    code  from
+    Code  from
     https://muva.co.ke/blog/creating-shopping-cart-views-shop-products-django-2-0-python-3-6/
     """
     cart = Cart(request)
@@ -111,7 +111,7 @@ def earn_coins(request):
         referral_link = "{0}{1}".format(request.get_host(), redirect("referred_signup", request.user.id).url)
         reference_sender_email = request.user.email
         subject = "{} thinks that you'll like UnicorAttractor".format(reference_sender_email)
-        body = "click this link to sign up now: {}".format(referral_link)
+        body = "Click this link to sign up now: {}".format(referral_link)
         email = EmailMessage(subject, body, to=[email])
         email.send()
         messages.info(request, "Email sent")

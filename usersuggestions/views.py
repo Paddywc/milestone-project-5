@@ -258,6 +258,8 @@ def promote_feature(request):
                 submit_feature_promotion(request)
                 price = prices["{}".format(request.POST.get("promotionDays"))]
                 remove_coins(request.user, price, 9)
+                messages.success(request, "Suggestion promoted. Thank you")
+                
                 return redirect("issue_tracker")
 
         return render(request, "promote_feature.html", {"features": features,

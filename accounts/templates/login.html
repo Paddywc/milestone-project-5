@@ -15,12 +15,12 @@
     {{ form|as_bootstrap_inline }}
     {% csrf_token %}
     <input type="submit" value="Login">
-     <p><a href="{% url 'password_reset' %}">Forgot my password</a></p>
+     <p><a href="{% url 'password_reset' %}">Forgot my Password</a></p>
 
 </form>
 
 <div id="no-account-section">
-    <h5 id="no-account-text"> No account yet?</h5>
+    <h5 id="no-account-text"> No Account Yet?</h5>
 <a href="{% url 'signup' %}" class="btn btn-primary">Signup</a>
 
 </div>

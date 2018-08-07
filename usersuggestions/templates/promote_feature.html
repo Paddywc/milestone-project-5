@@ -54,11 +54,11 @@
                 <div class="form-group">
                     <label for="promotionDays">Promotion Time</label>
                     <select class="form-control" id="promotionDays" name="promotionDays" required>
-      <option value=1>1 day: {{ prices.1 }} coins</option>
-      <option value=2>2 days: {{ prices.2 }} coins <span class="discount">({{ discount_rates.2 }}% off)</span></option>
-      <option value=3>3 days: {{ prices.3 }} coins <span class="discount">({{ discount_rates.3 }}% off)</span></option>
-      <option value=4>4 days: {{ prices.4 }} coins <span class="discount">({{ discount_rates.4 }}% off)</span></option>
-      <option value=5>5 days: {{ prices.5 }} coins<span class="discount"> ({{ discount_rates.5 }}% off)</span></option>
+      <option value=1>1 Day: {{ prices.1 }} Coins</option>
+      <option value=2>2 Days: {{ prices.2 }} Coins <span class="discount">({{ discount_rates.2 }}% Off)</span></option>
+      <option value=3>3 Days: {{ prices.3 }} Coins <span class="discount">({{ discount_rates.3 }}% Off)</span></option>
+      <option value=4>4 Days: {{ prices.4 }} Coins <span class="discount">({{ discount_rates.4 }}% Off)</span></option>
+      <option value=5>5 Days: {{ prices.5 }} Coins<span class="discount"> ({{ discount_rates.5 }}% Off)</span></option>
     </select>
                 </div>
 
@@ -81,7 +81,7 @@
                         <strong>Coins: </strong>{{ user_coins }}
                         <div id="price">
                         </div>
-                        <button type="submit" class="btn btn-primary" id="purchaseCoins" name="purchaseCoins">Purchase more coins</button>
+                        <button type="submit" class="btn btn-primary" id="purchaseCoins" name="purchaseCoins">Purchase More Coins</button>
                         <button type="submit" class="btn btn-primary" id="confirm">Confirm Purchase</button>
 
                     </div>
@@ -121,7 +121,7 @@
                     if (endDateString.includes("NaN")){
                         endDateString=""
                     }
-                    $("#endDate").html("End date: " + endDateString);
+                    $("#endDate").html("End Date: " + endDateString);
                 }
 
                 let showAppropriateButton = function() {

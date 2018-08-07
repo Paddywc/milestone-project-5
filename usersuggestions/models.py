@@ -76,7 +76,7 @@ class Comment(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "{0}: {1}".format(self.user, self.suggestion.title)
+        return "{0}'s comment on {1}, {2}".format(self.user, self.suggestion.title, self.date_time.date())
 
 
 class Upvote(models.Model):
@@ -89,9 +89,9 @@ class Upvote(models.Model):
 
     def __str__(self):
         try:
-            return "{0}:Suggestion:{1}".format(self.user, self.suggestion.title)
+            return "{0} Upvoted Suggestion: {1}".format(self.user, self.suggestion.title)
         except:
-            return "{0}: Comment on Suggestion: {1}".format(self.user, self.comment.suggestion.title)
+            return "{0} Upvoted Comment on Suggestion: {1}".format(self.user, self.comment.suggestion.title)
 
 
 class Flag(models.Model):
@@ -114,7 +114,7 @@ class Flag(models.Model):
     result = models.NullBooleanField(blank=True, null=True, choices=result_choices)
 
     def __str__(self):
-        return "Flagged {0}. {1}. {2}".format(self.get_flagged_item_type_display(), self.date_time_marked, self.get_result_display())
+        return "Flagged {0}. {1}. Status: {2}".format(self.get_flagged_item_type_display(), self.date_time_marked.date(), self.get_result_display())
 
 
 class PromotedFeatureSuggestion(models.Model):
@@ -126,4 +126,4 @@ class PromotedFeatureSuggestion(models.Model):
     end_date = models.DateField(blank=False, null=False)
 
     def __str__(self):
-        return "{0}: {1}-{2}".format(self.suggestion, self.start_date, self.end_date)
+        return "{0}. Start date: {1}. End date: {2}".format(self.suggestion.title, self.start_date, self.end_date)

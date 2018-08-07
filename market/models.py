@@ -45,7 +45,7 @@ class Delivery(models.Model):
     current_delivery_method = models.BooleanField(default=True)
 
     def __str__(self):
-        return "{0}:{1},{2},{3}".format(self.user, self.full_name, self.street_address_1, self.postcode)
+        return "{0}: {1}".format(self.user, self.postcode)
 
     # Code for turning other current_delivery_method values
     # to False once a new value saved as a True
@@ -71,7 +71,7 @@ class Order(models.Model):
     delivery_address = models.ForeignKey(Delivery, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
-        return "{0}-{1}".format(self.user, self.date_time.date())
+        return "{0}: {1}".format(self.user, self.date_time.date())
 
 
 class OrderItem(models.Model):
@@ -93,7 +93,7 @@ class UserCoins(models.Model):
     coins = models.PositiveIntegerField(null=True, default=0)
 
     def __str__(self):
-        return "{0}-{1}".format(self.user, self.coins)
+        return "{0}: {1}".format(self.user, self.coins)
 
 
 class UserCoinHistory(models.Model):
