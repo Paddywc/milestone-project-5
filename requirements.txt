@@ -24,6 +24,7 @@ django-phonenumber-field==2.0.0
 django-storages==1.6.6
 docutils==0.14
 freetype-py==2.0.0.post6
+gunicorn==19.9.0
 html5lib==0.999
 itsdangerous==0.24
 jmespath==0.9.3

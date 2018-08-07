@@ -679,6 +679,7 @@ class TestCheckout(TestCase):
         cart_add(request, random_store_item.id)
         
         request.POST["stripeToken"] = "tok_visa_debit"
+        
         process_stripe_payment(request)
         
         with self.assertRaises(AuthenticationError):
