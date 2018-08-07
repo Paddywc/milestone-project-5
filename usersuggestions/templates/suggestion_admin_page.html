@@ -48,7 +48,7 @@
 
 
         {% csrf_token %}
-        <input type="submit" value="submit changes" name="adminPageSubmit">
+        <input type="submit" class="btn btn-primary" value="submit changes" name="adminPageSubmit">
     </form>
     </div>
     
@@ -99,7 +99,7 @@
 
 
                     {{ comment_form|as_bootstrap }} {% csrf_token %}
-                    <input type="submit" value="Submit" name="postComment">
+                    <input type="submit" class="btn btn-primary" value="Submit" name="postComment">
 
                 </form>
             </div>

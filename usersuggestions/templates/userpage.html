@@ -10,12 +10,13 @@
         </div>
     </div>
 
-    {% if suggestions|length == 0 %}
-    <p>You have not submitted any suggestions</p>
-    {% else %}
 
     <div class="row">
         <div class="col-xs-12 table-col col-md-8 offset-md-2">
+
+            {% if suggestions|length == 0 %}
+            <p class="no-entry-text">You have not submitted any suggestions</p>
+            {% else %}
             <table class="table submissions-table table-striped">
 
                 <thead>
@@ -34,7 +35,7 @@
                         <td>{{ suggestion.suggestion.get_is_feature_display }}</td>
                         <td>{{ suggestion.suggestion.date_time.date }}</td>
                         <td class="status">
-                            {% if suggestion.suggestion.is_feature %} {% if suggestion.in_current_voting_cycle %} Vote o ngoing {% elif suggestion.suggestion.delay_submission %} Submission delayed till next voting cycle {% elif suggestion.was_successful == True %} Suggestion Successful
+                            {% if suggestion.suggestion.is_feature %} {% if suggestion.in_current_voting_cycle %} Vote Ongoing {% elif suggestion.suggestion.delay_submission %} Submission delayed till next voting cycle {% elif suggestion.was_successful == True %} Suggestion Successful
                             {% else %} Suggestion unsuccessful {% endif %} {% else %} {{ suggestion.get_status_display }} {% endif %}
 
                         </td>
@@ -42,9 +43,10 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% endif %}
+
         </div>
     </div>
-    {% endif %}
 
 
     <div class="row">
@@ -52,11 +54,12 @@
             <h2 class="section-header">Votes:</h2>
         </div>
     </div>
-    {% if votes|length == 0 %}
-    <p>You have not cast any votes</p>
-    {% else %}
+
     <div class="row">
         <div class="col-xs-10 col-md-8 table-col offset-xs-1 offset-md-2">
+            {% if votes|length == 0 %}
+            <p class="no-entry-text">You have not cast any votes</p>
+            {% else %}
             <table class="table table-striped">
 
                 <thead>
@@ -84,9 +87,9 @@
                         {% endfor %}
                 </tbody>
             </table>
+            {% endif %}
             </div>
         </div>
-        {% endif %}
 
 
 
@@ -132,12 +135,13 @@
                 <h2 class="section-header">Store Purchases:</h2>
             </div>
         </div>
-        {% if purchases|length == 0 %}
 
-        <p>You have made no purchases at our store</p>
-        {% else %}
         <div class="row">
             <div class="col-xs-10  table-col col-md-8 offset-xs-1 offset-md-2">
+                {% if purchases|length == 0 %}
+
+                <p class="no-entry-text">You have made no purchases at our store</p>
+                {% else %}
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -164,20 +168,18 @@
                     </tbody>
                 </table>
             </div>
+            {% endif %}
         </div>
-        {% endif %}
 
-<script>
-    
-//  use smaller table on xs and sm devices 
-  let windowWidth = $(window).width()
-  if (windowWidth <= 768){
-  $(".table").addClass("table-sm")
-  }
-  
-</script>
-    
-    
-</script>
+        <script>
+            //  use smaller table on xs and sm devices 
+            let windowWidth = $(window).width()
+            if (windowWidth <= 768) {
+                $(".table").addClass("table-sm")
+            }
+        </script>
+
+
+        </script>
 </main>
 {% endblock %}

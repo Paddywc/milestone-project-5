@@ -59,7 +59,7 @@ Flag Suggestion
                         <div class="form-row align-items-center">
                             <div class="col-auto my-1">
                                 <select class="custom-select mr-sm-2" name="flagSuggestionReasonSelect" id="flagSuggestionReasonSelect">
-       <option selected>Suggestion contains...</option>
+       <option selected>Suggestion Contains...</option>
         <option value="0">Spam</option>
          <option value="1" >Hate Speech</option>
        <option value="2" >Graphic Content</option>
@@ -172,7 +172,7 @@ Flag Comment
                             <div class="form-row align-items-center">
                                 <div class="col-auto my-1">
                                     <select class="custom-select mr-sm-2" name="flagCommentReasonSelect" id="flagCommentReasonSelect">
-       <option selected>Comment contains...</option>
+       <option selected>Comment Contains...</option>
         <option value="0">Spam</option>
          <option value="1" >Hate Speech</option>
        <option value="2" >Graphic Content</option>
@@ -254,7 +254,7 @@ Flag Comment
 
 
                 {{ form|as_bootstrap }} {% csrf_token %}
-                <input type="submit" value="Submit" name="postComment">
+                <input type="submit" class="btn btn-primary" value="Post Comment" name="postComment">
 
             </form>
         </div>

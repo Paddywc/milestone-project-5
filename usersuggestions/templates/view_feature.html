@@ -136,7 +136,7 @@ Flag Suggestion
                         <div class="form-row align-items-center">
                             <div class="col-auto my-1">
                                 <select class="custom-select mr-sm-2" name="flagSuggestionReasonSelect" id="flagSuggestionReasonSelect">
-       <option selected>Suggestion contains...</option>
+       <option selected>Suggestion Contains...</option>
         <option value="0">Spam</option>
          <option value="1" >Hate Speech</option>
        <option value="2" >Graphic Content</option>
@@ -218,11 +218,6 @@ Flag Comment
             </div>
         </div>
 
-        <!--<a class="btn btn-danger" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>-->
-
-
-
-
         <!--Flag comment model-->
 
         <div class="modal fade" id="flagCommentModal" tabindex="-1" role="dialog" aria-labelledby="flagCommentModalLabel" aria-hidden="true">
@@ -241,7 +236,7 @@ Flag Comment
                             <div class="form-row align-items-center">
                                 <div class="col-auto my-1">
                                     <select class="custom-select mr-sm-2" name="flagCommentReasonSelect" id="flagCommentReasonSelect">
-       <option selected>Comment contains...</option>
+       <option selected>Comment Contains...</option>
         <option value="0">Spam</option>
          <option value="1" >Hate Speech</option>
        <option value="2" >Graphic Content</option>
@@ -314,7 +309,7 @@ Flag Comment
 
     <div class="row">
         <div class="offset-md-1">
-            <h6 class="comments-title">Add Comment:</h6>
+            <h6 class="comments-title add-comment">Add Comment:</h6>
         </div>
     </div>
     <div class="row">
@@ -323,7 +318,7 @@ Flag Comment
 
 
                 {{ form|as_bootstrap }} {% csrf_token %}
-                <input type="submit" value="Submit" name="postComment">
+                <input type="submit" class="btn btn-primary" value="Post Comment" name="postComment">
 
             </form>
         </div>

@@ -1,6 +1,5 @@
 from django.db import models
 from django_countries.fields import CountryField
-
 from accounts.models import User
 from usersuggestions.models import Suggestion
 

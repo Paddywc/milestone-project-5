@@ -32,7 +32,6 @@ kiwisolver==1.0.1
 matplotlib==2.2.2
 mpld3==0.3
 numpy==1.14.5
-phonenumberslite==8.9.9
 pycurl==7.19.3
 python-dateutil==2.7.3
 pyparsing==2.2.0
