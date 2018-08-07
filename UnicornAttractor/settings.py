@@ -39,7 +39,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["milestone-project-5-paddywc.c9users.io", "https://paddywc-unicornattractor.herokuapp.com/"]
+ALLOWED_HOSTS = ["milestone-project-5-paddywc.c9users.io", "paddywc-unicornattractor.herokuapp.com"]
 
 
 # Application definition
