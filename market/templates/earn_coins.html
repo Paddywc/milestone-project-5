@@ -61,8 +61,7 @@
             <div class="col-xs-12 div-col col-md-10 offset-md-1">
 
                 <h6 class="referral-subtitle">Referral Link:</h6>
-                <a href="{{ request.get_host }}{% url 'referred_signup' request.user.id %}">{{ request.get_host }}{% url
-                    'referred_signup' request.user.id %}</a>
+                <a href="{{ request.get_host }}{% url 'referred_signup' request.user.id %}">{{ request.get_host }}{% url 'referred_signup' request.user.id %}</a>
                 <h6 class="referral-subtitle">Send Referral Email:</h6>
                 <form method="POST">
                     {% csrf_token %}

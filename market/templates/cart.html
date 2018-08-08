@@ -29,8 +29,7 @@
                         <div class="card-body">
                             <p class="text-muted">{{ item.item.description }}</p>
                             <br>
-                            <p class="card-text">Quantity: {{ item.quantity}} X €{{ item.price }} = €{{ item.total_price
-                                }} </p>
+                            <p class="card-text">Quantity: {{ item.quantity}} X €{{ item.price }} = €{{ item.total_price }} </p>
 
                             <a href="/cart/add/{{ item.item.id }}" class="btn btn-primary">Add Another</a>
                             <a href="/cart/remove/{{ item.item.id }}" class="btn btn-primary">Remove One</a>
