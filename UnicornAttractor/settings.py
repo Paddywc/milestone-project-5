@@ -181,16 +181,16 @@ STATICFILES_DIRS = (
 MEDIAFILES_LOCATION = "media"
 DEFAULT_FILE_STORAGE = "custom_storages.MediaStorage"
 
+STRIPE_PUBLISHABLE =  os.environ.get('STRIPE_PUBLISHABLE')
+STRIPE_SECRET = os.environ.get('STRIPE_SECRET')
 
 AWS_S3_CUSTOM_DOMAIN = "{}.s3.amazonaws.com".format(AWS_STORAGE_BUCKET_NAME)
 
+STATICFILES_LOCATION = "static"
+STATICFILES_STORAGE = "custom_storages.StaticStorage"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
-
-
-STATICFILES_LOCATION = "static"
-STATICFILES_STORAGE = "custom_storages.StaticStorage"
 
 # From Django Auth Project
 EMAIL_USE_TLS = True          
@@ -199,10 +199,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_ADDRESS')        
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')     
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
-
-
-STRIPE_PUBLISHABLE =  os.environ.get('STRIPE_PUBLISHABLE')
-STRIPE_SECRET = os.environ.get('STRIPE_SECRET')
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
