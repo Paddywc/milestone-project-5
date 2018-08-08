@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load staticfiles %} 
+{% load staticfiles %}
 
 <html lang="en">
 
@@ -7,17 +7,23 @@
 
 
     <!--bootstrap-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 
     <!--Import google icons-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
 
 
     <!--Stripe JavaScript
@@ -39,90 +45,92 @@ https://stripe.com/docs/stripe-js/reference
     https://getbootstrap.com/docs/4.0/components/navbar/-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
         <a class="navbar-brand website-title" href="{% url 'home' %}">UnicornAttractor</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
 
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="{% url 'issue_tracker' %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Suggestions
-        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'issue_tracker' %}">Suggestions Home</a>
-                            <a class="dropdown-item" href="{% url 'add_suggestion' %}">Submit Suggestion</a>
-                            <a class="dropdown-item" href="{% url 'promote_feature' %}">Promote Feature Suggestion</a>
-                            <a class="dropdown-item" href="{% url 'view_data' %}">View Data</a>
-                        </div>
-                    </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'issue_tracker' %}" id="navbarDropdown"
+                       role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Suggestions
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'issue_tracker' %}">Suggestions Home</a>
+                        <a class="dropdown-item" href="{% url 'add_suggestion' %}">Submit Suggestion</a>
+                        <a class="dropdown-item" href="{% url 'promote_feature' %}">Promote Feature Suggestion</a>
+                        <a class="dropdown-item" href="{% url 'view_data' %}">View Data</a>
+                    </div>
+                </li>
 
 
-
-                    {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{ user.username }}
-        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownUser">
-                            <a class="dropdown-item" href="{% url 'userpage' user.id %}">View Profile</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                        </div>
-                    </li>
-                    
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'earn_coins' %}"> Coins <span class="badge badge-light">{{ usercoins }}</span></a></a>
-                    </li>
-
-       
-                    {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'signup' %}">Signup</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    {% endif %}
-                    
-                     {% if request.user.is_staff %}
-     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'flags' %}">Flags</a>
-                    </li>
-    {% endif %}
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ user.username }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+                        <a class="dropdown-item" href="{% url 'userpage' user.id %}">View Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </li>
 
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'store' %}">Store</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'earn_coins' %}"> Coins <span class="badge badge-light">{{ usercoins }}</span></a>
+                </li>
 
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_cart' %}">Cart <span class="badge badge-light">{% if cart|length > 0 %}{{ cart|length }}{% endif %}</span></a>
-                    </li>
-                </ul>
-            </div>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                {% endif %}
+
+                {% if request.user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'flags' %}">Flags</a>
+                </li>
+                {% endif %}
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'store' %}">Store</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_cart' %}">Cart <span class="badge badge-light">{% if cart|length > 0 %}{{ cart|length }}{% endif %}</span></a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
 
 </header>
 
 <body>
-    
+
 <!--messages code from: https://simpleisbetterthancomplex.com/tips/2016/09/06/django-tip-14-messages-framework.html-->
 {% for message in messages %}
-  <div class="alert message-alert alert-{{ message.tags }} alert-dismissible" role="alert">
+<div class="alert message-alert alert-{{ message.tags }} alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
+        <span aria-hidden="true">&times;</span>
     </button>
     {{ message }}
-  </div>
+</div>
 {% endfor %}
-    
-    
-    {% block content %}{% endblock %}
+
+
+{% block content %}{% endblock %}
 </body>
 
 </html>

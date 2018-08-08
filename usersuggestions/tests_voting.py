@@ -23,17 +23,17 @@ class TestVoting(TestCase):
         user_2 = User(username="Another Test User", email="example@email.com")
         user_2.save()
 
-        suggestion_1 = Suggestion(is_feature=True, user=user_1, title="Test Suggestion 1", details="Any old detials",
+        suggestion_1 = Suggestion(is_feature=True, user=user_1, title="Test Suggestion 1", details="Any old details",
                                   delay_submission=False)
         suggestion_1.save()
         suggestion_2 = Suggestion(id=2, is_feature=True, user=user_2, title="Test Suggestion 2",
-                                  details="Any old detials", delay_submission=True)
+                                  details="Any old details", delay_submission=True)
         suggestion_2.save()
         suggestion_3 = Suggestion.objects.create(is_feature=False, user=user_2, title="Test Suggestion 3",
-                                                 details="Any old detials", delay_submission=False)
+                                                 details="Any old details", delay_submission=False)
         suggestion_3.save()
         suggestion_4 = Suggestion.objects.create(is_feature=True, user=user_1, title="Test Suggestion 4",
-                                                 details="Any old detials", delay_submission=False)
+                                                 details="Any old details", delay_submission=False)
         suggestion_4.save()
 
         comment_1 = Comment(user=user_1, suggestion=suggestion_2, comment="test comment")
@@ -92,12 +92,11 @@ class TestVoting(TestCase):
         Test to check that get_voting_end_date returns the end date of the current
         winner. If there is no current winner it should return 5 days ahead of the current date
         """
-
         SuggestionAdminPage.objects.all().update(current_winner=False)
         current_date = datetime.date.today()
-        end_date_if_no_curent_winner = get_voting_end_date()
-        print(end_date_if_no_curent_winner)
-        five_days_before_end_date = end_date_if_no_curent_winner - datetime.timedelta(days=5)
+        end_date_if_no_current_winner = get_voting_end_date()
+        print(end_date_if_no_current_winner)
+        five_days_before_end_date = end_date_if_no_current_winner - datetime.timedelta(days=5)
         self.assertEqual(current_date, five_days_before_end_date)
 
         suggestion_admin_pages = SuggestionAdminPage.objects.all()
@@ -237,7 +236,7 @@ class TestVoting(TestCase):
         new_winner = SuggestionAdminPage.objects.get(current_winner=True)
         self.assertNotEqual(winner.id, new_winner.id)
 
-    def test_coins_given_to_winner_if_coints_enabled(self):
+    def test_coins_given_to_winner_if_coins_enabled(self):
         """
         Test to check that if coins are enabled, declare_winner() gives
         coins to the winning suggestion's user
@@ -272,7 +271,6 @@ class TestVoting(TestCase):
         Test to check that trigger_delayed_suggestions adds
         all delayed suggestions to voting cycle
         """
-
         Suggestion.objects.all().update(delay_submission=False)
         suggestions = Suggestion.objects.all()
         random_suggestion = choice(suggestions)
@@ -296,7 +294,6 @@ class TestVoting(TestCase):
         winner if the voting end date is today. Function should return false if end date
         is not today
         """
-
         SuggestionAdminPage.objects.all().update(current_winner=False)
         suggestion_admin_objects = SuggestionAdminPage.objects.all()
         random_admin_object = choice(suggestion_admin_objects)
@@ -352,7 +349,7 @@ class TestVoting(TestCase):
         add_suggestion_upvote_to_database(new_user, random_bug)
         self.assertTrue(len(Upvote.objects.filter(user=new_user, suggestion=random_bug)) == 1)
 
-        if settings.COINS_ENABLED == False:
+        if not settings.COINS_ENABLED:
             random_feature = choice(Suggestion.objects.filter(is_feature=True))
             add_suggestion_upvote_to_database(new_user, random_feature)
             self.assertTrue(len(Upvote.objects.filter(user=new_user, suggestion=random_feature)) == 1)

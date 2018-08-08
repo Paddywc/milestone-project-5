@@ -4,12 +4,15 @@ from market.coins import get_coins_price
 
 def set_current_url_as_session_url(request):
     """
+    Used to redirect to previous  url after making a purchase
     """
     request.session["session_url"] = str(request.build_absolute_uri())
 
 
 def retrieve_session_url(request):
     """
+    Redirect to this url after making a purchase. If no
+    session_url is set, return False
     """
     try:
         return request.session["session_url"]
@@ -19,12 +22,17 @@ def retrieve_session_url(request):
 
 def get_promote_feature_discount_rates():
     """
+    Returns a dictionary with the values from
+    suggestion_promotion_discounts.py
     """
     return {2: discounts.two, 3: discounts.three, 4: discounts.four, 5: discounts.five}
 
 
 def get_feature_promotion_prices():
     """
+    Calculates the price for promoting a feature for
+    1-5 days, applying the discounts specified in
+    suggestion_promotion_discounts.py
     """
     price_of_one = get_coins_price("Feature Suggestion Promotion")
 

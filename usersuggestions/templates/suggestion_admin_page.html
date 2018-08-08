@@ -6,7 +6,8 @@
 
     <div class="row btn-row">
         <div class="col-xs-6 col-md-4 offset-xs-3 offset-md-4">
-            <a class="btn btn-outline-primary" href="{% url 'view_suggestion' suggestion.id %}" role="button">View public page</a>
+            <a class="btn btn-outline-primary" href="{% url 'view_suggestion' suggestion.id %}" role="button">View
+                public page</a>
         </div>
     </div>
 
@@ -28,11 +29,11 @@
     </div>
     <div class="col-xs-10 col-md-8 offset-md-2 offset-xs-1">
 
-    <form id ="admin-page-form" method="POST">
-        {{ form|as_bootstrap }}
-        <div id="fullGitHubUrl"></div>
+        <form id="admin-page-form" method="POST">
+            {{ form|as_bootstrap }}
+            <div id="fullGitHubUrl"></div>
 
-        <script>
+            <script>
             let showFullGitHubUrl = function() {
                 $("#fullGitHubUrl").empty()
                 $("#fullGitHubUrl").append(
@@ -44,14 +45,16 @@
 
             $(document).ready(showFullGitHubUrl)
             $("#id_github_branch").keyup(showFullGitHubUrl)
-        </script>
 
 
-        {% csrf_token %}
-        <input type="submit" class="btn btn-primary" value="submit changes" name="adminPageSubmit">
-    </form>
+            </script>
+
+
+            {% csrf_token %}
+            <input type="submit" class="btn btn-primary" value="submit changes" name="adminPageSubmit">
+        </form>
     </div>
-    
+
 </main>
 
 <footer id="suggestion-comments">
@@ -78,8 +81,9 @@
                         </blockquote>
                     </div>
                     <div class="card-footer text-muted">
-                        Upvotes: {{ comment.upvotes }} <a class="btn upvote-btn btn-success " href="{% url 'upvote_comment' comment.id %}" role="button">
-                                <i class="material-icons">thumb_up</i>Upvote Comment</a>
+                        Upvotes: {{ comment.upvotes }} <a class="btn upvote-btn btn-success "
+                                                          href="{% url 'upvote_comment' comment.id %}" role="button">
+                        <i class="material-icons">thumb_up</i>Upvote Comment</a>
 
                     </div>
                 </div>

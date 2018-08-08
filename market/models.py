@@ -1,10 +1,12 @@
 from django.db import models
 from django_countries.fields import CountryField
+
 from accounts.models import User
 from usersuggestions.models import Suggestion
 
 
-# below class taken from ecommerce project
+# below class taken from ecommerce project. Added delivery_required,
+# is_coins and coins_amount
 class StoreItem(models.Model):
     name = models.CharField(max_length=200, null=False, blank=False)
     description = models.TextField()
@@ -28,10 +30,6 @@ class CoinsPurchase(models.Model):
 
 
 class Delivery(models.Model):
-    """
-    Delivery details
-    """
-
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     full_name = models.CharField(max_length=50, blank=False)
     phone_number = models.CharField(max_length=20, blank=False)
@@ -63,8 +61,6 @@ class Delivery(models.Model):
 
 
 class Order(models.Model):
-    """
-    """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     date_time = models.DateTimeField(auto_now_add=True)
     delivery_address = models.ForeignKey(Delivery, null=True, on_delete=models.PROTECT)
@@ -74,8 +70,6 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    """
-    """
     order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
     item = models.ForeignKey(StoreItem, null=False, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField(null=False)
@@ -86,8 +80,6 @@ class OrderItem(models.Model):
 
 
 class UserCoins(models.Model):
-    """
-    """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     coins = models.PositiveIntegerField(null=True, default=0)
 
@@ -96,8 +88,6 @@ class UserCoins(models.Model):
 
 
 class UserCoinHistory(models.Model):
-    """
-    """
     transaction_choices = ((1, 'submission'), (2, 'upvote'), (3, 'referral'),
                            (4, 'store purchase'), (5, 'initial signup'), (6, 'received referral'),
                            (7, 'suggestion upvoted'), (8, 'suggestion successful'), (9, 'feature suggestion promoted'))

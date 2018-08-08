@@ -8,7 +8,7 @@ from .models import Delivery, Order, OrderItem
 
 def process_stripe_payment(request):
     """
-    from stipe documentation
+    from stripe documentation
     https://stripe.com/docs/charges
     """
     stripe.api_key = settings.STRIPE_SECRET
@@ -29,8 +29,10 @@ def process_stripe_payment(request):
 
 def process_order(request, user, transaction=0):
     """
-    Adds coins to account if they are included
-    in order
+    Processes user order. Adds an Order object. Adds an OrderItem
+    object for each item in the cart, all of which connect to the order
+    via a foreign key. Adds coins to the user's account if coins are in cart.
+    Clears cart on completion
     """
     try:
         delivery_pk = request.POST.get("deliverySelection")

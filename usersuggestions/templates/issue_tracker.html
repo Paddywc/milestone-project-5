@@ -1,172 +1,178 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block title %}Issue Tracker{% endblock %}
 
 {% block content %}
 
 <main id="issue-tracker">
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="features-tab" data-toggle="tab" href="#features" role="tab" aria-controls="features" aria-selected="true">Suggestions</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="bugs-tab" data-toggle="tab" href="#bugs" role="tab" aria-controls="bugs" aria-selected="false">Bugs</a>
-  </li>
-    <li class="nav-item">
-    <a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab" aria-controls="completed" aria-selected="false">Completed</a>
-
-  
-</ul>
-<div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="features" role="tabpanel" aria-labelledby="features-tab">
-      
-<h3 id="voting-end-date">Voting end date: {{ voting_end_date }} </h3>   
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="features-tab" data-toggle="tab" href="#features" role="tab"
+               aria-controls="features" aria-selected="true">Suggestions</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="bugs-tab" data-toggle="tab" href="#bugs" role="tab" aria-controls="bugs"
+               aria-selected="false">Bugs</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab"
+               aria-controls="completed" aria-selected="false">Completed</a>
 
 
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="features" role="tabpanel" aria-labelledby="features-tab">
+
+            <h3 id="voting-end-date">Voting end date: {{ voting_end_date }} </h3>
 
 
-  <div class="btn-group" role="group">
-    <button id="orderResultsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Sort results by
-    </button>
-    <div class="dropdown-menu" aria-labelledby="orderResultsButtonGroup">
-      <a class="dropdown-item" href="{% url 'issue_tracker'  'oldest' %}">Oldest</a>
-      <a class="dropdown-item" href="{% url 'issue_tracker' 'newest' %}">Newest</a>
-            <a class="dropdown-item" href="{% url 'issue_tracker' 'comments' %}">Most Commented</a>
+            <div class="btn-group" role="group">
+                <button id="orderResultsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort results by
+                </button>
+                <div class="dropdown-menu" aria-labelledby="orderResultsButtonGroup">
+                    <a class="dropdown-item" href="{% url 'issue_tracker'  'oldest' %}">Oldest</a>
+                    <a class="dropdown-item" href="{% url 'issue_tracker' 'newest' %}">Newest</a>
+                    <a class="dropdown-item" href="{% url 'issue_tracker' 'comments' %}">Most Commented</a>
 
-        <a class="dropdown-item" href="{% url 'issue_tracker' 'upvotes' %}">Most Popular</a>
-      
+                    <a class="dropdown-item" href="{% url 'issue_tracker' 'upvotes' %}">Most Popular</a>
+
+                </div>
+            </div>
+
+
+            <input type="text" id="searchFeature" placeholder="Search feature suggestions..">
+
+
+            <!--</header>-->
+
+            <!--<main id="issue-tracker">-->
+
+            {% for feature in promoted_features %}
+
+            <div class="jumbotron">
+                <h1 class="suggestion-title display-4">{{ feature.title }}</h1>
+                <p class="suggestion-meta lead">PROMOTED</p>
+                <hr class="my-4">
+                <div class="suggestion-details">
+                    <p>{{ feature.details|safe }}</p>
+                </div>
+                <p class="lead">
+                    <a href="{% url 'view_suggestion' feature.id %}" class="btn view-suggestion-btn btn-primary ">View
+                        Feature Suggestion</a>
+                </p>
+            </div>
+
+
+            {% endfor %}
+
+            {% for feature in features %}
+
+            <div class="jumbotron">
+                <h1 class="suggestion-title display-4">{{ feature.title }}</h1>
+                <p class="suggestion-meta lead">Upvotes: {{ feature.upvotes }} | Comments: {{ feature.comments }} | Date
+                    Posted: {{ feature.date_time.date }} | User: {{ feature.user }}</p>
+                <hr class="my-4">
+                <div class="suggestion-details">
+                    <p>{{ feature.details|safe }}</p>
+                </div>
+                <p class="lead">
+                    <a href="{% url 'view_suggestion' feature.id %}" class="btn view-suggestion-btn btn-primary ">View
+                        Feature Suggestion</a>
+                </p>
+            </div>
+
+
+            {% endfor %}
+        </div>
+
+
+        <div class="tab-pane fade" id="bugs" role="tabpanel" aria-labelledby="bugs-tab">
+
+            <div class="btn-group" role="group">
+                <button id="orderResultsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort results by
+                </button>
+                <div class="dropdown-menu" aria-labelledby="orderResultsButtonGroup">
+                    <a class="dropdown-item" href="{% url 'issue_tracker'  'oldest' %}#bugs">Oldest</a>
+                    <a class="dropdown-item" href="{% url 'issue_tracker' 'newest' %}#bugs">Newest</a>
+                    <a class="dropdown-item" href="{% url 'issue_tracker' 'comments' %}#bugs">Most Commented</a>
+
+                    <a class="dropdown-item" href="{% url 'issue_tracker' 'upvotes' %}#bugs">Most Encountered</a>
+                </div>
+            </div>
+
+            <input type="text" id="searchBug" placeholder="Search bugs...">
+
+
+            {% for bug in bugs %}
+
+
+            <div class="jumbotron">
+                <h1 class="suggestion-title display-4">{{ bug.title }}</h1>
+                <p class="suggestion-meta lead">Upvotes: {{ bug.upvotes }} | Comments: {{ bug.comments }} | Date Posted:
+                    {{ bug.date_time.date }} | User: {{ bug.user }}</p>
+                <hr class="my-4">
+                <div class="suggestion-details">
+                    <p>{{ bug.details|safe }}</p>
+                </div>
+                <p class="lead">
+                    <a href="{% url 'view_suggestion' bug.id %}" class="btn view-suggestion-btn btn-primary ">View
+                        Bug</a>
+                </p>
+            </div>
+
+            <br><br>
+            {% endfor %}
+
+        </div>
+
+
+        <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+
+
+            <input type="text" id="searchCompleted" placeholder="Search completed suggestions...">
+
+            <div class="jumbotron">
+                <h1 class="suggestion-title display-4">MOST RECENT WINNER: {{ current_winner.suggestion.title }}</h1>
+                <p class="suggestion-meta lead">Expected compilation date: {{ voting_end_date }}</p>
+                <hr class="my-4">
+                <div class="suggestion-details">
+                    <p>{{ current_winner.suggestion.details|safe }}</p>
+                </div>
+                <p class="lead">
+                    <a href="{% url 'view_suggestion' current_winner.suggestion.id %}"
+                       class="btn view-suggestion-btn btn-primary ">View Suggestion</a>
+                </p>
+            </div>
+
+            {% for suggestion in completed_suggestions %}
+
+
+            <div class="jumbotron">
+                <h1 class="suggestion-title display-4">{{ suggestion.title }}</h1>
+                <p class="suggestion-meta lead">{% if suggestion.is_feature %}Feature{% else %}Bug{% endif %} |
+                    Completed: {{ suggestion.date_time }}</p>
+                <hr class="my-4">
+                <div class="suggestion-details">
+                    <p>{{ suggestion.details|safe }}</p>
+                </div>
+                <p class="lead">
+                    <a href="{% url 'view_suggestion' suggestion.id %}" class="btn view-suggestion-btn btn-primary ">View
+                        Suggestion</a>
+                </p>
+            </div>
+
+            <br><br>
+            {% endfor %}
+
+        </div>
+
     </div>
-  </div>
-  
-  
-  <input type="text" id="searchFeature"  placeholder="Search feature suggestions..">    
-
-  
-<!--</header>-->
-
-<!--<main id="issue-tracker">-->
-
-{% for feature in promoted_features %}
-
-<div class="jumbotron">
-  <h1 class="suggestion-title display-4">{{ feature.title }}</h1>
-  <p class="suggestion-meta lead">PROMOTED</p>
-  <hr class="my-4">
-    <div class="suggestion-details">
-  <p>{{ feature.details|safe }}</p>
-  </div>
-  <p class="lead">
-<a href="{% url 'view_suggestion' feature.id %}" class="btn view-suggestion-btn btn-primary ">View Feature Suggestion</a>
-</p>
-</div>
 
 
-{% endfor %}
-
-{% for feature in features %}
-
-<div class="jumbotron">
-  <h1 class="suggestion-title display-4">{{ feature.title }}</h1>
-  <p class="suggestion-meta lead">Upvotes: {{ feature.upvotes }} | Comments: {{ feature.comments }} | Date Posted: {{ feature.date_time.date }} | User: {{ feature.user }}</p>
-  <hr class="my-4">
-    <div class="suggestion-details">
-  <p>{{ feature.details|safe }}</p>
-  </div>
-  <p class="lead">
-<a href="{% url 'view_suggestion' feature.id %}" class="btn view-suggestion-btn btn-primary ">View Feature Suggestion</a>
-</p>
-</div>
-
-
-{% endfor %}
-      </div>
-      
-      
-      
-  <div class="tab-pane fade" id="bugs" role="tabpanel" aria-labelledby="bugs-tab">
-      
-      <div class="btn-group" role="group">
-    <button id="orderResultsButtonGroup" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Sort results by
-    </button>
-    <div class="dropdown-menu" aria-labelledby="orderResultsButtonGroup">
-      <a class="dropdown-item" href="{% url 'issue_tracker'  'oldest' %}#bugs">Oldest</a>
-      <a class="dropdown-item" href="{% url 'issue_tracker' 'newest' %}#bugs">Newest</a>
-         <a class="dropdown-item" href="{% url 'issue_tracker' 'comments' %}#bugs">Most Commented</a>
-
-        <a class="dropdown-item" href="{% url 'issue_tracker' 'upvotes' %}#bugs">Most Encountered</a>
-    </div>
-  </div>
-
-  <input type="text" id="searchBug"  placeholder="Search bugs...">    
-
-            
-      
-{% for bug in bugs %}
-
-
-<div class="jumbotron">
-  <h1 class="suggestion-title display-4">{{ bug.title }}</h1>
-  <p class="suggestion-meta lead">Upvotes: {{ bug.upvotes }} | Comments: {{ bug.comments }} | Date Posted: {{ bug.date_time.date }} | User: {{ bug.user }}</p>
-  <hr class="my-4">
-    <div class="suggestion-details">
-  <p>{{ bug.details|safe }}</p>
-  </div>
-  <p class="lead">
-<a href="{% url 'view_suggestion' bug.id %}" class="btn view-suggestion-btn btn-primary ">View Bug</a>
-</p>
-</div>
-
-<br><br>
-{% endfor %}
-   
-  </div>
-  
-  
-  
-  
-    <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
-      
-    
-
-  <input type="text" id="searchCompleted"  placeholder="Search completed suggestions...">    
-
-      <div class="jumbotron">
-  <h1 class="suggestion-title display-4">MOST RECENT WINNER: {{ current_winner.suggestion.title }}</h1>
-  <p class="suggestion-meta lead">Expected compilation date: {{ voting_end_date }}</p>
-  <hr class="my-4">
-    <div class="suggestion-details">
-  <p>{{ current_winner.suggestion.details|safe }}</p>
-  </div>
-  <p class="lead">
-<a href="{% url 'view_suggestion' current_winner.suggestion.id %}" class="btn view-suggestion-btn btn-primary ">View Suggestion</a>
-</p>
-</div>      
-      
-{% for suggestion in completed_suggestions %}
-
-
-<div class="jumbotron">
-  <h1 class="suggestion-title display-4">{{ suggestion.title }}</h1>
-  <p class="suggestion-meta lead">{% if suggestion.is_feature %}Feature{% else %}Bug{% endif %} | Completed: {{ suggestion.date_time }}</p>
-  <hr class="my-4">
-    <div class="suggestion-details">
-  <p>{{ suggestion.details|safe }}</p>
-  </div>
-  <p class="lead">
-<a href="{% url 'view_suggestion' suggestion.id %}" class="btn view-suggestion-btn btn-primary ">View Suggestion</a>
-</p>
-</div>
-
-<br><br>
-{% endfor %}
-   
-  </div>
-
-</div>
-
-
-<script>
+    <script>
 // code from: https://stackoverflow.com/questions/7862233/twitter-bootstrap-tabs-go-to-specific-tab-on-page-reload-or-hyperlink
   var url = document.location.toString();
 if (url.match('#')) {
@@ -200,7 +206,12 @@ $(document).ready(searchFuntion)
 
 
   
-</script>
+
+
+
+
+
+    </script>
 
 
 </main>

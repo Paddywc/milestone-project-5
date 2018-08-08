@@ -1,59 +1,63 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block title %}Cart{% endblock %}
 {% block content %}
 
 
 <main id="cart">
-<h1 id="page-header">Cart</h1>
+    <h1 id="page-header">Cart</h1>
 
-<div class="row">
-  <div class="col-md-8 div-col col-xs-10 offset-xs-1 offset-md-2">
-<div id="accordion">
-  {%  if cart|length  > 0 %}
-  {% for item in cart %}
-  <div class="card">
-    <div class="card-header" id="header-{{ item.item.id }}">
-      <h5 class="mb-0">
-        <button class="btn btn-link" data-toggle="collapse" data-target="#{{ item.item.id }}" aria-expanded="false" aria-controls="collapseOne">
-         {{ item.item.name }}   <span class="badge badge-primary badge-pill">{{ item.quantity }}</span></a>
-        </button>
-      </h5>
+    <div class="row">
+        <div class="col-md-8 div-col col-xs-10 offset-xs-1 offset-md-2">
+            <div id="accordion">
+                {% if cart|length > 0 %}
+                {% for item in cart %}
+                <div class="card">
+                    <div class="card-header" id="header-{{ item.item.id }}">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#{{ item.item.id }}"
+                                    aria-expanded="false" aria-controls="collapseOne">
+                                {{ item.item.name }} <span
+                                    class="badge badge-primary badge-pill">{{ item.quantity }}</span>
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="{{ item.item.id }}" class="collapse collapsed" aria-labelledby="header-{{ item.item.id }}"
+                         data-parent="#accordion">
+
+
+                        <div class="card-body">
+                            <p class="text-muted">{{ item.item.description }}</p>
+                            <br>
+                            <p class="card-text">Quantity: {{ item.quantity}} X €{{ item.price }} = €{{ item.total_price
+                                }} </p>
+
+                            <a href="/cart/add/{{ item.item.id }}" class="btn btn-primary">Add Another</a>
+                            <a href="/cart/remove/{{ item.item.id }}" class="btn btn-primary">Remove One</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
     </div>
 
-    <div id="{{ item.item.id }}" class="collapse collapsed" aria-labelledby="header-{{ item.item.id }}" data-parent="#accordion">
-     
+    <div class="row">
+        <div class="col-md-8 div-col col-xs-10 offset-xs-1 offset-md-2">
 
-      <div class="card-body">
-        <p class="text-muted">{{ item.item.description }}</p>
-        <br>
-        <p class="card-text">Quantity: {{ item.quantity}} X €{{ item.price }} = €{{ item.total_price }} </p>
-
-    <a href="/cart/add/{{ item.item.id }}" class="btn btn-primary">Add Another</a>
-    <a href="/cart/remove/{{ item.item.id }}" class="btn btn-primary">Remove One</a>
-      </div>
+            <div class="alert alert-warning show" role="alert">
+                <strong>Cart Total: </strong>€{{ cart.get_total_price }}
+                <a href="{% url 'pay' %}" class="btn btn-sm checkout-btn btn-primary">Checkout</a>
+            </div>
+        </div>
     </div>
-  </div>
-  {% endfor %}
-
-</div>
-</div>
-</div>
-
-<div class="row">
-  <div class="col-md-8 div-col col-xs-10 offset-xs-1 offset-md-2">
-    
-    <div class="alert alert-warning show" role="alert">
-  <strong>Cart Total: </strong>€{{ cart.get_total_price }}
-    <a href="{% url 'pay' %}" class="btn btn-sm checkout-btn btn-primary">Checkout</a>
-</div>
-</div>
-</div>
-{% else %}
-<div id="cart-empty">
-<h5 class="cart-empty">Your cart is empty</h5>
-   <a href="{% url 'store' %}" class="btn  btn-primary">Visit Store</a>
-   </div>
-{% endif %}
+    {% else %}
+    <div id="cart-empty">
+        <h5 class="cart-empty">Your cart is empty</h5>
+        <a href="{% url 'store' %}" class="btn  btn-primary">Visit Store</a>
+    </div>
+    {% endif %}
 
 </main>
 {% endblock %}

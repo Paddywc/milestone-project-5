@@ -1,19 +1,18 @@
 import datetime
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
 
 import market.coin_prices.coin_rewards as coin_rewards
-from accounts.models import User
 from market.coins import return_user_coins, add_coins, get_coins_price, remove_coins, return_all_store_coin_options, \
     return_minimum_coins_purchase, purchase_coins_for_action, purchase_coins_for_feature_promotion
 from market.helpers import get_promote_feature_discount_rates, get_feature_promotion_prices
-from usersuggestions.helpers import get_promoted_features, set_current_url_as_session_url
+from usersuggestions.helpers import get_promoted_features
 from .data_visualization import create_most_upvoted_chart, create_coin_spending_chart
 from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
-from .helpers import get_userpage_values, return_current_features, \
+from .helpers import return_current_features, \
     return_all_current_bugs, \
     return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, \
     set_initial_session_form_title_as_false, \
@@ -27,6 +26,10 @@ from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_dat
 @login_required()
 def add_suggestion(request):
     """
+    Renders add suggestion page. User can purchase more coins
+    if they have insufficient coins to submit feature  suggestions.
+    In these case, their current form values are saved and returned
+    once they are redirected back from the store.
     """
     set_initial_session_form_title_as_false(request)
 
@@ -50,21 +53,22 @@ def add_suggestion(request):
             if form.is_valid():
                 saved_suggestion_object = form.save()
                 if is_feature == 'True' and settings.COINS_ENABLED:
-                    remove_coins(request.user, get_coins_price("Suggestion"),1)
+                    remove_coins(request.user, get_coins_price("Suggestion"), 1)
                     user_coins = return_user_coins(request.user)
 
                 if saved_suggestion_object.delay_submission:
                     suggestion_admin_page = SuggestionAdminPage(suggestion=saved_suggestion_object,
                                                                 in_current_voting_cycle=False)
-                    messages.success(request, "Suggestion successfully submitted. It will be posted as the end of the current voting cycle")
+                    messages.success(request,
+                                     "Suggestion successfully submitted. It will be posted as the end of the current voting cycle")
                 else:
                     suggestion_admin_page = SuggestionAdminPage(suggestion=saved_suggestion_object)
                     messages.success(request, "Suggestion successfully submitted!")
                 suggestion_admin_page.save()
                 set_session_form_values_as_false(request)
-                return (redirect("view_suggestion", saved_suggestion_object.id))
+                return redirect("view_suggestion", saved_suggestion_object.id)
 
-    if (settings.COINS_ENABLED):
+    if settings.COINS_ENABLED:
         price = get_coins_price("Suggestion")
         user_coins = return_user_coins(request.user)
         minimum_coins = return_minimum_coins_purchase(price, user_coins)
@@ -77,9 +81,9 @@ def add_suggestion(request):
 
 def render_issue_tracker(request, sorting="oldest"):
     """
+    Renders main suggestions page. Users can sort results
+    by upvotes and age
     """
-    # for testing
-    # set_current_voting_cycle_as_true_for_all_suggestions()
 
     voting_end_date = get_voting_end_date()
     current_features = return_current_features(sorting)
@@ -88,11 +92,19 @@ def render_issue_tracker(request, sorting="oldest"):
     current_winner = SuggestionAdminPage.objects.get(current_winner=True)
     promoted_features = get_promoted_features()
     return render(request, "issue_tracker.html", {"features": current_features, "bugs": bugs,
-                                         "voting_end_date": voting_end_date, "promoted_features": promoted_features, "completed_suggestions": completed_suggestions, "current_winner": current_winner})
+                                                  "voting_end_date": voting_end_date,
+                                                  "promoted_features": promoted_features,
+                                                  "completed_suggestions": completed_suggestions,
+                                                  "current_winner": current_winner})
 
 
 def view_suggestion(request, id, comment_sorting="oldest"):
     """
+    Renders suggestion page. Users can upvote and post
+    comments to suggestion. If users have insufficient coins
+    to upvote a feature suggestion, they can be redirected to the store.
+    The current url is saved as the session_url, and users are redirected to
+    this url after purchasing coins. Users can sort comments  by age and upvotes
     """
     coins_enabled = settings.COINS_ENABLED
     suggestion = get_object_or_404(Suggestion, id=id)
@@ -132,19 +144,17 @@ def view_suggestion(request, id, comment_sorting="oldest"):
 
     else:
         return render(request, "view_bug.html",
-                      {"form": form, "comments": comments, "bug": suggestion, "coins_enabled": coins_enabled, "suggestion_admin": suggestion_admin})
-
-    return True
+                      {"form": form, "comments": comments, "bug": suggestion, "coins_enabled": coins_enabled,
+                       "suggestion_admin": suggestion_admin})
 
 
 @login_required
 def render_suggestion_admin_page(request, id):
     """
+    Renders admin page for a suggestion. If user does not have
+    staff status, redirects them to the public suggestion page. Admin
+    can change values of the SuggestionAdminPage object
     """
-    # for testing:
-    # set_current_voting_cycle_as_true_for_all_suggestions()
-    # end_voting_cycle_if_current_end_date()
-
     if not request.user.is_staff:
         return redirect("view_suggestion", id=id)
     suggestion = get_object_or_404(Suggestion, id=id)
@@ -172,6 +182,9 @@ def render_suggestion_admin_page(request, id):
 @login_required
 def upvote_suggestion(request, id):
     """
+    View for upvoting a suggestion. An upvote is only added if the
+    user has not already upvoted that suggestion.  However, if coins are
+    enabled, users can add several upvotes to the same FEATURE suggestion
     """
     suggestion = get_object_or_404(Suggestion, id=id)
     if settings.COINS_ENABLED and suggestion.is_feature:
@@ -187,6 +200,10 @@ def upvote_suggestion(request, id):
 
 @login_required
 def upvote_comment(request, id):
+    """
+    View for upvoting a comment. Upvote only added if
+    user has not already upvoted that comment
+    """
     comment = get_object_or_404(Comment, id=id)
     already_upvoted = add_comment_upvote_to_database(request.user, comment)
     if already_upvoted:
@@ -199,9 +216,10 @@ def upvote_comment(request, id):
 @login_required()
 def flag_item(request, item_type, item_id, reason):
     """
+    View that allows users to create a Flag object
     """
-    # if flagged item is a commment
     messages.info(request, "Item flagged. Thank you for your help in keeping UnicornAttractor safe and fun for all")
+    # if flagged item is a comment
     if item_type == "1":
         comment = get_object_or_404(Comment, id=int(item_id))
         flag = Flag(flagged_item_type=int(item_type), comment=comment,
@@ -218,28 +236,15 @@ def flag_item(request, item_type, item_id, reason):
 
 
 @login_required()
-def render_userpage(request, user_id):
-    """
-    """
-    user = get_object_or_404(User, id=user_id)
-    if request.user == user:
-        values = get_userpage_values(user)
-        return render(request, "userpage.html", {"user": user,
-                                                 "votes": values["votes"], "purchases": values["purchases"],
-                                                 "coin_history": values["coin_history"],
-                                                 "suggestions": values["suggestions"],
-                                                 })
-
-    else:
-        return redirect("issue_tracker")
-
-
-@login_required()
 def promote_feature(request):
     """
+    Renders promote feature page where user can create
+    a PromotedFeatureSuggestion object. Redirect to
+    suggestions home if coins are not enabled. Users
+    can be redirected to the store if they have insufficient
+    coins to make a purchase
     """
     if settings.COINS_ENABLED:
-        # note when implementing DRY that price is different than others 
         prices = get_feature_promotion_prices()
         user_coins = return_user_coins(request.user)
         coin_options = return_all_store_coin_options()
@@ -259,7 +264,7 @@ def promote_feature(request):
                 price = prices["{}".format(request.POST.get("promotionDays"))]
                 remove_coins(request.user, price, 9)
                 messages.success(request, "Suggestion promoted. Thank you")
-                
+
                 return redirect("issue_tracker")
 
         return render(request, "promote_feature.html", {"features": features,
@@ -273,6 +278,9 @@ def promote_feature(request):
 
 def view_data(request):
     """
+    Renders view_data page. June_completion_chart is rendered
+    as an img from the S3 bucket. upvoted_chart and coin_spending_chart
+    are rendered via HTML using current data
     """
     upvoted_chart = create_most_upvoted_chart(5)
     coin_spending_chart = create_coin_spending_chart()
@@ -282,22 +290,29 @@ def view_data(request):
                   {"upvoted_chart": upvoted_chart, "coin_spending_chart": coin_spending_chart,
                    "june_completions_chart_url": june_completions_chart_url})
 
+
 @login_required()
 def render_flags_page(request):
     """
+    Renders flags page. Redirects to suggestions
+    home if user is not staff
     """
     if not request.user.is_staff:
         return redirect("issue_tracker")
     flags = Flag.objects.all()
     return render(request, "view_flags.html", {"flags": flags})
-    
+
+
 @login_required()
 def flag_response(request, flag_id, result):
     """
+    URL redirected to from flags page. Allows staff to change
+    the 'result' value of a Flag object. Automatically sets
+    this staff member as that Flag's responsible admin
     """
     if not request.user.is_staff:
         return redirect("issue_tracker")
-        
+
     flag = get_object_or_404(Flag, id=flag_id)
     if result == "True":
         flag_result = True
@@ -309,4 +324,3 @@ def flag_response(request, flag_id, result):
     flag.result = flag_result
     flag.save()
     return redirect("flags")
-    

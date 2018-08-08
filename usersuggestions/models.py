@@ -6,7 +6,6 @@ from django.db import models
 from accounts.models import User
 
 
-# Create your models here.
 class Suggestion(models.Model):
     suggestion_choices = ((True, 'Feature'), (False, 'Bug Fix'))
 
@@ -67,8 +66,6 @@ class SuggestionAdminPage(models.Model):
 
 
 class Comment(models.Model):
-    """
-    """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     suggestion = models.ForeignKey(Suggestion, null=False, on_delete=models.CASCADE)
     admin_page_comment = models.BooleanField(blank=False, default=False)
@@ -80,8 +77,6 @@ class Comment(models.Model):
 
 
 class Upvote(models.Model):
-    """
-    """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, null=True, on_delete=models.CASCADE)
@@ -95,9 +90,6 @@ class Upvote(models.Model):
 
 
 class Flag(models.Model):
-    """
-    """
-
     flagged_item_choices = ((1, "comment"), (2, 'suggestion'))
     reason_choices = ((0, "Spam"), (1, "Hate Speech"), (2, "Graphic Content"), (3, "Harassment or Bullying"))
 
@@ -110,16 +102,15 @@ class Flag(models.Model):
     reason = models.PositiveSmallIntegerField(choices=reason_choices, null=False, blank=False)
     date_time_marked = models.DateTimeField(auto_now_add=True)
     responsible_admin = models.ForeignKey(User, related_name="admin_assigned", null=True, blank=True,
-                                       on_delete=models.PROTECT)
+                                          on_delete=models.PROTECT)
     result = models.NullBooleanField(blank=True, null=True, choices=result_choices)
 
     def __str__(self):
-        return "Flagged {0}. {1}. Status: {2}".format(self.get_flagged_item_type_display(), self.date_time_marked.date(), self.get_result_display())
+        return "Flagged {0}. {1}. Status: {2}".format(self.get_flagged_item_type_display(),
+                                                      self.date_time_marked.date(), self.get_result_display())
 
 
 class PromotedFeatureSuggestion(models.Model):
-    """
-    """
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     suggestion = models.ForeignKey(Suggestion, null=True, on_delete=models.CASCADE)
     start_date = models.DateField(blank=False, null=False)

@@ -1,15 +1,13 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
 
 import market.coin_prices.coin_rewards as coin_rewards
 from market.cart import Cart
-
 from market.coins import add_coins
 from .forms import UserSignupForm, UserLoginForm
 from .models import User
-from django.http import HttpResponseRedirect
 
 
 def create_user(request):
@@ -33,6 +31,9 @@ def create_user(request):
 
 def create_referred_user(request, ref_user_id):
     """
+    Creates a new non-admin user. Adds extra coins 
+    to both the new user and referee user's UserCoin. 
+    Amount of extra coins specified in coin_rewards
     """
     if request.method == "POST":
         form = UserSignupForm(request.POST)
@@ -76,6 +77,7 @@ def login_user(request):
 
 def logout_user(request):
     """
+    Logs out user
     """
     logout(request)
     messages.success(request, 'You have successfully logged out')

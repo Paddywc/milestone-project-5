@@ -3,21 +3,21 @@ import datetime
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
 
-from market.models import Order, UserCoinHistory, OrderItem, UserCoins
-from usersuggestions.models import PromotedFeatureSuggestion
 from .forms import SuggestionForm
-from .models import Suggestion, Upvote, Comment, SuggestionAdminPage, PromotedFeatureSuggestion
+from .models import Suggestion, Comment, SuggestionAdminPage, PromotedFeatureSuggestion
 
 
 def set_current_url_as_session_url(request):
     """
+    Creates a bar chart for the most upvoted feature
+    suggestions. Returns this chart as HTML
     """
     request.session["session_url"] = str(request.build_absolute_uri())
 
 
 def return_current_features(sorting="-upvotes"):
     """
-    Returns all features (not bugs) in the current 
+    Returns all features  suggestions in the current
     voting cycle along with their upvote and comment count.
     Ordered by argument value
     """
@@ -41,7 +41,6 @@ def return_all_current_bugs(sorting="newest"):
     status of 'done', along with their upvote and comment count. Ordered
     by argument value
     """
-
     if sorting == "oldest":
         sorting = "date_time"
     elif sorting == "newest":
@@ -58,7 +57,8 @@ def return_all_current_bugs(sorting="newest"):
 
 def return_public_suggestion_comments(suggestion, comment_sorting="oldest"):
     """
-    Excludes admin comments
+    Returns all non-admin comments for the argument suggestion,
+    sorted by the argument value
     """
     if comment_sorting == "oldest":
         comment_sorting = "date_time"
@@ -73,13 +73,17 @@ def return_public_suggestion_comments(suggestion, comment_sorting="oldest"):
 
 def return_admin_suggestion_comments(suggestion):
     """
+    Returns all admin comments for the argument suggestion
     """
-
     return Comment.objects.filter(suggestion=suggestion, admin_page_comment=True).order_by("date_time").annotate(
         upvotes=Count("upvote"))
 
 
 def update_suggestion_admin_page(form):
+    """
+    Updates a SuggestionAdminPage object using
+    the values from the argument form
+    """
     row = SuggestionAdminPage.objects.get(suggestion=form.cleaned_data["suggestion"])
     row.status = form.cleaned_data["status"]
     row.developer_assigned = form.cleaned_data["developer_assigned"]
@@ -122,38 +126,17 @@ def return_previous_suggestion_form_values_or_empty_form(request):
 
 def set_session_form_values_as_false(request):
     """
-    For use in add_suggestion function
+    For use in add_suggestion function. Allows these values
+    to then be set as the user's current form values if they are redirected
     """
     request.session["form_title"] = False
     request.session["form_details"] = False
 
 
-def get_userpage_values(user):
-    """
-    Returns a dictionary with all the values required
-    to render a userpage
-    """
-    votes = Upvote.objects.filter(user=user).order_by("-date_time")
-    purchases = Order.objects.filter(user=user).order_by("-date_time")
-    coin_history = UserCoinHistory.objects.filter(user=user).order_by("-date_time")
-    suggestions = SuggestionAdminPage.objects.filter(suggestion__user=user).order_by("-suggestion__date_time")
-    
-
-    for purchase in purchases:
-        purchase.items = OrderItem.objects.filter(order=purchase)
-        purchase.total_cost = 0
-        for item in purchase.items:
-            purchase.total_cost += item.total_purchase_price
-
-    values_dictionary = {"purchases": purchases,
-                         "coin_history": coin_history, "votes": votes, "suggestions": suggestions
-                         }
-
-    return values_dictionary
-
-
 def submit_feature_promotion(request):
     """
+    Create a PromotedFeatureSuggestion using the values
+    submitted in the post request
     """
     user = request.user
     feature_id = request.POST.get("featureSuggestion")
@@ -169,6 +152,7 @@ def submit_feature_promotion(request):
 
 def get_promoted_features():
     """
+    Returns all currently promoted features
     """
     current_date = datetime.date.today()
     promoted_feature_suggestions = PromotedFeatureSuggestion.objects.filter(end_date__gt=current_date,

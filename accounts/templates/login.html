@@ -1,30 +1,27 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% load bootstrap_tags %}
 {% block title %}Login{% endblock %}
 {% block content %}
 <main id="login">
-    
-    
-<h1 id="page-header">Login</h1>
 
-
+    <h1 id="page-header">Login</h1>
 
 
     <div class="col-xs-10 col-md-8 offset-md-2 offset-xs-1">
-<form class="accounts-form" action="{% url 'login' %}" method="post">
-    {{ form|as_bootstrap_inline }}
-    {% csrf_token %}
-    <input type="submit" class="btn btn-primary" value="Login">
-     <p><a href="{% url 'password_reset' %}">Forgot my Password</a></p>
+        <form class="accounts-form" action="{% url 'login' %}" method="post">
+            {{ form|as_bootstrap_inline }}
+            {% csrf_token %}
+            <input type="submit" class="btn btn-primary" value="Login">
+            <p><a href="{% url 'password_reset' %}">Forgot my Password</a></p>
 
-</form>
+        </form>
 
-<div id="no-account-section">
-    <h5 id="no-account-text"> No Account Yet?</h5>
-<a href="{% url 'signup' %}" class="btn btn-primary">Signup</a>
+        <div id="no-account-section">
+            <h5 id="no-account-text"> No Account Yet?</h5>
+            <a href="{% url 'signup' %}" class="btn btn-primary">Signup</a>
 
-</div>
+        </div>
 
-</div>
+    </div>
 </main>
 {% endblock %}

@@ -1,4 +1,4 @@
-# code largly from: https://muva.co.ke/blog/developing-shopping-cart-class-shop-products-django-2-0-python-3-6/
+# code largely from: https://muva.co.ke/blog/developing-shopping-cart-class-shop-products-django-2-0-python-3-6/
 from decimal import Decimal
 
 from django.conf import settings
@@ -7,6 +7,9 @@ from .models import StoreItem
 
 
 class Cart(object):
+    """
+    Saved as context
+    """
     def __init__(self, request):
         self.session = request.session
         cart = self.session.get(settings.CART_SESSION_ID)
@@ -57,7 +60,7 @@ class Cart(object):
         My code. Required to get the correct price
         for Stripe JavaScript payment
         """
-        return (sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values()) * 100)
+        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values()) * 100
 
     def clear(self):
         del self.session[settings.CART_SESSION_ID]

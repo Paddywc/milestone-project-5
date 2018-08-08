@@ -2,107 +2,111 @@
 
 <main id="pay">
 
-  <h1 id="page-header">Pay</h1>
+    <h1 id="page-header">Pay</h1>
 
-  {% if cart_contains_delivery_item %}
-  <div class="row">
-    <div class="offset-md-1">
-      <h2 class="section-header">Address:</h2>
+    {% if cart_contains_delivery_item %}
+    <div class="row">
+        <div class="offset-md-1">
+            <h2 class="section-header">Address:</h2>
+        </div>
     </div>
-  </div>
-  <form method="POST" name="pay-form">
-    {% csrf_token %}
+    <form method="POST" name="pay-form">
+        {% csrf_token %}
 
-    <div class="card-group">
-      <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+        <div class="card-group">
+            <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
 
-        {% for address in addresses %}
+                {% for address in addresses %}
 
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">{{ address.full_name }}</h6>
-            <p class="card-text">{{ address.street_address_1 }}</p>
-            {% if address.street_address_2 %}
-            <p class="card-text">{{ address.street_address_2 }}</p>
-            {% endif %} {% if address.postcode %}
-            <p class="card-text">{{ address.postcode }}</p>
-            {% endif %}
-            <p class="card-text">{{ address.town_or_city }}</p>
-            <p class="card-text">{{ address.county }}</p>
-            <p class="card-text">{{ address.country }}</p>
-          </div>
-          <div class="card-footer">
-            <div class="form-check">
-              {% if address.current_delivery_method %}
-              <input class="form-check-input" type="radio" name="deliverySelection" id="{{ address.id }}" add value="{{ address.id }}" checked> {% else %}
-              <input class="form-check-input" type="radio" name="deliverySelection" id="{{ address.id }}" value="{{ address.id }}"> {% endif %}
-              <label class="form-check-label">
-    Use This Address
-  </label>
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ address.full_name }}</h6>
+                        <p class="card-text">{{ address.street_address_1 }}</p>
+                        {% if address.street_address_2 %}
+                        <p class="card-text">{{ address.street_address_2 }}</p>
+                        {% endif %} {% if address.postcode %}
+                        <p class="card-text">{{ address.postcode }}</p>
+                        {% endif %}
+                        <p class="card-text">{{ address.town_or_city }}</p>
+                        <p class="card-text">{{ address.county }}</p>
+                        <p class="card-text">{{ address.country }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-check">
+                            {% if address.current_delivery_method %}
+                            <input class="form-check-input" type="radio" name="deliverySelection" id="{{ address.id }}"
+                                   add value="{{ address.id }}" checked> {% else %}
+                            <input class="form-check-input" type="radio" name="deliverySelection" id="{{ address.id }}"
+                                   value="{{ address.id }}"> {% endif %}
+                            <label class="form-check-label">
+                                Use This Address
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+
+            <a href="{% url 'delivery' %}" class="btn add-another-address-btn btn-primary">Add another address</a>
+        </div>
+        {% endif %}
+
+        <form method="POST" name="pay-form">
+            {% csrf_token %}
+
+
+            <div class="row">
+                <div class="offset-md-1">
+                    <h2 class="section-header">Order Summary:</h2>
+                </div>
             </div>
 
-          </div>
-        </div>
+            <div class="row">
+                <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
+
+                    <table class="cart-table table-sm table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Individual Price</th>
+                            <th scope="col">Total Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in cart %}
+                        <tr>
+                            <td>{{ item.item.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>€{{ item.price }}</td>
+                            <td>€{{ item.total_price }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
 
-        {% endfor %}
-      </div>
-    </div>
-    <div class="row">
-
-      <a href="{% url 'delivery' %}" class="btn add-another-address-btn btn-primary">Add another address</a>
-    </div>
-    {% endif %}
-
-    <form method="POST" name="pay-form">
-      {% csrf_token %}
+            <div id="pay-with-card-section">
+                <p>Total: €{{ cart.get_total_price }}</p>
 
 
-      <div class="row">
-        <div class="offset-md-1">
-          <h2 class="section-header">Order Summary:</h2>
-        </div>
-      </div>
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_b67BbJYB2tO4Pksp4y9SHzfw" data-amount="{{ cart.get_stripe_price }}"
+                        data-name="UnicornAttractor" data-description="Cart Checkout"
+                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                        data-locale="auto" data-currency="eur">
+                </script>
 
-      <div class="row">
-        <div class="col-xs-10 col-md-8 offset-xs-1 offset-md-2">
-
-          <table class="cart-table table-sm table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Item</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Individual Price</th>
-                <th scope="col">Total Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in cart %}
-              <tr>
-                <td>{{ item.item.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>€{{ item.price }}</td>
-                <td>€{{ item.total_price }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-
-
-      <div id="pay-with-card-section">
-        <p>Total: €{{ cart.get_total_price }}</p>
-
-
-
-        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_b67BbJYB2tO4Pksp4y9SHzfw" data-amount="{{ cart.get_stripe_price }}" data-name="UnicornAttractor" data-description="Cart Checkout" data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-          data-locale="auto" data-currency="eur">
-        </script>
-
-        <input type="hidden" name="next" value="{{ request.path }}">
-      </div>
+                <input type="hidden" name="next" value="{{ request.path }}">
+            </div>
+        </form>
     </form>
 </main>
 

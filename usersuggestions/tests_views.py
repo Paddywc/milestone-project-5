@@ -22,14 +22,14 @@ class TestViews(TestCase):
         user_3 = User(username="withpassword", password="password", email="withpassword@email.com")
         user_3.save()
 
-        suggestion_1 = Suggestion(is_feature=True, user=user_1, title="Test Suggestion 1", details="Any old detials",
+        suggestion_1 = Suggestion(is_feature=True, user=user_1, title="Test Suggestion 1", details="Any old details",
                                   delay_submission=False)
         suggestion_1.save()
         suggestion_2 = Suggestion(id=2, is_feature=True, user=user_2, title="Test Suggestion 2",
-                                  details="Any old detials", delay_submission=True)
+                                  details="Any old details", delay_submission=True)
         suggestion_2.save()
         suggestion_3 = Suggestion.objects.create(is_feature=False, user=user_2, title="Test Suggestion 3",
-                                                 details="Any old detials", delay_submission=False)
+                                                 details="Any old details", delay_submission=False)
         suggestion_3.save()
 
         comment_1 = Comment(user=user_1, suggestion=suggestion_2, comment="test comment")
@@ -39,7 +39,8 @@ class TestViews(TestCase):
 
         admin_page_1 = SuggestionAdminPage(suggestion=suggestion_2, current_winner=False)
         admin_page_1.save()
-        admin_page_2 = SuggestionAdminPage(suggestion=suggestion_1, current_winner=True, expected_completion_date= datetime.date(2019, 2, 8))
+        admin_page_2 = SuggestionAdminPage(suggestion=suggestion_1, current_winner=True,
+                                           expected_completion_date=datetime.date(2019, 2, 8))
         admin_page_2.save()
         admin_page_3 = SuggestionAdminPage(suggestion=suggestion_3, current_winner=False)
         admin_page_3.save()
@@ -85,7 +86,6 @@ class TestViews(TestCase):
         Test to check that a new Suggestion object is successfully created
         on completion of the form
         """
-
         self.client.force_login(User.objects.get_or_create(username="testuser", email="testuser@email.com")[0])
 
         logged_in_user_id = User.objects.get(username="testuser").id
@@ -238,21 +238,6 @@ class TestViews(TestCase):
 
         retrieved_comment_flag_values = Flag.objects.get(flagged_by__id=logged_in_user_id, comment=random_comment)
         self.assertEqual(retrieved_comment_flag_values.reason, 2)
-
-    def test_get_userpage(self):
-        """
-        Test to check that the userpage page returns a response
-        code of 200 and uses the userpage.html template. Should redirect
-        to issue_tracker if userpage is not the userpage of the logged in user
-        """
-        self.client.force_login(User.objects.get_or_create(username="testuser", email="testuser@email.com")[0])
-        logged_in_user_id = User.objects.get(username="testuser").id
-        page = self.client.get(reverse("userpage", kwargs={"user_id": logged_in_user_id}))
-        self.assertEqual(page.status_code, 200)
-        self.assertTemplateUsed(page, "userpage.html")
-
-        page = self.client.get(reverse("userpage", kwargs={"user_id": 1}), follow=True)
-        self.assertTemplateUsed(page, "issue_tracker.html")
 
     def test_get_promote_feature_page(self):
         """
