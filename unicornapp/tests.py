@@ -5,12 +5,11 @@ from django.urls import reverse
 
 from accounts.models import User
 from market.models import CoinsPurchase, StoreItem, UserCoinHistory, Order, OrderItem
-from unicornapp.views import get_userpage_values
+from .views import get_userpage_values
 from usersuggestions.models import Suggestion, Comment, SuggestionAdminPage, Upvote
 
 
 class TestUnicornApp(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         user_1 = User(username="Test User")
@@ -32,9 +31,7 @@ class TestUnicornApp(TestCase):
         suggestion_4 = Suggestion.objects.create(is_feature=True, user=user_1, title="Test Suggestion 4",
                                                  details="Any old detials", delay_submission=False)
         suggestion_4.save()
-        suggestion_5 = Suggestion.objects.create(is_feature=False, user=user_1, title="Test Suggestion 4",
-                                                 details="Any old detials", delay_submission=False)
-        suggestion_5.save()
+  
 
         comment_1 = Comment(user=user_1, suggestion=suggestion_2, comment="test comment")
         comment_1.save()
@@ -43,7 +40,7 @@ class TestUnicornApp(TestCase):
 
         admin_page_1 = SuggestionAdminPage(suggestion=suggestion_2, current_winner=False)
         admin_page_1.save()
-        admin_page_2 = SuggestionAdminPage(suggestion=suggestion_1, current_winner=False)
+        admin_page_2 = SuggestionAdminPage(suggestion=suggestion_1, current_winner=True)
         admin_page_2.save()
         admin_page_3 = SuggestionAdminPage(suggestion=suggestion_3, current_winner=False)
         admin_page_3.save()
@@ -73,6 +70,7 @@ class TestUnicornApp(TestCase):
         coins_store_item_500 = StoreItem(name="500 coins", price=0, delivery_required=False, is_coins=True,
                                          coins_amount=500)
         coins_store_item_500.save()
+
 
     def test_get_userpage(self):
         """

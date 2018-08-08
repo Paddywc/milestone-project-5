@@ -6,9 +6,9 @@ from django.test import TestCase
 from accounts.models import User
 from market.models import CoinsPurchase, StoreItem, UserCoinHistory, Order, OrderItem
 from usersuggestions.helpers import return_current_features, return_all_current_bugs, return_public_suggestion_comments, \
-    return_admin_suggestion_comments, get_userpage_values, get_promoted_features
+    return_admin_suggestion_comments, get_promoted_features
 from usersuggestions.models import Suggestion, Comment, SuggestionAdminPage, Upvote, PromotedFeatureSuggestion
-
+from unicornapp.views import get_userpage_values
 
 class TestHelpers(TestCase):
 
