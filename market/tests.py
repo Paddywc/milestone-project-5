@@ -666,6 +666,7 @@ class TestCheckout(TestCase):
         
         random_store_item = choice(StoreItem.objects.exclude(price=0))
         
+        # below block of code from: https://stackoverflow.com/questions/16865947/django-httprequest-object-has-no-attribute-session
         request = HttpRequest()
         engine = import_module(settings.SESSION_ENGINE)
         session_key = None
@@ -791,3 +792,5 @@ class TestCheckout(TestCase):
         self.assertFalse(cart_contains_item_needing_delivery(request))
         cart_add(request, random_delivery_item.id)
         self.assertTrue(cart_contains_item_needing_delivery(request))
+        
+        
