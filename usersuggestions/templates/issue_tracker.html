@@ -50,15 +50,15 @@
 
             {% for feature in promoted_features %}
 
-            <div class="jumbotron">
-                <h1 class="suggestion-title display-4">{{ feature.title }}</h1>
-                <p class="suggestion-meta lead">PROMOTED</p>
+                  <div class="jumbotron featured-jumbotron">
+                <h1 class="suggestion-title display-4">{{ feature.suggestion.title }}</h1>
+                <p class="suggestion-meta lead">Promoted</p>
                 <hr class="my-4">
                 <div class="suggestion-details">
-                    <p>{{ feature.details|safe }}</p>
+                    <p>{{ feature.suggestion.details|safe }}</p>
                 </div>
                 <p class="lead">
-                    <a href="{% url 'view_suggestion' feature.id %}" class="btn view-suggestion-btn btn-primary ">View
+                    <a href="{% url 'view_suggestion' feature.suggestion.id %}" class="btn view-suggestion-btn btn-primary ">View
                         Feature Suggestion</a>
                 </p>
             </div>
@@ -134,7 +134,7 @@
 
             <input type="text" id="searchCompleted" placeholder="Search completed suggestions...">
 
-            <div class="jumbotron">
+            <div class="jumbotron featured-jumbotron">
                 <h1 class="suggestion-title display-4">MOST RECENT WINNER: {{ current_winner.suggestion.title }}</h1>
                 <p class="suggestion-meta lead">Expected compilation date: {{ voting_end_date }}</p>
                 <hr class="my-4">
