@@ -2,7 +2,6 @@
 {% block title %}Cart{% endblock %}
 {% block content %}
 
-
 <main id="cart">
     <h1 id="page-header">Cart</h1>
 
@@ -31,8 +30,8 @@
                             <br>
                             <p class="card-text">Quantity: {{ item.quantity}} X €{{ item.price }} = €{{ item.total_price }} </p>
 
-                            <a href="/cart/add/{{ item.item.id }}" class="btn btn-primary">Add Another</a>
-                            <a href="/cart/remove/{{ item.item.id }}" class="btn btn-primary">Remove One</a>
+                            <a href="{% url 'cart_add' item.item.id %}" class="btn btn-primary">Add Another</a>
+                            <a href="{% url 'cart_remove' item.item.id %}" class="btn btn-primary">Remove One</a>
                         </div>
                     </div>
                 </div>

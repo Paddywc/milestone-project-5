@@ -21,10 +21,10 @@ class Cart(object):
         self.session[settings.CART_SESSION_ID] = self.cart
         self.session.modified = True
 
-    def add(self, item):
-        item_id = str(item.id)
+    def add(self, StoreItem):
+        item_id = str(StoreItem.id)
         if item_id not in self.cart:
-            self.cart[item_id] = {'quantity': 0, 'price': str(item.price)}
+            self.cart[item_id] = {'quantity': 0, 'price': str(StoreItem.price)}
 
         self.cart[item_id]['quantity'] += 1
         self.save()

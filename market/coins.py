@@ -101,7 +101,7 @@ def purchase_coins_for_action(request):
     coins_store_item_id = request.POST.get("purchaseCoinsSelect")
     coins_store_item = get_object_or_404(StoreItem, id=coins_store_item_id)
     cart = Cart(request)
-    cart.add(item=coins_store_item)
+    cart.add(coins_store_item)
     return HttpResponseRedirect(reverse('pay'))
 
 

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .cart import Cart
@@ -12,13 +12,13 @@ from .helpers import retrieve_session_url
 from .models import StoreItem, CoinsPurchase, Delivery
 
 
+
 def render_store(request):
     """
     From ecommerce project
     """
     store_items = StoreItem.objects.all()
     return render(request, "store.html", {"store_items": store_items})
-
 
 def cart_add(request, item_id):
     """
@@ -27,10 +27,8 @@ def cart_add(request, item_id):
     """
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
-    cart.add(item=item)
-    messages.info(request, "Item added to cart")
+    cart.add(item)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
 
 def cart_remove(request, item_id):
     """
@@ -40,7 +38,6 @@ def cart_remove(request, item_id):
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)
     cart.remove(item)
-    messages.info(request, "Item removed from cart")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -86,7 +83,6 @@ def pay(request):
         messages.success(request, "Purchase successful. Thank you")
 
         if redirect_url:
-            print(redirect_url)
             return redirect(redirect_url)
         else:
             return redirect("store")
