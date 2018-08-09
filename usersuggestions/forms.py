@@ -11,7 +11,7 @@ class SuggestionForm(forms.ModelForm):
         widgets = {"user": forms.HiddenInput()}  # value set in views
         labels = {
             "is_feature": "Suggestion Type",
-            "delay_submission": "Delay Submission Till Next Voting Cycle"
+            "delay_submission": "Delay Submission Till Next Voting Cycle<br> If you're worried that you won't be able to catch up with the current leaders"
         }
 
 

@@ -69,12 +69,10 @@
                                                 id="purchaseCoinsSelect">
                                             {% for coin_option in coin_options %}
                                             {% if coin_option == minimum_coins %}
-                                            <option value="{{ coin_option.id }}" selected> {{ coin_option }}: €{{
-                                                coin_option.price }}
+                                            <option value="{{ coin_option.id }}" selected> {{ coin_option }}: €{{ coin_option.price }}
                                             </option>
                                             {% else %}
-                                            <option value="{{ coin_option.id }}"> {{ coin_option }}: €{{
-                                                coin_option.price }}
+                                            <option value="{{ coin_option.id }}"> {{ coin_option }}: €{{ coin_option.price }}
                                             </option>
                                             {% endif %}
                                             {% endfor %}
@@ -216,8 +214,7 @@
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
                             <p>{{ comment.comment|safe }}</p>
-                            <footer class="blockquote-footer">{{ comment.user }}<cite title="Source Title">, {{
-                                comment.date_time }}</cite></footer>
+                            <footer class="blockquote-footer">{{ comment.user }}<cite title="Source Title">, {{ comment.date_time }}</cite></footer>
                         </blockquote>
                     </div>
                     <div class="card-footer text-muted">

@@ -79,7 +79,7 @@ def add_suggestion(request):
                    "coin_options": coin_options, "minimum_coins": minimum_coins})
 
 
-def render_issue_tracker(request, sorting="oldest"):
+def render_issue_tracker(request, sorting="-upvotes"):
     """
     Renders main suggestions page. Users can sort results
     by upvotes and age
