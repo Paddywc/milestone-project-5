@@ -47,37 +47,31 @@
     </div>
 
 
-    <div class="row">
-        <form class="col-md-8  div-col offset-md-2">
-            <p class="coins-answer">
-                You already have! You earned 100 coins when you first signed up. There are other ways to earn coins too.
-                You get 5 coins every time a user votes for your feature suggestion. If your suggestion wins, you also
-                get refunded the coins you paid to submit the
-                suggestion. <br> <br>You can also refer other users to UnicornAttractor using your unique link below.
-                For every user that signs up using that link, you earn 200 coins. They’ll also get an additional 100
-                coins upon signup. Alternatively, you
-                can enter their email address below, and we’ll send the link for you.
-            </p>
-            <div class="col-xs-12 div-col col-md-10 offset-md-1">
-
-                <h6 class="referral-subtitle">Referral Link:</h6>
-                <a href="{{ request.get_host }}{% url 'referred_signup' request.user.id %}">{{ request.get_host }}{% url 'referred_signup' request.user.id %}</a>
-                <h6 class="referral-subtitle">Send Referral Email:</h6>
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        <div class="col">
-                            <input type="email" class="form-control" name="refereeEmail" id="refereeEmail"
-                                   placeholder="name@example.com">
-                        </div>
-                        <div class="col">
-                            <button type="submit" class="btn btn-primary sm-2">Submit</button>
-                        </div>
+<div class="row">
+    <div class="col-md-8  div-col offset-md-2">
+        <p class="coins-answer">
+            You already have! You earned 100 coins when you first signed up. There are other ways to earn coins too. You get 5 coins every time a user votes for your feature suggestion. If your suggestion wins, you also get refunded the coins you paid to submit the
+            suggestion. <br> <br>You can also refer other users to UnicornAttractor using your unique link below. For every user that signs up using that link, you earn 200 coins. They’ll also get an additional 100 coins upon signup. Alternatively,
+            you can enter their email address below, and we’ll send the link for you.
+        </p>
+        <div class="col-xs-12 div-col col-md-10 offset-md-1">
+            <h6 class="referral-subtitle">Referral Link:</h6>
+            <a href="{{ request.get_host }}{% url 'referred_signup' request.user.id %}">{{ request.get_host }}{% url 'referred_signup' request.user.id %}</a>
+            <h6 class="referral-subtitle">Send Referral Email:</h6>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col">
+                        <input type="email" class="form-control" name="refereeEmail" id="refereeEmail" placeholder="name@example.com">
                     </div>
-                </form>
-            </div>
-        </form>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary sm-2">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
 
     <div class="row">
