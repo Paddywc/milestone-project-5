@@ -15,7 +15,7 @@ from .models import StoreItem, CoinsPurchase, Delivery
 
 def render_store(request):
     """
-    From ecommerce project
+    From ecommerce project. Renders store page
     """
     store_items = StoreItem.objects.all()
     return render(request, "store.html", {"store_items": store_items})
