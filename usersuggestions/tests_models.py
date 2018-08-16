@@ -54,7 +54,6 @@ class TestModels(TestCase):
         are assigned as follows: is_feature: False, date_time: now, delay_submission:
         False
         """
-
         users = User.objects.all()
         random_user = choice(users)
 
@@ -133,7 +132,6 @@ class TestModels(TestCase):
         set to the current date if its status is set to done(3) and it doesn't
         already have a value for date_completed
         """
-
         suggestion_admin_objects = SuggestionAdminPage.objects.all()
         random_admin_object = choice(suggestion_admin_objects)
         random_admin_object.status = 3
@@ -160,7 +158,6 @@ class TestModels(TestCase):
         Test to check that when creating a comment object, admin_page_comment defaults
         to False, and date_time defaults to the current date and time
         """
-
         random_user = choice(User.objects.all())
         random_suggestion = choice(Suggestion.objects.all())
         new_comment = Comment(user=random_user, suggestion=random_suggestion)
@@ -231,7 +228,6 @@ class TestModels(TestCase):
         is made to save a Flag object without a value for flagged_by,
         flagged_item_type and reason
         """
-
         with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 random_user = choice(User.objects.all())

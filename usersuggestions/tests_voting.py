@@ -115,7 +115,6 @@ class TestVoting(TestCase):
         current winner or current winner already has a completion date. If the current winner
         has no value for estimated_days_to_complete, should return 14 days from the current date
         """
-
         SuggestionAdminPage.objects.all().update(current_winner=False)
         should_be_false = set_expected_compilation_date_if_none_exists()
         self.assertFalse(should_be_false)
@@ -151,7 +150,6 @@ class TestVoting(TestCase):
         first establish that at least one of these objects initially has in_current_voting_cycle
         set to True
         """
-
         at_lease_one_suggestion_in_current_voting_cycle = False
         all_suggestion_admin_objects = SuggestionAdminPage.objects.all()
         for suggestion in all_suggestion_admin_objects:

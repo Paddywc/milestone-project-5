@@ -84,7 +84,6 @@ class TestCheckout(TestCase):
         stripe api key and stripe token, otherwise it should throw an authentication
         error
         """
-
         random_store_item = choice(StoreItem.objects.exclude(price=0))
 
         # below block of code from: https://stackoverflow.com/questions/16865947/django-httprequest-object-has-no-attribute-session
@@ -146,7 +145,6 @@ class TestCheckout(TestCase):
         create an OrderItem object for each item in the cart, linked to the Order object
         via a foreign key. Quantity value should match the quantity of the item in the cart
         """
-
         self.client.force_login(User.objects.get_or_create(username="orderuser", email="orderuser@email.com")[0])
 
         current_user = User.objects.get(username="orderuser")
@@ -187,7 +185,6 @@ class TestCheckout(TestCase):
         True if the cart has at least one item with a delivery_required
         value of True, returns False otherwise
         """
-
         request = HttpRequest()
         engine = import_module(settings.SESSION_ENGINE)
         session_key = None

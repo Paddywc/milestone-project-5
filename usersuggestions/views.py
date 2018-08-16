@@ -84,7 +84,6 @@ def render_issue_tracker(request, sorting="-upvotes"):
     Renders main suggestions page. Users can sort results
     by upvotes and age
     """
-
     voting_end_date = get_voting_end_date()
     current_features = return_current_features(sorting)
     bugs = return_all_current_bugs(sorting)

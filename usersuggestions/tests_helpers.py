@@ -175,7 +175,6 @@ class TestHelpers(TestCase):
         Test to check that return_admin_suggestion_comments
         returns admin page comments only
         """
-
         random_suggestion = choice(Suggestion.objects.all())
         random_user = choice(User.objects.all())
         admin_comment_count = 0
