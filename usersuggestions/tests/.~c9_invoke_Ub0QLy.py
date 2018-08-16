@@ -5,12 +5,12 @@ from django.urls import reverse
 from django.db import IntegrityError, transaction
 from django.shortcuts  import get_object_or_404
 from urllib.parse import urlencode
-from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, get_voting_end_date, remove_all_suggestions_from_current_voting_cycle, set_expected_compilation_date_if_none_exists, set_suggestions_success_result,  declare_winner, trigger_delayed_suggestions, end_voting_cycle_if_current_end_date, return_previous_winners
-from .models import Upvote, Suggestion, Comment, SuggestionAdminPage, Flag, PromotedFeatureSuggestion
+from usersuggestions.voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, get_voting_end_date, remove_all_suggestions_from_current_voting_cycle, set_expected_compilation_date_if_none_exists, set_suggestions_success_result,  declare_winner, trigger_delayed_suggestions, end_voting_cycle_if_current_end_date, return_previous_winners
+from usersuggestions.models import Upvote, Suggestion, Comment, SuggestionAdminPage, Flag, PromotedFeatureSuggestion
 from market.models import UserCoins, CoinsPurchase, StoreItem, UserCoinHistory, Order, OrderItem
 from accounts.models import User
-from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
-from .helpers import set_current_url_as_session_url, return_current_features, return_all_current_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, set_session_form_values_as_false, set_session_form_values_as_false, return_previous_suggestion_form_values_or_empty_form, get_userpage_values, get_feature_promotion_prices, get_promoted_features, set_initial_session_form_title_as_false
+from usersuggestions.forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
+from usersuggestions.helpers import set_current_url_as_session_url, return_current_features, return_all_current_bugs, return_public_suggestion_comments, return_admin_suggestion_comments, set_session_form_values_as_false, set_session_form_values_as_false, return_previous_suggestion_form_values_or_empty_form, get_userpage_values, get_feature_promotion_prices, get_promoted_features, set_initial_session_form_title_as_false
 from random import choice, randint
 import datetime
 # Create your tests here.

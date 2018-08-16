@@ -10,6 +10,7 @@ from usersuggestions.helpers import return_current_features, return_all_current_
 from usersuggestions.models import Suggestion, Comment, SuggestionAdminPage, Upvote, PromotedFeatureSuggestion
 from unicornapp.views import get_userpage_values
 
+
 class TestHelpers(TestCase):
 
     @classmethod
@@ -201,15 +202,15 @@ class TestHelpers(TestCase):
         new_user.save()
 
         suggestion_1 = Suggestion(is_feature=True, user=new_user, title="Userpage suggestion 1",
-                                  details="Any old detials", delay_submission=False)
+                                  details="Any old details", delay_submission=False)
         suggestion_1.save()
         suggestion_2 = Suggestion(is_feature=True, user=new_user, title="Userpage suggestion 2",
-                                  details="Any old detials")
+                                  details="Any old details")
         suggestion_2.save()
-        
+
         suggestion_admin_1 = SuggestionAdminPage(suggestion=suggestion_1)
         suggestion_admin_1.save()
-        suggestion_admin_2 = SuggestionAdminPage(suggestion= suggestion_2)
+        suggestion_admin_2 = SuggestionAdminPage(suggestion=suggestion_2)
         suggestion_admin_2.save()
 
         for i in range(5):

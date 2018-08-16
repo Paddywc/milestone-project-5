@@ -6,7 +6,7 @@ from django.test import TestCase
 from accounts.models import User
 from market.models import UserCoinHistory
 from usersuggestions.models import Suggestion, SuggestionAdminPage, Upvote
-from .data_visualization import get_highest_vote_totals, get_coin_expenditures, get_data_for_june_completions_chart
+from usersuggestions.data_visualization import get_highest_vote_totals, get_coin_expenditures, get_data_for_june_completions_chart
 
 
 class TestDataVisualization(TestCase):

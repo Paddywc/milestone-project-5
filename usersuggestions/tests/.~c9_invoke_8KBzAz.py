@@ -5,7 +5,7 @@ from django.db.models import Count
 
 import market.coin_prices.coin_rewards as coin_rewards
 from market.coins import add_coins
-from .models import Upvote, SuggestionAdminPage, Suggestion
+from usersuggestions.models import Upvote, SuggestionAdminPage, Suggestion
 
 
 def add_suggestion_upvote_to_database(user, suggestion):

@@ -101,6 +101,7 @@ def set_initial_session_form_title_as_false(request):
     If there is no set form_title value in 
     the session, set it as False
     """
+    # noinspection PyPep8
     try:
         x = request.session["form_title"]
     except:

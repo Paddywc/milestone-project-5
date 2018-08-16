@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from accounts.models import User
 from market.models import CoinsPurchase, StoreItem, UserCoinHistory, Order, OrderItem
-from .views import get_userpage_values
+from unicornapp.views import get_userpage_values
 from usersuggestions.models import Suggestion, Comment, SuggestionAdminPage, Upvote
 
 
@@ -29,9 +29,8 @@ class TestUnicornApp(TestCase):
                                                  details="Any old details", delay_submission=False)
         suggestion_3.save()
         suggestion_4 = Suggestion.objects.create(is_feature=True, user=user_1, title="Test Suggestion 4",
-                                                 details="Any old detials", delay_submission=False)
+                                                 details="Any old details", delay_submission=False)
         suggestion_4.save()
-  
 
         comment_1 = Comment(user=user_1, suggestion=suggestion_2, comment="test comment")
         comment_1.save()
@@ -70,7 +69,6 @@ class TestUnicornApp(TestCase):
         coins_store_item_500 = StoreItem(name="500 coins", price=0, delivery_required=False, is_coins=True,
                                          coins_amount=500)
         coins_store_item_500.save()
-
 
     def test_get_userpage(self):
         """

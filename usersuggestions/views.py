@@ -60,10 +60,10 @@ def add_suggestion(request):
                     suggestion_admin_page = SuggestionAdminPage(suggestion=saved_suggestion_object,
                                                                 in_current_voting_cycle=False)
                     messages.success(request,
-                                     "Suggestion successfuly submitted. It will be posted as the end of the current voting cycle")
+                                     "Suggestion successfully submitted. It will be posted as the end of the current voting cycle")
                 else:
                     suggestion_admin_page = SuggestionAdminPage(suggestion=saved_suggestion_object)
-                    messages.success(request, "Suggestion successfuly submitted!")
+                    messages.success(request, "Suggestion successfully submitted!")
                 suggestion_admin_page.save()
                 set_session_form_values_as_false(request)
                 return redirect("view_suggestion", saved_suggestion_object.id)
@@ -74,12 +74,11 @@ def add_suggestion(request):
         minimum_coins = return_minimum_coins_purchase(price, user_coins)
         coin_options = return_all_store_coin_options()
         return render(request, 'add_suggestion.html',
-                  {"form": form, "coins_enabled": settings.COINS_ENABLED, "user_coins": user_coins, "price": price,
-                   "coin_options": coin_options, "minimum_coins": minimum_coins})
+                      {"form": form, "coins_enabled": settings.COINS_ENABLED, "user_coins": user_coins, "price": price,
+                       "coin_options": coin_options, "minimum_coins": minimum_coins})
     else:
         return render(request, 'add_suggestion.html',
-                  {"form": form, "coins_enabled": settings.COINS_ENABLED})
-    
+                      {"form": form, "coins_enabled": settings.COINS_ENABLED})
 
 
 def render_issue_tracker(request, sorting="-upvotes"):

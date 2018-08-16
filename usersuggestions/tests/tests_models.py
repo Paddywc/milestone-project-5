@@ -17,13 +17,13 @@ class TestModels(TestCase):
         user_2 = User(username="Another Test User", email="example@email.com")
         user_2.save()
 
-        suggestion_1 = Suggestion(is_feature=True, user=user_1, title="Test Suggestion 1", details="Any old detials",
+        suggestion_1 = Suggestion(is_feature=True, user=user_1, title="Test Suggestion 1", details="Any old details",
                                   delay_submission=False)
         suggestion_1.save()
         suggestion_2 = Suggestion(id=2, is_feature=True, user=user_2, title="Test Suggestion 2",
                                   details="Any old detials", delay_submission=True)
         suggestion_2.save()
-        suggestion_3 = Suggestion(is_feature=False, user=user_2, title="Test Suggestion 3", details="Any old detials",
+        suggestion_3 = Suggestion(is_feature=False, user=user_2, title="Test Suggestion 3", details="Any old details",
                                   delay_submission=False)
         suggestion_3.save()
 

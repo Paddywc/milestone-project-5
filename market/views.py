@@ -12,13 +12,13 @@ from .helpers import retrieve_session_url
 from .models import StoreItem, CoinsPurchase, Delivery
 
 
-
 def render_store(request):
     """
     From ecommerce project. Renders store page
     """
     store_items = StoreItem.objects.all()
     return render(request, "store.html", {"store_items": store_items})
+
 
 def cart_add(request, item_id):
     """
@@ -29,6 +29,7 @@ def cart_add(request, item_id):
     item = get_object_or_404(StoreItem, id=item_id)
     cart.add(item)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 def cart_remove(request, item_id):
     """

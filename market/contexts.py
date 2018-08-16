@@ -20,10 +20,11 @@ def usercoins(request):
     else:
         return {"usercoins": None}
 
+
 def coins_are_enabled(request):
     """
     Used to display or hide values in the 
     base template depending on if coins are 
     enabled in the settings
     """
-    return {"coins_are_enabled": settings.COINS_ENABLED }
+    return {"coins_are_enabled": settings.COINS_ENABLED}

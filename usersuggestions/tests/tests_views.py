@@ -83,7 +83,7 @@ class TestViews(TestCase):
 
     def test_suggestion_added_when_form_posted(self):
         """
-        Test to check that a new Suggestion object is successfuly created
+        Test to check that a new Suggestion object is successfully created
         on completion of the form
         """
         self.client.force_login(User.objects.get_or_create(username="testuser", email="testuser@email.com")[0])
