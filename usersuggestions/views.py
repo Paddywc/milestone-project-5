@@ -60,10 +60,10 @@ def add_suggestion(request):
                     suggestion_admin_page = SuggestionAdminPage(suggestion=saved_suggestion_object,
                                                                 in_current_voting_cycle=False)
                     messages.success(request,
-                                     "Suggestion successfully submitted. It will be posted as the end of the current voting cycle")
+                                     "Suggestion successfuly submitted. It will be posted as the end of the current voting cycle")
                 else:
                     suggestion_admin_page = SuggestionAdminPage(suggestion=saved_suggestion_object)
-                    messages.success(request, "Suggestion successfully submitted!")
+                    messages.success(request, "Suggestion successfuly submitted!")
                 suggestion_admin_page.save()
                 set_session_form_values_as_false(request)
                 return redirect("view_suggestion", saved_suggestion_object.id)

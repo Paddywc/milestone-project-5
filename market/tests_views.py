@@ -121,7 +121,7 @@ class TestViews(TestCase):
 
     def test_delivery_added_when_form_posted(self):
         """
-        Test to check that a new Delivery object is successfully created
+        Test to check that a new Delivery object is successfuly created
         on completion of the form. Should then redirect to pay page
         """
         self.client.force_login(User.objects.get_or_create(username="testuser", email="testuser@email.com")[0])

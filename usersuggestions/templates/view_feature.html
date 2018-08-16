@@ -19,13 +19,13 @@
     <h1 id="suggestion-title">{{ feature.title }}</h1>
     <div class="row admin-row">
         <div class="div-col col-xs-10 col-md-6 offset-xs-1 offset-md-3">
-            <div id="admin-status"><span class="admin-key">  Status: </span>{{ suggestion_admin.get_status_display }}
+            <div id="admin-status"><span class="admin-key">Status: </span>{{ suggestion_admin.get_status_display }}
             </div>
             <div id="admin-estimated-time"><span class="admin-key"> Estimated Time to Complete: </span>
             {% if not suggestion_admin.estimated_days_to_complete %}
             N/A 
             {% else %}
-            {{ suggestion_admin.estimated_days_to_complete }} Days 
+            {{ suggestion_admin.estimated_days_to_complete }} Days
             {% endif %}
             </div>
         </div>

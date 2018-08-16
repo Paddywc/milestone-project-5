@@ -61,7 +61,7 @@ def login_user(request):
     if request.method == "POST":
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
-            messages.success(request, "You have successfully logged in")
+            messages.success(request, "You have successfuly logged in")
             user = form.get_user()
             login(request, user)
             cart = Cart(request)
@@ -80,5 +80,5 @@ def logout_user(request):
     Logs out user
     """
     logout(request)
-    messages.success(request, 'You have successfully logged out')
+    messages.success(request, 'You have successfuly logged out')
     return redirect("home")
