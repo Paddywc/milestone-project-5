@@ -91,6 +91,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'market.contexts.cart',
                 'market.contexts.usercoins',
+                'market.contexts.coins_are_enabled',
             ],
         },
     },

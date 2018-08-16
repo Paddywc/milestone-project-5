@@ -73,10 +73,13 @@ def add_suggestion(request):
         user_coins = return_user_coins(request.user)
         minimum_coins = return_minimum_coins_purchase(price, user_coins)
         coin_options = return_all_store_coin_options()
-
-    return render(request, 'add_suggestion.html',
+        return render(request, 'add_suggestion.html',
                   {"form": form, "coins_enabled": settings.COINS_ENABLED, "user_coins": user_coins, "price": price,
                    "coin_options": coin_options, "minimum_coins": minimum_coins})
+    else:
+        return render(request, 'add_suggestion.html',
+                  {"form": form, "coins_enabled": settings.COINS_ENABLED})
+    
 
 
 def render_issue_tracker(request, sorting="-upvotes"):

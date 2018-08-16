@@ -7,6 +7,7 @@
 
     <div class="card-columns">
         {% for item in store_items %}
+        {% if coins_are_enabled or not item.is_coins %}
         <div class="col-10 offset-1">
             <div class="card">
                 {% if item.image %}
@@ -20,7 +21,7 @@
                 </div>
             </div>
         </div>
-
+        {% endif %}
         {% endfor %}
     </div>
 </main>

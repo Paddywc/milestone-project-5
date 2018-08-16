@@ -19,7 +19,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="/static/css/styles.css">
+   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 
     <!--Import google icons-->
@@ -61,7 +61,9 @@ https://stripe.com/docs/stripe-js/reference
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'issue_tracker' %}">Suggestions Home</a>
                         <a class="dropdown-item" href="{% url 'add_suggestion' %}">Submit Suggestion</a>
+                        {% if coins_are_enabled %}
                         <a class="dropdown-item" href="{% url 'promote_feature' %}">Promote Feature Suggestion</a>
+                        {% endif %}
                         <a class="dropdown-item" href="{% url 'view_data' %}">View Data</a>
                     </div>
                 </li>
@@ -80,11 +82,11 @@ https://stripe.com/docs/stripe-js/reference
                     </div>
                 </li>
 
-
+                {% if coins_are_enabled %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'earn_coins' %}"> Coins <span class="badge badge-light">{{ usercoins }}</span></a>
                 </li>
-
+                {% endif %}
 
                 {% else %}
                 <li class="nav-item">

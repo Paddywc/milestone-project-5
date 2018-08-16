@@ -1,6 +1,7 @@
 # from http://muva.co.ke/blog/lesson-8-developing-context-processor-current-cart-django-2-0-python-3-6/
 from .cart import Cart
 from .coins import return_user_coins
+from django.conf import settings
 
 
 def cart(request):
@@ -18,3 +19,11 @@ def usercoins(request):
         return {"usercoins": coins_amount}
     else:
         return {"usercoins": None}
+
+def coins_are_enabled(request):
+    """
+    Used to display or hide values in the 
+    base template depending on if coins are 
+    enabled in the settings
+    """
+    return {"coins_are_enabled": settings.COINS_ENABLED }
