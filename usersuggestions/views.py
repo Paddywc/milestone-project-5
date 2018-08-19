@@ -337,8 +337,10 @@ def delete_comment(request, comment_id, suggestion_id):
     Deletes the comment identified in the argument.
     Redirects to the suggestion identified in the argument
     """
-    Comment.objects.filter(id=comment_id).delete()
-    messages.success(request, "Comment deleted")
+    comment = get_object_or_404(Comment, id=comment_id)
+    if comment.user == request.user:
+        Comment.objects.filter(id=comment_id).delete()
+        messages.success(request, "Comment deleted")
     return redirect("view_suggestion", suggestion_id)
     
     
