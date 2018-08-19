@@ -13,7 +13,6 @@ import os
 import accounts
 
 # from e-commerce lesson
-# sets OS secret key. Hidden from Github
 if os.path.exists('env.py'):
     import env
 
