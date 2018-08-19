@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import add_suggestion, view_suggestion, upvote_suggestion, upvote_comment, render_suggestion_admin_page, \
-    flag_item, promote_feature, view_data, render_issue_tracker, render_flags_page, flag_response
+    flag_item, promote_feature, view_data, render_issue_tracker, render_flags_page, flag_response, delete_comment
 
 urlpatterns = [
     url(r'^$', render_issue_tracker, name='issue_tracker'),
@@ -17,5 +17,5 @@ urlpatterns = [
     url(r'^view_data$', view_data, name="view_data"),
     url(r'^flags$', render_flags_page, name="flags"),
     url(r'^flag_response/(?P<flag_id>\d+)/(?P<result>[-\w]+)$', flag_response, name="flag_response"),
-
+    url(r'^delete_comment/(?P<comment_id>\d+)/(?P<suggestion_id>\d+)$', delete_comment, name="delete_comment"),
 ]

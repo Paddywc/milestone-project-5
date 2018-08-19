@@ -212,7 +212,7 @@ CKEDITOR_CONFIGS = {
             'easyimage',
             ]),
         "removePlugins": "image",
-        "cloudServices_tokenUrl": 'https://34461.cke-cs.com/token/dev/g8EfmtXobxt6p8kkd2FGYw6bf7JqDONZDMb1u2ggsVN2NXT7oglv7AWLPRBW',
+        "cloudServices_tokenUrl": 'eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJ1c2VyIjp7ImlkIjoiZXhhbXBsZXVzZXIifSwiaXNzIjoibzRlYXNlY1BNMnd0UTIzcUlFeGYiLCJzZXJ2aWNlcyI6eyJja2VkaXRvci1jb2xsYWJvcmF0aW9uIjp7InBlcm1pc3Npb25zIjp7IioiOiJ3cml0ZSJ9fX19.3sC2VWwIjoq0_nXrdlmF9TSYzDSbE8S2Ej07dSDpQLH-dwlDO8AW-gZxTBVxAc1e',
         "cloudServices_uploadUrl": 'https://34461.cke-cs.com/easyimage/upload/',
 
     }

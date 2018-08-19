@@ -158,18 +158,24 @@
                         <i class="material-icons">thumb_up</i>Upvote Comment</a>
 
                         <!-- Flag comment modal trigger -->
+                        {% if check_comment_users %}
+                        {% if comment.user == request.user %}
+                        <!-- Flag comment modal trigger -->
+                        <a role="button" class="btn flag-btn btn-outline-danger btn-sm" href="{% url 'delete_comment' comment.id bug.id %}">
+                            Delete Comment
+                        </a>
+                        {% else %}
                         <button type="button" class="btn flag-btn btn-outline-danger btn-sm" data-toggle="modal"
                                 data-target="#flagCommentModal">
                             Flag Comment
                         </button>
-                    </div>
+                        {% endif %}
+                        {% endif %}
+                        </div>
 
                 </div>
             </div>
         </div>
-
-        <!--<a class="btn btn-danger" href="{% url 'flag' 1 comment.id 2 %}" role="button">Flag </a>-->
-
 
         <!--Flag comment model-->
 
