@@ -118,7 +118,7 @@ def view_suggestion(request, id, comment_sorting="oldest"):
         check_comment_users = True
     else:
         check_comment_users = False
-    
+
     if request.method == "POST":
         if 'purchaseCoins' in request.POST:
             return purchase_coins_for_action(request)
@@ -147,7 +147,8 @@ def view_suggestion(request, id, comment_sorting="oldest"):
         return render(request, "view_feature.html",
                       {"form": form, "comments": comments, "feature": suggestion, "coins_enabled": coins_enabled,
                        "price": price, "user_coins": user_coins, "minimum_coins": minimum_coins,
-                       "coin_options": coin_options, "suggestion_admin": suggestion_admin, "check_comment_users": check_comment_users})
+                       "coin_options": coin_options, "suggestion_admin": suggestion_admin,
+                       "check_comment_users": check_comment_users})
 
     else:
         return render(request, "view_bug.html",
@@ -332,6 +333,7 @@ def flag_response(request, flag_id, result):
     flag.save()
     return redirect("flags")
 
+
 @login_required()
 def delete_comment(request, comment_id, suggestion_id):
     """
@@ -343,5 +345,3 @@ def delete_comment(request, comment_id, suggestion_id):
         Comment.objects.filter(id=comment_id).delete()
         messages.success(request, "Comment deleted")
     return redirect("view_suggestion", suggestion_id)
-    
-    

@@ -82,7 +82,7 @@
      {{ flag.get_result_display }}
     </button>
                             <div class="dropdown-menu" aria-labelledby="flagResultButtonGroup">
-                                <a class="dropdown-item disabled" href="#" disabled>Change Result:</a>
+                                <a class="dropdown-item disabled" href="#" >Change Result:</a>
                                 <a class="dropdown-item" href="{% url 'flag_response' flag.id   'True' %}">Inappropriate</a>
                                 <a class="dropdown-item" href="{% url 'flag_response' flag.id  'False' %}">Not Inappropriate</a>
                             </div>

@@ -56,7 +56,7 @@ class SuggestionAdminPage(models.Model):
 
         # My code
         # For setting completed date automatically once status set to done
-        if self.status == 3 and self.date_completed == None:
+        if self.status == 3 and self.date_completed is None:
             try:
                 self.date_completed = datetime.date.today()
 

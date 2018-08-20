@@ -60,7 +60,7 @@ def set_expected_compilation_date_if_none_exists():
     """
     try:
         winner_admin_object = SuggestionAdminPage.objects.get(current_winner=True)
-        if winner_admin_object.expected_completion_date == None:
+        if winner_admin_object.expected_completion_date is None:
             if winner_admin_object.estimated_days_to_complete:
                 estimated_days = winner_admin_object.estimated_days_to_complete
             else:

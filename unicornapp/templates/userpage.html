@@ -71,7 +71,6 @@
                 <tbody>
 
                     {% for vote in votes %}
-                    <div class="row">
                         <tr>
                             <td>
                                 {% if vote.comment %}
@@ -82,7 +81,6 @@
 
                             <td>{{ vote.date_time }}</td>
                         </tr>
-                    </div>
 
                         {% endfor %}
                 </tbody>
