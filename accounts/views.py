@@ -58,6 +58,10 @@ def login_user(request):
     https://www.youtube.com/watch?v=XMgF3JwKzgs&list=PL4cUxeGkcC9ib4HsrXEYpQnTOTZE1x0uc&index=22
     Above video showed form.get_user and login
     """
+    # if redirected by login_required()
+    if "?next=" in  request.build_absolute_uri():
+        messages.info(request, 'You must be logged in to complete this action')
+        
     if request.method == "POST":
         form = UserLoginForm(data=request.POST)
         if form.is_valid():

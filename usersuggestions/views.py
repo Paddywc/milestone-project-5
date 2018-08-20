@@ -20,8 +20,7 @@ from .helpers import return_current_features, \
     submit_feature_promotion
 from .models import Suggestion, Comment, SuggestionAdminPage, Flag
 from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, \
-    get_voting_end_date, return_completed_suggestions
-
+    get_voting_end_date, return_completed_suggestions, end_voting_cycle_if_current_end_date
 
 @login_required()
 def add_suggestion(request):
@@ -86,6 +85,7 @@ def render_issue_tracker(request, sorting="-upvotes"):
     Renders main suggestions page. Users can sort results
     by upvotes and age
     """
+    end_voting_cycle_if_current_end_date()
     voting_end_date = get_voting_end_date()
     current_features = return_current_features(sorting)
     bugs = return_all_current_bugs(sorting)

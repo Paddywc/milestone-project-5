@@ -97,9 +97,9 @@ class Flag(models.Model):
 
     flagged_item_type = models.PositiveSmallIntegerField(choices=flagged_item_choices, null=False)
     flagged_by = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
-    suggestion = models.ForeignKey(Suggestion, null=True, blank=True, on_delete=models.SET_NULL)
+    suggestion = models.ForeignKey(Suggestion, null=True, blank=True, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, null=True, blank=True, on_delete=models.SET_NULL)
-    reason = models.PositiveSmallIntegerField(choices=reason_choices, null=False, blank=False)
+    reason = models.PositiveSmallIntegerField(choices=reason_choices)
     date_time_marked = models.DateTimeField(auto_now_add=True)
     responsible_admin = models.ForeignKey(User, related_name="admin_assigned", null=True, blank=True,
                                           on_delete=models.PROTECT)

@@ -105,7 +105,7 @@ def declare_winner():
     """
     try:
         winner = Suggestion.objects.filter(is_feature=True, suggestionadminpage__in_current_voting_cycle=True).annotate(
-            upvotes=Count("upvote")).latest('upvote')
+            upvotes=Count("upvote")).order_by("-upvotes").first()
         winner_admin_object = SuggestionAdminPage.objects.get(suggestion=winner)
         winner_admin_object.current_winner = True
         winner_admin_object.save()
