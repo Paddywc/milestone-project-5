@@ -35,7 +35,7 @@ AUTH_USER_MODEL = 'accounts.User'
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["milestone-project-5-paddywc.c9users.io", "paddywc-unicornattractor.herokuapp.com"]
 
