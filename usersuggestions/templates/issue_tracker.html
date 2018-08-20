@@ -49,10 +49,6 @@
             <input type="text" id="searchFeature" placeholder="Search feature suggestions..">
 
 
-            <!--</header>-->
-
-            <!--<main id="issue-tracker">-->
-
             {% for feature in promoted_features %}
 
                   <div class="jumbotron featured-jumbotron">
@@ -175,48 +171,6 @@
         </div>
 
     </div>
-
-
-    <script>
-// code from: https://stackoverflow.com/questions/7862233/twitter-bootstrap-tabs-go-to-specific-tab-on-page-reload-or-hyperlink
-  var url = document.location.toString();
-if (url.match('#')) {
-    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-} 
-
-
-// searchFunction code largely from: https://www.w3schools.com/jquery/jquery_filters.asp
-let searchFuntion = function(){
-  $("#searchFeature").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#features .jumbotron").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-    $("#searchBug").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#bugs .jumbotron").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-    $("#searchCompleted").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#completed .jumbotron").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-};
-
-$(document).ready(searchFuntion)
-
-
-  
-
-
-
-
-
-    </script>
 
 
 </main>

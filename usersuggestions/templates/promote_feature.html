@@ -100,61 +100,35 @@
 
             </form>
             <script>
-                // searchFunction code largely from: https://www.w3schools.com/jquery/jquery_filters.asp
-                let searchFunction = function() {
-                    $("#searchFeature").on("keyup", function() {
-                        var value = $(this).val().toLowerCase();
-                        $("#featureSuggestionForm .card").filter(function() {
-                            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                        });
-                    });
-                };
-
-                //from from:https://stackoverflow.com/questions/563406/add-days-to-javascript-date
-                function addDays(date, days) {
-                    var result = new Date(date);
-                    result.setDate(result.getDate() + days);
-                    return result;
-                }
-
-                let showEndDate = function() {
-                    let startDate = $("#startDate").val()
-                    let startDateJS = new Date(startDate);
-                    let daysToAdd = Number($("#promotionDays").val())
-                    let endDate = addDays(startDateJS, daysToAdd);
-                    let endDateString = `${endDate.getDate()}/${endDate.getMonth()+1}/${endDate.getFullYear()}`;
-                    if (endDateString.includes("NaN")){
-                        endDateString=""
-                    }
-                    $("#endDate").html("End Date: " + endDateString);
-                }
-
-                let showAppropriateButton = function() {
+              
+              
+              
+                let showAppropriatePromotionButton = function() {
 
                     var price;
 
                     switch ($("#promotionDays").val()) {
 
                         case "2":
-                            price = {{ prices.2 }}
+                            price = {{ prices.2 }};
                             break;
                         case "3":
-                            price = {{ prices.3 }}
+                            price = {{ prices.3 }};
                             break;
 
                         case "4":
-                            price = {{ prices.4 }}
+                            price = {{ prices.4 }};
                             break;
 
                         case "5":
-                            price = {{ prices.5 }}
+                            price = {{ prices.5 }};
                             break;
 
                         default:
-                            price = {{ prices.1 }}
+                            price = {{ prices.1 }};
                     }
 
-                    let userCoins = {{ user_coins }}
+                    let userCoins = {{ user_coins }};
 
                     if (userCoins >= price) {
                         $("#purchaseCoins").hide();
@@ -174,39 +148,34 @@
                     switch ($("#promotionDays").val()) {
 
                         case "2":
-                            price = {{ prices.2 }}
+                            price = {{ prices.2 }};
                             break;
                         case "3":
                             price = {{ prices.3 }}
                             break;
 
                         case "4":
-                            price = {{ prices.4 }}
+                            price = {{ prices.4 }};
                             break;
 
                         case "5":
-                            price = {{ prices.5 }}
+                            price = {{ prices.5 }};
                             break;
 
                         default:
-                            price = {{ prices.1 }}
+                            price = {{ prices.1 }};
                     }
 
                     $("#price").html("<strong>Price: </strong>" + price);
                 }
                 $("#promotionDays").change(function() {
-                    showAppropriateButton();
-                    showPrice()
-                    showEndDate()
+                    showAppropriatePromotionButton();
+                    showPrice();
                 })
 
-                $("#startDate").change(showEndDate)
-
                 $(document).ready(function() {
-                    showAppropriateButton()
-                    showPrice()
-                    searchFunction()
-                    showEndDate()
+                    showAppropriatePromotionButton();
+                    showPrice();
                 });
 
             </script>

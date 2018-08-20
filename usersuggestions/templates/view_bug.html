@@ -230,50 +230,7 @@
         {% endfor %}
 
     </div>
-    <script>
-        let showAppropriateButton = function() {
-            $(".flagBtn").hide()
-            if ($("#flagCommentReasonSelect").val() == "0") {
-                $("#commentSpanBtn").show()
-            }
-            else if ($("#flagCommentReasonSelect").val() == "1") {
-                $("#commentHateBtn").show()
-            }
-            else if ($("#flagCommentReasonSelect").val() == "2") {
-                $("#commentGraphicBtn").show()
-            }
-            else if ($("#flagCommentReasonSelect").val() == "3") {
-                $("#commentBullyingBtn").show()
-            }
-
-            if ($("#flagSuggestionReasonSelect").val() == "0") {
-                $("#suggestionSpanBtn").show()
-            }
-            else if ($("#flagSuggestionReasonSelect").val() == "1") {
-                $("#suggestionHateBtn").show()
-            }
-            else if ($("#flagSuggestionReasonSelect").val() == "2") {
-                $("#suggestionGraphicBtn").show()
-            }
-            else if ($("#flagSuggestionReasonSelect").val() == "3") {
-                $("#suggestionBullyingBtn").show()
-            }
-
-
-
-        };
-
-        $(document).ready(function() {
-            showAppropriateButton()
-        })
-
-        $("#flagCommentReasonSelect").change(showAppropriateButton)
-        $("#flagSuggestionReasonSelect").change(showAppropriateButton)
-
-
-
-
-    </script>
+    
 
 
     <div class="row">

@@ -22,6 +22,7 @@ from .models import Suggestion, Comment, SuggestionAdminPage, Flag
 from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, \
     get_voting_end_date, return_completed_suggestions, end_voting_cycle_if_current_end_date
 
+
 @login_required()
 def add_suggestion(request):
     """

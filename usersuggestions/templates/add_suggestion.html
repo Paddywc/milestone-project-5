@@ -98,37 +98,7 @@
             </form>
         </div>
     </div>
-    <script>
-    let showAppropriateButton = function() {
-      if ($("#id_is_feature").val() == "True") {
-        $("#bugFixSubmit").hide();
-        $("#featureSubmit").show();
-      }
-      else {
-        $("#bugFixSubmit").show();
-        $("#featureSubmit").hide();
-      }
-    };
-
-    let showOrHideDelaySubmissionCheckbox = function() {
-      if ($("#id_is_feature").val() == "True") {
-        $(".checkbox").show()
-      }
-      else {
-        $(".checkbox").hide()
-      }
-    };
-
-    $(document).ready(function() {
-      showAppropriateButton()
-      showOrHideDelaySubmissionCheckbox()
-    })
-
-    $("#id_is_feature").change(showAppropriateButton)
-    $("#id_is_feature").change(showOrHideDelaySubmissionCheckbox)
-
-
-    </script>
+  
 
 
 </main>

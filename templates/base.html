@@ -19,8 +19,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="/static/css/styles.css">
-    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     
     <!--Import google icons-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -134,6 +133,9 @@ https://stripe.com/docs/stripe-js/reference
 
 
 {% block content %}{% endblock %}
+
+    <script type="text/javascript" src="{% static 'js/unicornattractor.js' %}"></script>
+
 </body>
 
 </html>
