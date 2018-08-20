@@ -4,7 +4,7 @@ from market.coins import get_coins_price
 
 def set_current_url_as_session_url(request):
     """
-    Used to redirect to previous  url after making a purchase
+    Used to redirect to previous url after making a purchase
     """
     request.session["session_url"] = str(request.build_absolute_uri())
 
