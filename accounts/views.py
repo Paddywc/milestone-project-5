@@ -68,11 +68,7 @@ def login_user(request):
             messages.success(request, "You have successfully logged in")
             user = form.get_user()
             login(request, user)
-            cart = Cart(request)
-            if len(cart) > 0:
-                return redirect("view_cart")
-            else:
-                return redirect("home")
+            return redirect("home")
     else:
         form = UserLoginForm()
 

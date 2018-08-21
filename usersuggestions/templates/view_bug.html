@@ -11,18 +11,18 @@
         </div>
     </div>
     {% endif %}
-
+    
+    <div class="row btn-row">
+        <div class="div-col col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+            <a class="btn btn-outline-primary" href="{% url 'issue_tracker' %}#bugs" role="button"><i class="material-icons">arrow_back</i>Back to Bugs</a>
+        </div>
+    </div>
+    
 
     <h1 id="suggestion-title">{{ bug.title }}</h1>
-    <div class="row admin-row">
-        <div class="div-col col-xs-10 col-md-6 offset-xs-1 offset-md-3">
-            <div id="admin-status"><span class="admin-key">  Status: </span>{{ suggestion_admin.get_status_display }}
-            </div>
-            <div id="admin-estimated-time"><span class="admin-key"> Estimated Time to Complete: </span>
-            {% if not suggestion_admin.estimated_days_to_complete %}
-            N/A 
-            {% else %}
-            {{ suggestion_admin.estimated_days_to_complete }} Days {% endif %}
+    <div class="row admin-row" id="bug-admin-row">
+        <div class="div-col  col-xs-10 offset-xs-1" >
+            <div><span class="admin-key">  Status: </span>{{ suggestion_admin.get_status_display }}
             </div>
         </div>
     </div>
@@ -161,7 +161,7 @@
                         {% if check_comment_users %}
                         {% if comment.user == request.user %}
                         <!-- Flag comment modal trigger -->
-                        <a role="button" class="btn flag-btn btn-outline-danger btn-sm" href="{% url 'delete_comment' comment.id bug.id %}">
+                        <a role="button" class="btn flag-btn btn-danger btn-sm" href="{% url 'delete_comment' comment.id bug.id %}">
                             Delete Comment
                         </a>
                         {% else %}

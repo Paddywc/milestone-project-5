@@ -14,6 +14,12 @@
         </div>
     </div>
     {% endif %}
+    
+        <div class="row btn-row">
+        <div class="div-col col-xs-6 col-md-4 offset-xs-3 offset-md-4">
+            <a class="btn btn-outline-primary" href="{% url 'issue_tracker' %}#features" role="button"><i class="material-icons">arrow_back</i>Back to Feature Suggestions</a>
+        </div>
+    </div>
 
 
     <h1 id="suggestion-title">{{ feature.title }}</h1>
@@ -38,11 +44,19 @@
             <a class="btn btn-success" href="{% url 'upvote_suggestion' feature.id %}" role="button"> <i
                     class="material-icons"> thumb_up</i>
                 Upvote Suggestion</a> {% else %}
+                {% if user.is_authenticated %}
             <!-- Upvote modal trigger-->
             <button type="button" id="upvote" class="btn btn-success" data-toggle="modal" data-target="#upvoteModal">
                 <i class="material-icons"> thumb_up</i>
                 Upvote Suggestion
             </button>
+            {% else %}
+            <a id="upvote" class="btn btn-success" href="{% url 'upvote_suggestion' feature.id %}">
+                <i class="material-icons"> thumb_up</i>
+                Upvote Suggestion
+            </a>
+            {% endif %}
+            
             <!-- Upvote Modal -->
             <div class="modal fade" id="upvoteModal" tabindex="-1" role="dialog" aria-labelledby="upvoteModalLabel"
                  aria-hidden="true">
