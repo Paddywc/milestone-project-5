@@ -4,7 +4,6 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect, get_object_or_404
 
 import market.coin_prices.coin_rewards as coin_rewards
-from market.cart import Cart
 from market.coins import add_coins
 from .forms import UserSignupForm, UserLoginForm
 from .models import User

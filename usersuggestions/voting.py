@@ -72,14 +72,6 @@ def set_expected_compilation_date_if_none_exists():
         return False
 
 
-def set_current_voting_cycle_as_true_for_all_suggestions():
-    """
-    For testing
-    """
-    SuggestionAdminPage.objects.filter(suggestion__delay_submission=False).update(in_current_voting_cycle=True)
-    SuggestionAdminPage.objects.filter(suggestion__delay_submission=True).update(in_current_voting_cycle=False)
-
-
 def remove_all_suggestions_from_current_voting_cycle():
     """
     Sets all suggestion's in_current_voting_cycle values to False.

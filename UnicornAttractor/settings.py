@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'unicornapp',
     'usersuggestions',
     'django_countries',
-    'phonenumber_field',
     'ckeditor',
     'ckeditor_uploader',
 

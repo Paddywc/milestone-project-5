@@ -9,7 +9,6 @@ import market.coin_prices.coin_rewards as coin_rewards
 from market.coins import return_user_coins, add_coins, get_coins_price, remove_coins, return_all_store_coin_options, \
     return_minimum_coins_purchase, purchase_coins_for_action, purchase_coins_for_feature_promotion
 from market.helpers import get_promote_feature_discount_rates, get_feature_promotion_prices
-from usersuggestions.helpers import get_promoted_features
 from .data_visualization import create_most_upvoted_chart, create_coin_spending_chart
 from .forms import SuggestionForm, CommentForm, SuggestionAdminPageForm
 from .helpers import return_current_features, \
@@ -17,7 +16,7 @@ from .helpers import return_current_features, \
     return_public_suggestion_comments, return_admin_suggestion_comments, update_suggestion_admin_page, \
     set_initial_session_form_title_as_false, \
     return_previous_suggestion_form_values_or_empty_form, set_session_form_values_as_false, \
-    submit_feature_promotion
+    submit_feature_promotion, get_promoted_features
 from .models import Suggestion, Comment, SuggestionAdminPage, Flag
 from .voting import add_suggestion_upvote_to_database, add_comment_upvote_to_database, \
     get_voting_end_date, return_completed_suggestions, end_voting_cycle_if_current_end_date

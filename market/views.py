@@ -22,8 +22,8 @@ def render_store(request):
 
 def cart_add(request, item_id):
     """
-    Adds item to cart. Code partly from:
-    https://muva.co.ke/blog/creating-shopping-cart-views-shop-products-django-2-0-python-3-6/
+    Adds item to cart. Uses method of the
+    Cart object class
     """
     cart = Cart(request)
     item = get_object_or_404(StoreItem, id=item_id)

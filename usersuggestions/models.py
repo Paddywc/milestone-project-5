@@ -91,7 +91,7 @@ class Upvote(models.Model):
 
 class Flag(models.Model):
     flagged_item_choices = ((1, "comment"), (2, 'suggestion'))
-    reason_choices = ((0, "Spam"), (1, "Hate Speech"), (2, "Graphic Content"), (3, "Harassment or Bullying"))
+    reason_choices = ((0, "Spam/Duplicate"), (1, "Hate Speech"), (2, "Graphic Content"), (3, "Harassment or Bullying"))
 
     result_choices = ((True, 'Deemed Inappropriate'), (False, 'Deemed Not Inappropriate'), (None, "To Do"))
 

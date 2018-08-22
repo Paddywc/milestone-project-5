@@ -261,7 +261,7 @@ class TestModels(TestCase):
         new_flag.save()
 
         self.assertEqual(new_flag.get_flagged_item_type_display(), "suggestion")
-        self.assertEqual(new_flag.get_reason_display(), "Spam")
+        self.assertEqual(new_flag.get_reason_display(), "Spam/Duplicate")
 
     def test_user_and_suggestion_and_start_date_and_end_date_required_to_create_user_promoted_feature_suggestion(self):
         """
