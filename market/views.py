@@ -62,7 +62,6 @@ def delivery(request):
     form = DeliveryForm(initial={"user": request.user})
     if request.method == "POST":
         form = DeliveryForm(request.POST)
-        # form.user_id = request.user
         if form.is_valid():
             form.save()
             return redirect('pay')

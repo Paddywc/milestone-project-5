@@ -148,9 +148,6 @@ USE_TZ = True
 # Toggle to enable and disable coins
 COINS_ENABLED = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
-
 # AWS code from e-commerce lesson 
 AWS_S3_OBJECT_PARAMETERS = {
     "Expires" : "Thu, 31 Dec 2099 20:00:00 GMT",
@@ -214,8 +211,6 @@ CKEDITOR_CONFIGS = {
             ['Link', 'Unlink'],
             ['RemoveFormat'],
         ],
- 
-
     }
 }
 
