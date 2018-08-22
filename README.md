@@ -10,6 +10,7 @@ Assisting users in attracting unicorns
 
 ### What does it do?
 Emits a sound wave that attracts unicorns*.  It also features a store with items that can assist in attracting unicorns. However, the core of the website is the User Suggestions app. Users can submit suggestions for new features and bug fixes. They can also comment on, and upvote, other users’ feature suggestions. Admins have a separate page for each suggestion, where they can set the suggestion’s priority level, assigned admin, estimated completion date, and more.  The User Suggestions app also features voting cycles. Whichever feature suggestion has the most votes at the end of the voting cycle is declared the winner.  The website also has its own currency: Coins. Users can spend coins on submitting, upvoting, and promoting feature suggestions. They can also earn coins for free, e.g. by referring a new user to the website.  
+
 *Sound wave is fictitious. So are unicorns (probably). 
 
 ### How does it work? 
@@ -52,24 +53,24 @@ Unit tests are designed to work on the full Unicorn Attractor project. Some of t
 
 ### Accounts 
 Accounts deals with user accounts. This includes creating accounts, authenticating logins, and resetting passwords. 
--	**Required data from other apps **  
+-	**Required data from other apps**  
     *	If COINS_ENABLED is set to false, then the Accounts app is completely stand alone. However, you will need to clear the references to other apps from your imports.  If it is set as true, coins are added to a user’s account when they sign up. They can also get extra coins for referring users.
 
 ### Market
 Market includes the store, cart, and coins functionality. 
--	**Required data from other apps **  
+-	**Required data from other apps**  
     *	Many of the models, for example Usercoins, require a user object to connect to via a foreign key.  By default, this is imported from the models file in an accounts app
     *	Connecting a UserCoinsHistory object to a Suggestion object via a foreign key is optional. However, if you don’t intend to import the UserSuggestions app, you should clear the Suggestions object from your imports 
 
 ### User Suggestions
 User Suggestions includes functionality to post suggestions, comment on these suggestions, flag items, and manage the voting cycle for feature suggestions 
--	**Required data from other apps **  
+-	**Required data from other apps**  
     *	If COINS_ENABLED is set to false, the app does not require any data from the Market app. However, you will need to clear these references from your imports. 
     *	Most models require a user object to connect to via a foreign key.  By default, this is imported from the models file in an accounts app
 
 ### Unicorn App
 Unicorn App brings together elements from the other three apps. It hosts the homepage and the userpages
--	**Required data from other apps **  
+-	**Required data from other apps**  
     *	The app is heavily reliant on data from all three other apps
 
 ## Tech Used
@@ -90,9 +91,9 @@ Unicorn App brings together elements from the other three apps. It hosts the hom
 -	**HTML** , **CSS** and **SCSS**
     *	To structure and style the web app content
     *	CSS was written in SCSS and compiled into [styles.css](https://s3.eu-west-1.amazonaws.com/paddywc-unicornattractor/static/css/styles.css?response-content-disposition=inline&X-Amz-Security-Token=FQoGZXIvYXdzEAMaDGB%2BmeF5%2BW4JJ8eKqyK4A1tUfepKKwfpz5qkAsEp6robGW53W8ptFqjgGeJ994r%2FK90HIJ%2FKFeGb7JI32iqJN4teqDs8mYS7puEjJgrClqXE%2FmMHfH6Wk%2FtcOuuIb%2BUrDcVKc416Ktl7a3xYlQ3EWhsJWwiSTHRZaEGtYMBnPuV2fZWwuRqyCh06zX7Goz26KyPofJTgQ2Mx7Fq1w7tq1cSGjGHVGnpyVmwnbVH5dDKX1uTNiKOLa%2F%2BRfNLJ%2FOY%2FFlpbz78fb1JfbAeSzNeIHPTjGFs9vpCvDEEdt9vJ58RFbgVmXebmkNnTYo0d3zliV0LlGMJCiPhF284lsvS0OCmFU862aqYWG8mrDvKNEz6PxhL88cIcK4fC%2BdLokqZCk1WtAiwo7YYT1ty27B3lrAt0%2Fdrslln%2BLbmQ9nlLEQN1A36Ylfx6r8B%2BDYpjhkkuKMaU4KqmG5Knd%2BEMT5G8ri%2FzRGCpO9qz8b%2FYyi%2F72iVCcuF%2B9GxcXv%2FfflDJ9mz1SEyElxdRcYP8sW7UQTP9XNaRwgi0UOEGDO%2By02aFLc2e%2FoY%2Fql%2F5%2FE17t5QHtOPL4o2Gah2dWDHm0Uw%2FU5Galos5irc12UCcKMeR8dsF&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20180821T171700Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAXRZSFNY4ASDWIMOG%2F20180821%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Signature=d9e386afe773c7829d213ace51fbcedcf944585c3d76cf9b23d651548343daac)
-[**SQLite**](https://www.sqlite.org/index.html)
+-	[**SQLite**](https://www.sqlite.org/index.html)
     *	Used as the application database
-[**Bootstrap**](http://getbootstrap.com/)
+-	[**Bootstrap**](http://getbootstrap.com/)
     *	Used in conjunction with HTML and CSS to develop the website style
     *	For implementing the responsive, grid-based website layout
     *	Bootstrap components used includes cards, tables, and the navbar 
@@ -157,14 +158,14 @@ To run these unit tests, enter the following into the project terminal:
 
 ## Deployment
 
-The app is hosted on [Heroku](https://paddywc-unicornattractor.herokuapp.com/). The code uses the default GitHub (master branch)[https://github.com/Paddywc/milestone-project-5/tree/master]. The code found on GitHub is the same code used on the live Heroku app. Changes made to the master branch on GitHub are automatically pushed to Heroku.  The only data used in Heroku not visible on GitHub are the secret config variables detailed in the [contributing section of this readme](https://github.com/Paddywc/milestone-project-5#contributing), and the static and media files hosted on S3
+The app is hosted on [Heroku](https://paddywc-unicornattractor.herokuapp.com/). The code uses the default GitHub [master branch](https://github.com/Paddywc/milestone-project-5/tree/master). The code found on GitHub is the same code used on the live Heroku app. Changes made to the master branch on GitHub are automatically pushed to Heroku.  The only data used in Heroku not visible on GitHub are the secret config variables detailed in the [contributing section of this readme](https://github.com/Paddywc/milestone-project-5#contributing), and the static and media files hosted on S3
 
 ## Credits
 
 ### Code
 - The sources for all non-original code are displayed in comments above the relevant code
 - [PyCharm](https://www.jetbrains.com/pycharm/download/) software was used for separating out the python code into separate files. Therefore, much of the code for importing functions from python files within the project directory was generated using PyCharm
-- The code for registering the custom user class in the [Accounts Admin.py file](https://github.com/Paddywc/milestone-project-5/blob/master/accounts/admin.py) is from the (Django documentation)[https://docs.djangoproject.com/en/dev/topics/auth/customizing/#auth-custom-user]
+- The code for registering the custom user class in the [Accounts Admin.py file](https://github.com/Paddywc/milestone-project-5/blob/master/accounts/admin.py) is from the [Django documentation](https://docs.djangoproject.com/en/dev/topics/auth/customizing/#auth-custom-user)
 - The custom user class in [accounts/models.py](https://github.com/Paddywc/milestone-project-5/blob/master/accounts/models.py)  is based on code from [FOMFUS](https://www.fomfus.com/articles/how-to-use-email-as-username-for-django-authentication-removing-the-username). The basic structure of this code is followed, with minor customisations to suit the needs of the project 
 - Two lines of code in the [login_user() function](https://github.com/Paddywc/milestone-project-5/blob/master/accounts/views.py) are from [The Net Ninja](https://www.youtube.com/watch?v=XMgF3JwKzgs&list=PL4cUxeGkcC9ib4HsrXEYpQnTOTZE1x0uc&index=22). They are identified in the function docstring
 - The [cart.py code](https://github.com/Paddywc/milestone-project-5/blob/master/market/cart.py) is largely taken from [muva](https://muva.co.ke/blog/developing-shopping-cart-class-shop-products-django-2-0-python-3-6/).  The cart.add and cart.remove functions are significantly edited as the original code did not function correctly. Other changes from the source are mostly simple name changes to match the variables of the project.  Completely original code is identified by comments
@@ -172,14 +173,14 @@ The app is hosted on [Heroku](https://paddywc-unicornattractor.herokuapp.com/). 
 - The [StoreItem class](https://github.com/Paddywc/milestone-project-5/blob/master/market/models.py)  is taken from the Code Institute e-commerce project. The delivery_required, is_coins and coins_amount fields are original code
 - Code in the [Delivery class](https://github.com/Paddywc/milestone-project-5/blob/master/market/models.py) for automatically setting other current_delivery_method values to false when one’s value is set to true is taken from [Adam on stackoverflow](https://stackoverflow.com/questions/1455126/unique-booleanfield-value-in-django) and edited to reflect the project variables. Added is the condition of only changing the current_delivery_method values of that user. This code is also used in the [SuggestionAdminPage class](https://github.com/Paddywc/milestone-project-5/blob/master/usersuggestions/models)
 - The code that fixes the bug where tests crash because unit tests can’t use the messages middleware is from [Tarsis Azevedo on stackoverflow](https://stackoverflow.com/questions/11938164/why-dont-my-django-unittests-know-that-messagemiddleware-is-installed). It is used throughout the various tests files and identified in the comments
-- The code that enables unit testing session attributes is from [Mark L on stackoverflow.com)[https://stackoverflow.com/questions/16865947/django-httprequest-object-has-no-attribute-session]. It is used throughout the testing files and identified in the comments
-- The code in the [base.html](https://github.com/Paddywc/milestone-project-5/blob/master/templates /base.html) template for displaying Django messages as a bootstrap alert is from [simpleisbetterthancomplex](https://simpleisbetterthancomplex.com/tips/2016/09/06/django-tip-14-messages-framework.html). The foundations of the [password_reset_done template](https://github.com/Paddywc/milestone-project-5/blob/master/templates/registration/password_reset_done.html) are also from [simpleisbetterthancomplex](https://simpleisbetterthancomplex.com/tutorial/2016/09/19/how-to-create-password-reset-view.html)
+- The code that enables unit testing session attributes is from [Mark L on stackoverflow.com](https://stackoverflow.com/questions/16865947/django-httprequest-object-has-no-attribute-session). It is used throughout the testing files and identified in the comments
+- The code in the [base.html](https://github.com/Paddywc/milestone-project-5/blob/master/templates/base.html) template for displaying Django messages as a bootstrap alert is from [simpleisbetterthancomplex](https://simpleisbetterthancomplex.com/tips/2016/09/06/django-tip-14-messages-framework.html). The foundations of the [password_reset_done template](https://github.com/Paddywc/milestone-project-5/blob/master/templates/registration/password_reset_done.html) are also from [simpleisbetterthancomplex](https://simpleisbetterthancomplex.com/tutorial/2016/09/19/how-to-create-password-reset-view.html)
 - The code in the [project settings](https://github.com/Paddywc/milestone-project-5/blob/master/unicornattractor/settings/py) for using AWS is from the Code Institute e-commerce project
 - The [project settings](https://github.com/Paddywc/milestone-project-5/blob/master/unicornattractor/settings/py) code that enables testing for Matplotlib functions in Travis is from [Sylhare on stackoverflow](https://stackoverflow.com/questions/37604289/tkinter-tclerror-no-display-name-and-no-display-environment-variable)
 - The code in [usersuggestions/data_visualization.py](https://github.com/Paddywc/milestone-project-5/blob/master/usersuggestions/data_visualization.py) for specifying minor and major tick mark intervals is from the [Matplotlib website](https://matplotlib.org/gallery/ticks_and_spines/major_minor_demo.html#sphx-glr-gallery-ticks-and-spines-major-minor-demo-py)
 - The code in [usersuggestions/data_visualization.py](https://github.com/Paddywc/milestone-project-5/blob/master/usersuggestions/data_visualization.py) for saving plots to S3 is taken from [Aidan Feldman on stackoverflow](https://stackoverflow.com/questions/31485660/python-uploading-a-plot-from-memory-to-s3-using-matplotlib-and-boto). The code is adjusted to fit projects structure and data
 - The [SuggestionAdminPageForm initialization code](https://github.com/Paddywc/milestone-project-5/blob/master/usersuggestions/forms.py) that only allows admin users to be assigned to a suggestion is from [neil.millikin  on stackoverflow](https://stackoverflow.com/questions/291945/how-do-i-filter-foreignkey-choices-in-a-django-modelform)
-- The line of code used throughout the tests files that force logs in a user is from (WeizhongTu on stackoverflow)[https://stackoverflow.com/questions/2619102/djangos-self-client-login-does-not-work-in-unit-tests]
+- The line of code used throughout the tests files that force logs in a user is from [WeizhongTu on stackoverflow](https://stackoverflow.com/questions/2619102/djangos-self-client-login-does-not-work-in-unit-tests)
 
 ### Additional Credits
 - The sound wave gif seen by logged in users on the [home page](https://paddywc-unicornattractor.herokuapp.com/) is taken from [tenor](https://tenor.com/view/sound-wave-wave-sound-gif-3535566) 
