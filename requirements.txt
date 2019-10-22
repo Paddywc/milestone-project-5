@@ -2,7 +2,7 @@ Babel==2.6.0
 Django==2.0.7
 Jinja2==2.10
 MarkupSafe==1.0
-Pillow==5.2.0
+Pillow==6.2.0
 Werkzeug==0.14.1
 boto3==1.7.49
 botocore==1.10.49
